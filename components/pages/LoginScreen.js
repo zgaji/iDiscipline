@@ -1,11 +1,19 @@
 import React from 'react';
-import { View, Text, TouchableOpacity, Image } from 'react-native';
-import InputField from '../components/InputField';
-import Button from '../components/Button';
-import Checkbox from '../components/CheckBox';
-import { styles } from '../components/stylesheet/Styles';
+import { View, Text, TouchableOpacity } from 'react-native';
+import InputField from '../parts/InputField';
+import Button from '../parts/Button';
+import Checkbox from '../parts/CheckBox';
+import { styles } from '../stylesheet/Styles';
+import { useNavigation } from '@react-navigation/native';
 
 const LoginScreen = () => {
+  const navigation = useNavigation(); // Hook to handle navigation
+
+  const handleLogin = () => {
+    // Add authentication logic here (optional)
+    navigation.navigate("Home"); // Navigate to HomeScreen
+  };
+
   return (
     <View style={styles.container}>
       {/* Top section */}
@@ -26,7 +34,8 @@ const LoginScreen = () => {
           </TouchableOpacity>
         </View>
 
-        <Button title="Sign In" />
+        {/* Sign In Button with Navigation */}
+        <Button title="Sign In" onPress={handleLogin} />
       </View>
     </View>
   );
