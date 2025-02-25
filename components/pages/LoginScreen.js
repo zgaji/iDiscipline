@@ -1,5 +1,5 @@
-import React from 'react';
-import { View, Text, TouchableOpacity } from 'react-native';
+import React, { useState } from 'react';
+import { View, Text, TouchableOpacity, Alert } from 'react-native';
 import InputField from '../parts/InputField';
 import Button from '../parts/Button';
 import Checkbox from '../parts/CheckBox';
@@ -9,9 +9,25 @@ import { useNavigation } from '@react-navigation/native';
 const LoginScreen = () => {
   const navigation = useNavigation(); // Hook to handle navigation
 
+  // State to manage email and password input
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
+
+  // Hardcoded correct credentials (For demo purposes)
+  const correctEmail = "test";
+  const correctPassword = "password";
+
+  // Function to check if credentials match
+  const isValid = 
+    email.trim().toLowerCase() === correctEmail.toLowerCase() && 
+    password.trim() === correctPassword;
+
   const handleLogin = () => {
-    // Add authentication logic here (optional)
-    navigation.navigate("Home"); // Navigate to HomeScreen
+    if (isValid) {
+      navigation.navigate("Home"); // Navigate to HomeScreen
+    } else {
+      Alert.alert("Invalid Credentials", "Please check your email and password.");
+    }
   };
 
   return (
@@ -24,8 +40,19 @@ const LoginScreen = () => {
       {/* Bottom section */}
       <View style={styles.bottomSection}>
         <Text style={styles.title}>Login</Text>
-        <InputField placeholder="Email Address" />
-        <InputField placeholder="Password" secureTextEntry />
+        
+        <InputField 
+          placeholder="Email Address" 
+          value={email}
+          onChangeText={(text) => setEmail(text)}
+        />
+        
+        <InputField 
+          placeholder="Password" 
+          secureTextEntry 
+          value={password}
+          onChangeText={(text) => setPassword(text)}
+        />
 
         <View style={styles.optionsRow}>
           <Checkbox label="Remember Me" />
@@ -34,11 +61,12 @@ const LoginScreen = () => {
           </TouchableOpacity>
         </View>
 
-        {/* Sign In Button with Navigation */}
-        <Button title="Sign In" onPress={handleLogin} />
+        {/* Sign In Button with Validation */}
+        <Button title="Sign In" onPress={handleLogin} disabled={!isValid} />
       </View>
     </View>
   );
 };
 
 export default LoginScreen;
+
