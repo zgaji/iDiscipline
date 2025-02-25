@@ -7,11 +7,11 @@ import { styles } from '../stylesheet/Styles';
 import { useNavigation } from '@react-navigation/native';
 
 const LoginScreen = () => {
-  const navigation = useNavigation(); // Hook to handle navigation
+  const navigation = useNavigation(); 
 
   const handleLogin = () => {
-    // Add authentication logic here (optional)
-    navigation.navigate("Home"); // Navigate to HomeScreen
+
+    navigation.navigate("Home"); 
   };
 
   return (
