@@ -4,12 +4,16 @@ import { FontAwesome } from "@expo/vector-icons";
 import Header from "../parts/Header";
 import StudentCard from "../parts/StudentCard";
 import StatCard from "../parts/StatCard";
+import CategoryBTN from "../parts/CategoryBtn"; // Importing the slidable navigation buttons
 
 const ProfileScreen = () => {
   return (
     <View style={styles.container}>
       {/* Header */}
       <Header title="Student Profile" />
+
+      {/* Category Buttons (Horizontal Scroll) */}
+      <CategoryBTN />
 
       {/* Profile Content */}
       <ScrollView>
