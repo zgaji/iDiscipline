@@ -12,6 +12,8 @@ import ViolationSlipScreen from "./components/pages/ViolationSlipScreen";
 import ChatPortalScreen from "./components/pages/ChatPortalScreen";
 import AppointmentsScreen from './components/pages/AppoinmentsScreen';
 import CalendarView from './components/parts/CalendarView';
+import HandbookScreen from './components/pages/HandbookScreen';
+
 
 
 
@@ -35,6 +37,8 @@ export default function App() {
         <Stack.Screen name="ChatPortal" component={ChatPortalScreen} />
         <Stack.Screen name="Appoinments" component={AppointmentsScreen} />
         <Stack.Screen name="CalendarView" component={CalendarView} />
+        <Stack.Screen name="Handbook" component={HandbookScreen} />
+     
       
       </Stack.Navigator>
     </NavigationContainer>
