@@ -13,7 +13,8 @@ import ChatPortalScreen from "./components/pages/ChatPortalScreen";
 import AppointmentsScreen from './components/pages/AppoinmentsScreen';
 import CalendarView from './components/parts/CalendarView';
 import HandbookScreen from './components/pages/HandbookScreen';
-
+import DOHomeScreen from './components/DOpages/DOHomeScreen';
+import ComplaintsList from './components/parts/ComplaintsList';
 
 
 
@@ -38,6 +39,8 @@ export default function App() {
         <Stack.Screen name="Appoinments" component={AppointmentsScreen} />
         <Stack.Screen name="CalendarView" component={CalendarView} />
         <Stack.Screen name="Handbook" component={HandbookScreen} />
+        <Stack.Screen name="DOHome" component={DOHomeScreen} />
+        <Stack.Screen name="ComplaintsList" component={ComplaintsList} />
      
       
       </Stack.Navigator>
