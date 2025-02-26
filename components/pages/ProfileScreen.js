@@ -8,7 +8,7 @@ import MenuBar from "../parts/MenuBar";
 
 const ProfileScreen = () => {
   return (
-    <View style={styles.container}>
+    <View style={{ flex: 1, backgroundColor: "#F4F9FC", padding: 20 }}>
       <Header title="Student Profile" />
 
       {/* Category Buttons (Horizontal Scroll) */}

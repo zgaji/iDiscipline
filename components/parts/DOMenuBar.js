@@ -6,7 +6,7 @@ const DOMenuBar = () => {
   const navigation = useNavigation();
   const route = useRoute(); // Get current screen name
 
-  const menuItems = ["DOHome", "DOProfile", "DOViolations", "DOIncidentReports", "DOAppoinments", "DOHandbook"]; // ✅ Fixed IncidentReports name
+  const menuItems = ["Home", "Student List", "Violations", "Incident Reports", "Appointments", "Reports", "DOHandbook"];
 
   const handlePress = (item) => {
     navigation.navigate(item);
@@ -18,7 +18,7 @@ const DOMenuBar = () => {
         {menuItems.map((item) => (
           <TouchableOpacity
             key={item}
-            style={[styles.button, route.name === item && styles.activeButton]} // ✅ Ensures active state works
+            style={[styles.button, route.name === item && styles.activeButton]} 
             onPress={() => handlePress(item)}
           >
             <Text style={[styles.text, route.name === item && styles.activeText]}>
@@ -48,7 +48,7 @@ const styles = StyleSheet.create({
     elevation: 5,
   },
   activeButton: {
-    backgroundColor: "#0056FF", // ✅ Fix for blue highlight
+    backgroundColor: "#0056FF",
   },
   text: {
     color: "#333",

@@ -29,7 +29,13 @@ const LoginScreen = () => {
 
     if (user) {
       Alert.alert('Login Successful', `Welcome, ${user.role}!`);
-      navigation.navigate('Home'); 
+      
+      // Navigate based on role
+      if (user.role === 'admin') {
+        navigation.navigate('DOHome');  // Navigate to DOHomeScreen
+      } else {
+        navigation.navigate('Home');  // Navigate to the regular HomeScreen
+      }
     } else {
       Alert.alert('Login Failed', 'Invalid email or password');
     }
