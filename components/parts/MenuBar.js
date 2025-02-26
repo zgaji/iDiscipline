@@ -6,17 +6,10 @@ const MenuBar = () => {
   const navigation = useNavigation();
   const route = useRoute(); // Get current screen name
 
-  const menuItems = ["Home", "Profile", "Violations", "Complaints", "Appointments", "Handbook"];
+  const menuItems = ["Home", "Profile", "Violations", "IncidentReports", "Appointments", "Handbook"]; // ✅ Fixed IncidentReports name
 
   const handlePress = (item) => {
-    if (item === "Home") {
-      navigation.navigate("Home");
-    } else if (item === "Profile") {
-      navigation.navigate("Profile");
-    } else if (item === "Violations") {
-      navigation.navigate("Violations");
-    }
-    
+    navigation.navigate(item);
   };
 
   return (
@@ -25,10 +18,12 @@ const MenuBar = () => {
         {menuItems.map((item) => (
           <TouchableOpacity
             key={item}
-            style={[styles.button, route.name === item && styles.activeButton]}
+            style={[styles.button, route.name === item && styles.activeButton]} // ✅ Ensures active state works
             onPress={() => handlePress(item)}
           >
-            <Text style={[styles.text, route.name === item && styles.activeText]}>{item}</Text>
+            <Text style={[styles.text, route.name === item && styles.activeText]}>
+              {item.replace(/([A-Z])/g, " $1").trim()} {/* ✅ Formats "IncidentReports" to "Incident Reports" */}
+            </Text>
           </TouchableOpacity>
         ))}
       </ScrollView>
@@ -51,10 +46,9 @@ const styles = StyleSheet.create({
     shadowOpacity: 0.2,
     shadowRadius: 4,
     elevation: 5,
-    overflow: "visible",
   },
   activeButton: {
-    backgroundColor: "#0056FF",
+    backgroundColor: "#0056FF", // ✅ Fix for blue highlight
   },
   text: {
     color: "#333",
