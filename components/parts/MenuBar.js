@@ -13,7 +13,10 @@ const MenuBar = () => {
       navigation.navigate("Home");
     } else if (item === "Profile") {
       navigation.navigate("Profile");
+    } else if (item === "Violations") {
+      navigation.navigate("Violations");
     }
+    
   };
 
   return (
