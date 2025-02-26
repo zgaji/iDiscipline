@@ -1,10 +1,16 @@
 import React from "react";
 import { View, Text, StyleSheet, TouchableOpacity } from "react-native";
 import { FontAwesome } from "@expo/vector-icons";
+import { useNavigation } from "@react-navigation/native";
 
 const ViolationCard = ({ type, count }) => {
+  const navigation = useNavigation();
+
   return (
-    <TouchableOpacity style={styles.card}>
+    <TouchableOpacity 
+      style={styles.card} 
+      onPress={() => navigation.navigate("ViolationDetails", { type, count })}
+    >
       <View style={styles.iconContainer}>
         <FontAwesome name="gavel" size={24} color="#0057FF" />
       </View>

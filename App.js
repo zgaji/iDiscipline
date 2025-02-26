@@ -5,6 +5,8 @@ import LoginScreen from './components/pages/LoginScreen';
 import HomeScreen from './components/pages/HomeScreen';
 import ProfileScreen from './components/pages/ProfileScreen';
 import ViolationsScreen from './components/pages/ViolationsScreen';
+import ViolationDetailsScreen from './components/pages/ViolationDetailsScreen';
+
 
 
 const Stack = createNativeStackNavigator();
@@ -17,6 +19,7 @@ export default function App() {
         <Stack.Screen name="Home" component={HomeScreen} />
         <Stack.Screen name="Profile" component={ProfileScreen} />
         <Stack.Screen name="Violations" component={ViolationsScreen} />
+        <Stack.Screen name="ViolationDetails" component={ViolationDetailsScreen} />
       </Stack.Navigator>
     </NavigationContainer>
   );
