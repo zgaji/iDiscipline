@@ -1,10 +1,20 @@
-import React, { useState } from "react";
+import React from "react";
 import { View, Text, ScrollView, TouchableOpacity, StyleSheet } from "react-native";
+import { useNavigation, useRoute } from "@react-navigation/native";
 
 const MenuBar = () => {
-  const [activeTab, setActiveTab] = useState("Home");
+  const navigation = useNavigation();
+  const route = useRoute(); // Get current screen name
 
   const menuItems = ["Home", "Profile", "Violations", "Complaints", "Appointments", "Handbook"];
+
+  const handlePress = (item) => {
+    if (item === "Home") {
+      navigation.navigate("Home");
+    } else if (item === "Profile") {
+      navigation.navigate("Profile");
+    }
+  };
 
   return (
     <View style={styles.container}>
@@ -12,10 +22,10 @@ const MenuBar = () => {
         {menuItems.map((item) => (
           <TouchableOpacity
             key={item}
-            style={[styles.button, activeTab === item && styles.activeButton]}
-            onPress={() => setActiveTab(item)}
+            style={[styles.button, route.name === item && styles.activeButton]}
+            onPress={() => handlePress(item)}
           >
-            <Text style={[styles.text, activeTab === item && styles.activeText]}>{item}</Text>
+            <Text style={[styles.text, route.name === item && styles.activeText]}>{item}</Text>
           </TouchableOpacity>
         ))}
       </ScrollView>
@@ -34,14 +44,14 @@ const styles = StyleSheet.create({
     borderRadius: 10,
     marginHorizontal: 5,
     shadowColor: "#000",
-    shadowOffset: { width: 0, height: 5 }, 
+    shadowOffset: { width: 0, height: 5 },
     shadowOpacity: 0.2,
-    shadowRadius: 4, 
+    shadowRadius: 4,
     elevation: 5,
     overflow: "visible",
   },
   activeButton: {
-    backgroundColor: "#0056FF", 
+    backgroundColor: "#0056FF",
   },
   text: {
     color: "#333",
