@@ -22,7 +22,7 @@ const MenuBar = () => {
             onPress={() => handlePress(item)}
           >
             <Text style={[styles.text, route.name === item && styles.activeText]}>
-              {item.replace(/([A-Z])/g, " $1").trim()} {/* ✅ Formats "IncidentReports" to "Incident Reports" */}
+              {item.replace(/([A-Z])/g, " $1").trim()} 
             </Text>
           </TouchableOpacity>
         ))}
