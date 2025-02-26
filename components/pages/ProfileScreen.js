@@ -9,7 +9,6 @@ import MenuBar from "../parts/MenuBar";
 const ProfileScreen = () => {
   return (
     <View style={styles.container}>
-      {/* Header */}
       <Header title="Student Profile" />
 
       {/* Category Buttons (Horizontal Scroll) */}
