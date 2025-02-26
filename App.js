@@ -8,6 +8,12 @@ import ViolationsScreen from './components/pages/ViolationsScreen';
 import ViolationDetailsScreen from './components/pages/ViolationDetailsScreen';
 import IncidentReportFormScreen from './components/pages/IncidentReportsFormScreen';
 import IncidentReportsScreen from './components/pages/IncidentReportsScreen';
+import ViolationSlipScreen from "./components/pages/ViolationSlipScreen";
+import ChatPortalScreen from "./components/pages/ChatPortalScreen";
+import AppointmentsScreen from './components/pages/AppoinmentsScreen';
+import CalendarView from './components/parts/CalendarView';
+
+
 
 
 
@@ -24,7 +30,12 @@ export default function App() {
         <Stack.Screen name="Violations" component={ViolationsScreen} />
         <Stack.Screen name="ViolationDetails" component={ViolationDetailsScreen} />
         <Stack.Screen name="IncidentReports" component={IncidentReportsScreen} />
-        <Stack.Screen name="IncidentReportForm" component={IncidentReportFormScreen} />  
+        <Stack.Screen name="IncidentReportForm" component={IncidentReportFormScreen} />
+        <Stack.Screen name="ViolationSlip" component={ViolationSlipScreen} />
+        <Stack.Screen name="ChatPortal" component={ChatPortalScreen} />
+        <Stack.Screen name="Appoinments" component={AppointmentsScreen} />
+        <Stack.Screen name="CalendarView" component={CalendarView} />
+      
       </Stack.Navigator>
     </NavigationContainer>
   );

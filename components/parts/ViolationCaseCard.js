@@ -1,10 +1,16 @@
 import React from "react";
 import { View, Text, StyleSheet, TouchableOpacity } from "react-native";
+import { useNavigation } from "@react-navigation/native";
 import { FontAwesome } from "@expo/vector-icons";
 
 const ViolationCaseCard = ({ caseData }) => {
+  const navigation = useNavigation();
+
   return (
-    <View style={styles.card}>
+    <TouchableOpacity 
+      style={styles.card} 
+      onPress={() => navigation.navigate("ViolationSlip", { caseData })} // ✅ Navigates to Violation Slip
+    >
       <View style={styles.caseHeader}>
         <Text style={styles.caseTitle}>Case #{caseData.id}</Text>
         <View style={styles.statusBadge}>
@@ -14,11 +20,16 @@ const ViolationCaseCard = ({ caseData }) => {
       <Text style={styles.caseInfo}>Student ID: {caseData.studentId}</Text>
       <Text style={styles.caseInfo}>Date Sent: {caseData.dateSent}</Text>
       <Text style={styles.description}>{caseData.description}</Text>
-      <TouchableOpacity style={styles.readMore}>
+
+      {/* Read More Button */}
+      <TouchableOpacity 
+        style={styles.readMore} 
+        onPress={() => navigation.navigate("ViolationSlip", { caseData })}
+      >
         <Text style={styles.readMoreText}>Read More</Text>
         <FontAwesome name="chevron-right" size={14} color="#007AFF" />
       </TouchableOpacity>
-    </View>
+    </TouchableOpacity>
   );
 };
 

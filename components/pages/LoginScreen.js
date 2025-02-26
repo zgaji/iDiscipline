@@ -7,7 +7,7 @@ import { styles } from '../stylesheet/Styles';
 import { useNavigation } from '@react-navigation/native';
 
 const USERS = {
-  student: { email: 'student@example.com', password: 'student123', role: 'student' },
+  student: { email: 'matt', password: '123', role: 'student' },
   admin: { email: 'admin@example.com', password: 'admin123', role: 'admin' },
 };
 
