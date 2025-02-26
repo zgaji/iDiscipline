@@ -7,8 +7,8 @@ import { styles } from '../stylesheet/Styles';
 import { useNavigation } from '@react-navigation/native';
 
 const USERS = {
-  student: { email: 'matt', password: '123', role: 'student' },
-  admin: { email: 'admin@example.com', password: 'admin123', role: 'admin' },
+  student: { email: 'user', password: '123', role: 'student' },
+  admin: { email: 'admin', password: '321', role: 'admin' },
 };
 
 const LoginScreen = () => {
