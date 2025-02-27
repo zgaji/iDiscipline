@@ -20,6 +20,8 @@ import DOStudentProfile from './components/DOpages/DOStudentProfile';
 import ViolationRecord from './components/DOpages/ViolationRecord';
 import DOViolations from './components/DOpages/DOViolations';
 import IncidentReports from './components/DOpages/IncidentReports';
+import DOAppointments from './components/DOpages/DOAppointments';
+
 
 
 
@@ -50,6 +52,7 @@ export default function App() {
         <Stack.Screen name="ViolationRecord" component={ViolationRecord} />
         <Stack.Screen name="DOViolations" component={DOViolations} />
         <Stack.Screen name="DOIncidentReports" component={IncidentReports} />
+        <Stack.Screen name="DOAppointments" component={DOAppointments} />
 
        
      
