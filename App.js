@@ -15,8 +15,10 @@ import CalendarView from './components/parts/CalendarView';
 import HandbookScreen from './components/pages/HandbookScreen';
 import DOHomeScreen from './components/DOpages/DOHomeScreen';
 import ComplaintsList from './components/parts/ComplaintsList';
-
-
+import DOStudentList from './components/DOpages/DOStudentList';
+import DOStudentProfile from './components/DOpages/DOStudentProfile';
+import ViolationRecord from './components/DOpages/ViolationRecord';
+import DOViolations from './components/DOpages/DOViolations';
 
 
 
@@ -41,6 +43,12 @@ export default function App() {
         <Stack.Screen name="Handbook" component={HandbookScreen} />
         <Stack.Screen name="DOHome" component={DOHomeScreen} />
         <Stack.Screen name="ComplaintsList" component={ComplaintsList} />
+        <Stack.Screen name="DOStudentList" component={DOStudentList} />
+        <Stack.Screen name="DOStudentProfile" component={DOStudentProfile} />
+        <Stack.Screen name="ViolationRecord" component={ViolationRecord} />
+        <Stack.Screen name="DOViolations" component={DOViolations} />
+
+       
      
       
       </Stack.Navigator>

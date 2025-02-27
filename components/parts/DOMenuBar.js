@@ -6,7 +6,7 @@ const DOMenuBar = () => {
   const navigation = useNavigation();
   const route = useRoute(); // Get current screen name
 
-  const menuItems = ["Home", "Student List", "Violations", "Incident Reports", "Appointments", "Reports", "DOHandbook"];
+  const menuItems = ["DOHome", "DOStudentList", "DOViolations", "DOIncident Reports", "DOAppointments", "Reports", "DOHandbook"];
 
   const handlePress = (item) => {
     navigation.navigate(item);
