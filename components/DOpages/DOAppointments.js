@@ -1,11 +1,12 @@
 import React, { useState } from "react";
-import {View,Text, TextInput, ScrollView, TouchableOpacity, StyleSheet,} from "react-native";
+import {View,Text, TextInput, ScrollView, TouchableOpacity,StyleSheet,} from "react-native";
 import { FontAwesome } from "@expo/vector-icons";
 import DOMenuBar from "../parts/DOMenuBar";
 import AppointmentsMenu from "../parts/AppointmentsMenu";
 
 const DOAppointments = () => {
   const [searchQuery, setSearchQuery] = useState("");
+
 
   return (
     <View style={styles.container}>
@@ -104,12 +105,16 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: "#F9F9F9",
   },
+
+  
   headerTitle: {
     fontSize: 20,
     fontWeight: "bold",
     textAlign: "center",
     paddingVertical: 15,
   },
+
+  
   content: {
     paddingHorizontal: 15,
     paddingTop: 10,
@@ -223,6 +228,7 @@ const styles = StyleSheet.create({
     flex: 1,
     fontSize: 14,
   },
+  
   floatingButton: {
     position: "absolute",
     bottom: 20,
@@ -239,6 +245,7 @@ const styles = StyleSheet.create({
     shadowRadius: 4,
     elevation: 5,
   },
+  
 });
 
 export default DOAppointments;
