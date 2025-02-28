@@ -1,5 +1,13 @@
 import React, { useState } from "react";
-import {View,Text, TextInput, ScrollView, TouchableOpacity,StyleSheet,} from "react-native";
+import {
+  View,
+  Text,
+  TextInput,
+  ScrollView,
+  TouchableOpacity,
+  StyleSheet,
+  Alert,
+} from "react-native";
 import { FontAwesome } from "@expo/vector-icons";
 import DOMenuBar from "../parts/DOMenuBar";
 import AppointmentsMenu from "../parts/AppointmentsMenu";
@@ -8,6 +16,25 @@ import Header from "../parts/Header";
 const DOAppointments = () => {
   const [searchQuery, setSearchQuery] = useState("");
 
+  const handleAddAppointment = () => {
+    Alert.alert(
+      "Set an Appointment",
+      "Case:\n\nDate and Time:\n\nNote:",
+      [
+        {
+          text: "Set appointment",
+          onPress: () => console.log("Appointment Set"),
+          style: "default",
+        },
+        {
+          text: "Cancel",
+          onPress: () => console.log("Cancelled"),
+          style: "cancel",
+        },
+      ],
+      { cancelable: true }
+    );
+  };
 
   return (
     <View style={{ flex: 1, backgroundColor: "#F4F9FC", padding: 20, marginTop: 30 }}>
@@ -38,7 +65,7 @@ const DOAppointments = () => {
         <AppointmentsMenu />
 
         {/* Add Appointment Button */}
-        <TouchableOpacity style={styles.addButton}>
+        <TouchableOpacity style={styles.addButton} onPress={handleAddAppointment}>
           <Text style={styles.addButtonText}>Add new appointment</Text>
         </TouchableOpacity>
 
@@ -108,7 +135,6 @@ const styles = StyleSheet.create({
     backgroundColor: "#F9F9F9",
   },
 
-  
   headerTitle: {
     fontSize: 20,
     fontWeight: "bold",
@@ -116,7 +142,6 @@ const styles = StyleSheet.create({
     paddingVertical: 15,
   },
 
-  
   content: {
     paddingHorizontal: 15,
     paddingTop: 10,
@@ -230,7 +255,6 @@ const styles = StyleSheet.create({
     flex: 1,
     fontSize: 14,
   },
-  
   floatingButton: {
     position: "absolute",
     bottom: 20,
@@ -247,7 +271,6 @@ const styles = StyleSheet.create({
     shadowRadius: 4,
     elevation: 5,
   },
-  
 });
 
 export default DOAppointments;
