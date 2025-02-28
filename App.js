@@ -20,10 +20,10 @@ import ViolationRecord from './components/DOpages/ViolationRecord';
 import DOViolations from './components/DOpages/DOViolations';
 import IncidentReports from './components/DOpages/IncidentReports';
 import DOAppointments from './components/DOpages/DOAppointments';
-import ReportsMenu from './components/parts/ReportsMenu';
-import ReportsScreen from './components/DOpages/ReportsScreen';
+import DOViolationDetails from './components/DOpages/DOViolationDetails';
+import DOChatPortal from './components/DOpages/DOChatPortal';
 import DOHandbookScreen from './components/DOpages/DOHandbookScreen';
-
+import ReportsScreen from './components/DOpages/ReportsScreen';
 
 
 const Stack = createNativeStackNavigator();
@@ -51,8 +51,11 @@ export default function App() {
         <Stack.Screen name="DOViolations" component={DOViolations} />
         <Stack.Screen name="DOIncidentReports" component={IncidentReports} />
         <Stack.Screen name="DOAppointments" component={DOAppointments} />
-        <Stack.Screen name="Reports" component={ReportsScreen} />
+        <Stack.Screen name="DOViolationDetails" component={DOViolationDetails} />
+        <Stack.Screen name="DOChatPortal" component={DOChatPortal} />
         <Stack.Screen name="DOHandbook" component={DOHandbookScreen} />
+        <Stack.Screen name="Reports" component={ReportsScreen}/>
+       
        
      
       

@@ -1,69 +1,65 @@
 import React, { useState } from "react";
-import { View, Text, Image, TouchableOpacity, StyleSheet, ScrollView } from "react-native";
+import { View, Text, Image, TouchableOpacity, StyleSheet, ScrollView,Platform,ToastAndroid} from "react-native";
 import Header from "../parts/Header";
 import MenuBar from "../parts/DOMenuBar";
+import StudentCard from "../parts/StudentCard";
+import DOViolationCard from "../parts/DOViolationCard";
+
 
 const ViolationRecord = ({ navigation }) => {
   const [selectedFilter, setSelectedFilter] = useState("All");
 
+  const violations = [
+    { type: "Bullying", count: 2 },
+    { type: "Major", count: 3 },
+    { type: "Minor", count: 4 },
+    { type: "Bullying", count: 5 },
+  ];
+
+  const showToast = () => {
+    if (Platform.OS === "android") {
+        ToastAndroid.show("Chatbot has been clicked", ToastAndroid.SHORT);
+      } 
+  };
   return (
-    <View style={styles.container}>
-      <Header title="Student List" />
-      <MenuBar activeTab="Student List" />
+    <View style={{ flex: 1, backgroundColor: "#F4F9FC", padding: 20, marginTop: 30 }}>
+      <View style={{ marginBottom: 15 }}> 
+        <Header title="Violation Record" />
+      </View>
+      <MenuBar activeTab="ViolationRecord"/>
 
       <ScrollView contentContainerStyle={styles.content}>
         {/* Violation Record Header */}
         <Text style={styles.sectionTitle}>Violation Record</Text>
 
-        {/* Student Profile Card */}
-        <View style={styles.profileCard}>
-          <View style={styles.profileHeader} />
-          <View style={styles.profileBody}>
-            <Image source={require("../../assets/user.png")} style={styles.avatar} />
-            <View style={styles.profileText}>
-              <Text style={styles.name}>Student Name</Text>
-              <Text style={styles.details}>Year & Section:</Text>
-              <Text style={styles.details}>School Year:</Text>
-            </View>
-          </View>
-        </View>
 
-        {/* Filters */}
+        <StudentCard></StudentCard>
         <View style={styles.filterContainer}>
-          <TouchableOpacity
-            style={[styles.filterButton, selectedFilter === "All" && styles.activeFilter]}
-            onPress={() => setSelectedFilter("All")}
-          >
-            <Text style={[styles.filterText, selectedFilter === "All" && styles.activeFilterText]}>All</Text>
-          </TouchableOpacity>
-          <TouchableOpacity
-            style={[styles.filterButton, selectedFilter === "Major Offense" && styles.activeFilter]}
-            onPress={() => setSelectedFilter("Major Offense")}
-          >
-            <Text style={[styles.filterText, selectedFilter === "Major Offense" && styles.activeFilterText]}>Major Offense</Text>
-          </TouchableOpacity>
-          <TouchableOpacity
-            style={[styles.filterButton, selectedFilter === "Minor Offense" && styles.activeFilter]}
-            onPress={() => setSelectedFilter("Minor Offense")}
-          >
-            <Text style={[styles.filterText, selectedFilter === "Minor Offense" && styles.activeFilterText]}>Minor Offense</Text>
-          </TouchableOpacity>
-        </View>
+        <ScrollView horizontal showsHorizontalScrollIndicator={false}>
+          {["All", "Major Offense", "Minor Offense"].map((filter) => (
+            <TouchableOpacity
+              key={filter}
+              style={[styles.filterButton, selectedFilter === filter && styles.activeFilter]}
+              onPress={() => setSelectedFilter(filter)}
+            >
+              <Text style={[styles.filterText, selectedFilter === filter && styles.activeFilterText]}>
+                {filter}
+              </Text>
+            </TouchableOpacity>
+          ))}
+        </ScrollView>
+      </View>
 
-        {/* Violation List */}
-        <View style={styles.violationCard}>
-          <Text style={styles.violationTitle}>Minor</Text>
-          <Text style={styles.violationCount}>3</Text>
-        </View>
-        <View style={styles.violationCard}>
-          <Text style={styles.violationTitle}>Minor</Text>
-          <Text style={styles.violationCount}>4</Text>
-        </View>
-        <View style={styles.violationCard}>
-          <Text style={styles.violationTitle}>Bullying</Text>
-          <Text style={styles.violationCount}>5</Text>
-        </View>
+      <ScrollView contentContainerStyle={styles.listContainer}>
+        {violations.map((violation, index) => (
+          <DOViolationCard key={index} type={violation.type} count={violation.count} />
+        ))}
       </ScrollView>
+      </ScrollView>
+
+      <TouchableOpacity style={styles.fab} onPress={showToast}>
+          <Image source={require("../../assets/chatbot.png")} style={styles.fabIcon} />
+      </TouchableOpacity>      
     </View>
   );
 };
@@ -77,7 +73,7 @@ const styles = StyleSheet.create({
     padding: 20,
   },
   sectionTitle: {
-    fontSize: 18,
+    fontSize: 22,
     fontWeight: "bold",
     marginBottom: 10,
   },
@@ -113,26 +109,47 @@ const styles = StyleSheet.create({
     fontSize: 14,
     color: "#666",
   },
-  filterContainer: {
+  filterSection: {
     flexDirection: "row",
     justifyContent: "space-between",
-    marginBottom: 10,
+    alignItems: "center",
+    marginBottom: 15,
+  },
+  filterTitle: {
+    fontSize: 20,
+    fontWeight: "bold",
+    color: "#000",
+  },
+  filterContainer: {
+    flexDirection: "row",
+    marginBottom: 15,
   },
   filterButton: {
-    paddingVertical: 8,
-    paddingHorizontal: 15,
-    borderRadius: 20,
-    backgroundColor: "#E5E5E5",
+    paddingVertical: 15,
+    paddingHorizontal: 18,
+    backgroundColor: "#FFFFFF",
+    borderRadius: 12,
+    marginHorizontal: 6,
+    elevation: 3, 
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.1,
+    shadowRadius: 4,
+    borderWidth: 1,
+    borderColor: "#E0E0E0",
   },
   activeFilter: {
     backgroundColor: "#0057FF",
   },
   filterText: {
     fontSize: 14,
-    color: "#000",
+    fontWeight: "bold",
+    color: "#333",
   },
   activeFilterText: {
     color: "#fff",
+  },
+  listContainer: {
+    paddingBottom: 80, // Prevents overlap with floating button
   },
   violationCard: {
     flexDirection: "row",
@@ -150,6 +167,23 @@ const styles = StyleSheet.create({
   violationCount: {
     fontSize: 16,
     color: "#555",
+  },
+  fab: {
+    position: "absolute",
+    bottom: 20,
+    right: 20,
+    backgroundColor: "#007AFF",
+    width: 55,
+    height: 55,
+    borderRadius: 27.5,
+    justifyContent: "center",
+    alignItems: "center",
+    elevation: 5,
+  },
+  fabIcon: {
+    width: 30,
+    height: 30,
+    tintColor: "#fff", // Keeps icon color consistent
   },
 });
 

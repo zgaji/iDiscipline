@@ -1,10 +1,10 @@
 import React from "react";
-import { View, Text, StyleSheet } from "react-native";
+import { View, Text, StyleSheet, Image } from "react-native";
 
 const DOStatCard = ({ title, icon, count, bgColor }) => {
   return (
     <View style={[styles.card, { backgroundColor: bgColor }]}>
-      <Text style={styles.icon}>{icon}</Text>
+      <Image source={icon} style={styles.icon} />
       <Text style={styles.count}>{count}</Text>
     </View>
   );
@@ -13,7 +13,7 @@ const DOStatCard = ({ title, icon, count, bgColor }) => {
 const styles = StyleSheet.create({
   card: {
     width: "30%",
-    height: 80,
+    height: 100, 
     borderRadius: 10,
     justifyContent: "center",
     alignItems: "center",
@@ -22,16 +22,19 @@ const styles = StyleSheet.create({
     shadowOpacity: 0.2,
     shadowRadius: 4,
     elevation: 5,
+    padding: 10, 
   },
   icon: {
-    fontSize: 24,
-    color: "#fff",
+    width: 50,  
+    height: 50, 
+    resizeMode: "contain", 
+    marginBottom: 5,
   },
   count: {
-    fontSize: 18,
+    fontSize: 20,
     fontWeight: "bold",
     color: "#fff",
   },
 });
 
-export default DOStatCard; // ✅ Updated export
+export default DOStatCard;

@@ -1,8 +1,10 @@
 import React, { useState, useEffect } from "react";
 import { View, Text, TextInput, TouchableOpacity, Modal, StyleSheet, Animated } from "react-native";
 import { FontAwesome } from "@expo/vector-icons";
+import { useRoute, useNavigation } from "@react-navigation/native";
 
 const DOChatPortal = ({ onClose }) => {
+    const navigation = useNavigation();
   return (
     <View style={styles.chatBox}>
       {/* Header */}
@@ -46,10 +48,10 @@ const DOViolationsDetails = ({ data, onClose }) => {
   if (!data) return null;
 
   const handleOpenChat = () => {
-    setViolationModalOpen(false); // Close Violation Details First
+    setViolationModalOpen(false); 
 
     setTimeout(() => {
-      setShowChat(true); // Open Chat Portal after closing Violation Details
+      setShowChat(true); 
     }, 300);
   };
 
@@ -89,19 +91,18 @@ const DOViolationsDetails = ({ data, onClose }) => {
               <View style={styles.timelineItem}>
                 <View style={styles.dot} />
                 <Text style={styles.updateText}>Report Sent</Text>
-                <Text style={styles.dateText}>Thursday - Dec. 25, 2025</Text>
+                <Text style={styles.dateText}>     Thursday - Dec. 25, 2025</Text>
               </View>
             </View>
 
-            {/* Buttons */}
-            <View style={styles.buttonContainer}>
-              <TouchableOpacity style={styles.printButton}>
-                <Text style={styles.printText}>Print</Text>
-              </TouchableOpacity>
-              <TouchableOpacity style={styles.messageButton} onPress={handleOpenChat}>
-                <Text style={styles.messageText}>Message</Text>
-              </TouchableOpacity>
-            </View>
+           <View style={styles.buttonContainer}>
+                         <TouchableOpacity style={styles.printButton}>
+                           <Text style={styles.buttonText}>Print</Text>
+                         </TouchableOpacity>
+                         <TouchableOpacity style={styles.messageButton} onPress={() => navigation.navigate("DOChatPortal")}>
+                           <Text style={styles.buttonText}>Message</Text>
+                         </TouchableOpacity>
+                       </View>
           </View>
         </View>
       </Modal>
@@ -131,11 +132,28 @@ const styles = StyleSheet.create({
   dot: { width: 8, height: 8, backgroundColor: "#0057FF", borderRadius: 4, marginRight: 10 },
   updateText: { fontSize: 14 },
   dateText: { fontSize: 12, color: "#888" },
-  buttonContainer: { flexDirection: "row", justifyContent: "space-between", marginTop: 20 },
-  printButton: { backgroundColor: "#ddd", padding: 10, borderRadius: 5 },
-  messageButton: { backgroundColor: "#0057FF", padding: 10, borderRadius: 5 },
-  printText: { fontWeight: "bold" },
-  messageText: { color: "#fff", fontWeight: "bold" },
+  buttonContainer: {
+    flexDirection: "row",
+    justifyContent: "left",
+    marginTop: 50,
+  },
+  printButton: {
+    backgroundColor: "#4C66D6",
+    paddingVertical: 10,
+    paddingHorizontal: 20,
+    borderRadius: 20,
+    marginRight: 10,
+  },
+  messageButton: {
+    backgroundColor: "#0057FF",
+    paddingVertical: 10,
+    paddingHorizontal: 20,
+    borderRadius: 20,
+  },
+  buttonText: {
+    color: "#fff",
+    fontWeight: "bold",
+  },
   chatContainer: { backgroundColor: "#fff", width: "90%", height: "80%", borderRadius: 10, padding: 20 },
   chatBox: { backgroundColor: "#fff", width: "100%", height: "100%", borderRadius: 10, padding: 20 },
   chatHeader: { flexDirection: "row", justifyContent: "space-between", alignItems: "center" },

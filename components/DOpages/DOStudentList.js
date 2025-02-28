@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { View, Text, TextInput, ScrollView, TouchableOpacity, StyleSheet, Modal } from "react-native";
+import { View, Text, TextInput, ScrollView, TouchableOpacity, StyleSheet, Modal,Platform,ToastAndroid,Image } from "react-native";
 import { FontAwesome } from "@expo/vector-icons";
 import Header from "../parts/Header";
 import MenuBar from "../parts/DOMenuBar";
@@ -14,6 +14,12 @@ const DOStudentList = ({ navigation }) => {
     { name: "Full Name", year: "Year" },
     { name: "Full Name", year: "Year" },
   ];
+
+    const showToast = () => {
+      if (Platform.OS === "android") {
+        ToastAndroid.show("Chatbot has been clicked", ToastAndroid.SHORT);
+      } 
+    };
 
   return (
     <View style={{ flex: 1, backgroundColor: "#F4F9FC", padding: 20, marginTop: 30 }}>
@@ -57,9 +63,8 @@ const DOStudentList = ({ navigation }) => {
         ))}
       </ScrollView>
 
-      {/* Floating Settings Button */}
-      <TouchableOpacity style={styles.fab}>
-        <FontAwesome name="cog" size={24} color="#fff" />
+      <TouchableOpacity style={styles.fab} onPress={showToast}>
+        <Image source={require("../../assets/chatbot.png")} style={styles.fabIcon} />
       </TouchableOpacity>
 
       {/* Add Student Modal */}
@@ -89,9 +94,8 @@ const DOStudentList = ({ navigation }) => {
               <Text style={styles.infoText}>Contact Number:</Text>
             </View>
 
-            {/* Create Button - Fixed at the Bottom */}
-            <TouchableOpacity style={styles.createButton}>
-              <Text style={styles.createButtonText}>Create</Text>
+            <TouchableOpacity style={styles.fab} onPress={showToast}>
+              <Image source={require("../../assets/chatbot.png")} style={styles.fabIcon} />
             </TouchableOpacity>
           </View>
         </View>
@@ -166,13 +170,18 @@ const styles = StyleSheet.create({
     position: "absolute",
     bottom: 20,
     right: 20,
-    backgroundColor: "#0057FF",
-    width: 50,
-    height: 50,
-    borderRadius: 25,
+    backgroundColor: "#007AFF",
+    width: 55,
+    height: 55,
+    borderRadius: 27.5,
     justifyContent: "center",
     alignItems: "center",
     elevation: 5,
+  },
+  fabIcon: {
+    width: 30,
+    height: 30,
+    tintColor: "#fff", // Keeps icon color consistent
   },
 
   // Modal Styles

@@ -8,7 +8,7 @@ import ViolationUpdate from "../parts/ViolationUpdate";
 const ViolationSlipScreen = () => {
   const route = useRoute();
   const navigation = useNavigation();
-  const caseData = route.params?.caseData || {}; // ✅ Ensure `caseData` is always defined
+  const caseData = route.params?.caseData || {}; 
 
   return (
     <View style={styles.container}>

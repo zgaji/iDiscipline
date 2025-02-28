@@ -7,6 +7,7 @@ import {
   TouchableOpacity,
   StyleSheet,
   Alert,
+  Platform,ToastAndroid,Image
 } from "react-native";
 import { FontAwesome } from "@expo/vector-icons";
 import DOMenuBar from "../parts/DOMenuBar";
@@ -34,6 +35,12 @@ const DOAppointments = () => {
       ],
       { cancelable: true }
     );
+  };
+
+  const handleChatbotClick = () => {
+    if (Platform.OS === "android") {
+      ToastAndroid.show("Chatbot has been clicked", ToastAndroid.SHORT);
+    } 
   };
 
   return (
@@ -120,11 +127,11 @@ const DOAppointments = () => {
           </View>
         </ScrollView>
 
-        {/* Floating Action Button */}
-        <TouchableOpacity style={styles.floatingButton}>
-          <FontAwesome name="plus" size={24} color="white" />
-        </TouchableOpacity>
       </View>
+
+      <TouchableOpacity style={styles.fab} onPress={handleChatbotClick}>
+        <Image source={require("../../assets/chatbot.png")} style={styles.fabIcon} />
+      </TouchableOpacity>
     </View>
   );
 };
@@ -270,6 +277,24 @@ const styles = StyleSheet.create({
     shadowOpacity: 0.3,
     shadowRadius: 4,
     elevation: 5,
+  },
+
+  fab: {
+    position: "absolute",
+    bottom: 20,
+    right: 20,
+    backgroundColor: "#007AFF",
+    width: 55,
+    height: 55,
+    borderRadius: 27.5,
+    justifyContent: "center",
+    alignItems: "center",
+    elevation: 5,
+  },
+  fabIcon: {
+    width: 30,
+    height: 30,
+    tintColor: "#fff", // Keeps icon color consistent
   },
 });
 

@@ -1,33 +1,29 @@
 import React, { useState } from "react";
-import { View, Text, Image, TouchableOpacity, StyleSheet, ScrollView, Modal } from "react-native";
+import { View, Text, Image, TouchableOpacity, ScrollView, Modal, StyleSheet,Platform,ToastAndroid } from "react-native";
 import { useNavigation } from "@react-navigation/native";
 import Header from "../parts/Header";
 import MenuBar from "../parts/DOMenuBar";
 import { FontAwesome } from "@expo/vector-icons";
+import StudentCard from "../parts/StudentCard";
 
 const DOStudentProfile = () => {
 const navigation = useNavigation(); 
   const [modalVisible, setModalVisible] = useState(false); // ✅ Manage modal state
 
+  const showToast = () => {
+    if (Platform.OS === "android") {
+        ToastAndroid.show("Chatbot has been clicked", ToastAndroid.SHORT);
+      } 
+  };
   return (
-    <View style={styles.container}>
-      <Header title="Student List" />
-      <MenuBar activeTab="Student List" />
+    <View style={{ flex: 1, backgroundColor: "#F4F9FC", padding: 20, marginTop: 30 }}>
+      <View style={{ marginBottom: 15 }}> 
+        <Header title="Student List" />
+      </View>
+      <MenuBar activeTab="StudentList"/>
       
       <ScrollView contentContainerStyle={styles.content}>
-        {/* Student Profile Card - Clickable */}
-        <TouchableOpacity style={styles.profileCard} onPress={() => setModalVisible(true)}>
-          <View style={styles.profileHeader} />
-          <View style={styles.profileBody}>
-            <Image source={require("../../assets/user.png")} style={styles.avatar} />
-            <View style={styles.profileText}>
-              <Text style={styles.name}>Student Name</Text>
-              <Text style={styles.details}>Student No.</Text>
-              <Text style={styles.details}>Year & Section:</Text>
-              <Text style={styles.details}>School Year:</Text>
-            </View>
-          </View>
-        </TouchableOpacity>
+        <StudentCard></StudentCard>
 
         {/* Student Report Section */}
         <Text style={styles.sectionTitle}>Student Report</Text>
@@ -38,11 +34,14 @@ const navigation = useNavigation();
           <Text style={styles.arrow}>›</Text>
         </TouchableOpacity>
 
-        {/* Behavior Report */}
         <View style={styles.behaviorCard}>
-          <Text style={styles.behaviorText}>Behavior Report</Text>
-          <Text style={styles.behaviorSubtext}>This student is in immediate need of counseling</Text>
+        <Text style={styles.behaviorText}>Behavior Report</Text>
+        <View style={{ flex: 1 }}>
+          <Text style={styles.behaviorSubtext}>
+            This student is in immediate need of counseling
+          </Text>
         </View>
+      </View>
       </ScrollView>
 
       {/* Student Details Modal */}
@@ -82,6 +81,10 @@ const navigation = useNavigation();
           </View>
         </View>
       </Modal>
+
+       <TouchableOpacity style={styles.fab} onPress={showToast}>
+          <Image source={require("../../assets/chatbot.png")} style={styles.fabIcon} />
+        </TouchableOpacity>      
     </View>
   );
 };
@@ -128,21 +131,11 @@ const styles = StyleSheet.create({
     color: "#666",
   },
   sectionTitle: {
-    fontSize: 16,
+    fontSize: 20,
     fontWeight: "bold",
     marginBottom: 10,
   },
   recordCard: {
-    backgroundColor: "#fff",
-    borderRadius: 10,
-    padding: 15,
-    marginBottom: 10,
-    flexDirection: "row",
-    justifyContent: "space-between",
-    alignItems: "center",
-    elevation: 3,
-  },
-  behaviorCard: {
     backgroundColor: "#fff",
     borderRadius: 10,
     padding: 15,
@@ -157,14 +150,23 @@ const styles = StyleSheet.create({
     fontWeight: "bold",
     color: "#0057FF",
   },
+  behaviorCard: {
+    backgroundColor: "#fff",
+    borderRadius: 10,
+    padding: 15,
+    marginBottom: 10,
+    elevation: 3,
+  },
   behaviorText: {
     fontSize: 16,
     fontWeight: "bold",
     color: "#333",
+    marginBottom: 5, // ✅ Adds spacing between title & description
   },
   behaviorSubtext: {
     fontSize: 12,
     color: "#666",
+    flexShrink: 1, // ✅ Prevents overflow
   },
   arrow: {
     fontSize: 20,
@@ -221,6 +223,23 @@ const styles = StyleSheet.create({
   editText: {
     color: "#fff",
     fontWeight: "bold",
+  },
+  fab: {
+    position: "absolute",
+    bottom: 20,
+    right: 20,
+    backgroundColor: "#007AFF",
+    width: 55,
+    height: 55,
+    borderRadius: 27.5,
+    justifyContent: "center",
+    alignItems: "center",
+    elevation: 5,
+  },
+  fabIcon: {
+    width: 30,
+    height: 30,
+    tintColor: "#fff", // Keeps icon color consistent
   },
 });
 

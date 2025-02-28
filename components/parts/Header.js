@@ -2,6 +2,7 @@ import React from "react";
 import { View, Text, TouchableOpacity, StyleSheet, Image, Alert } from "react-native";
 import { useNavigation, useRoute } from "@react-navigation/native";
 
+
 const screenTitles = {
   Home: "Dashboard",
   Profile: "Student Profile",
@@ -9,7 +10,16 @@ const screenTitles = {
   IncidentReports: "Incident Reports",
   Appointments: "Appointments",
   Handbook: "Student Handbook",
-  DOHome: "Admin Dashboard",
+  DOHome: "Dashboard",
+  DOStudentList: "Student List",
+  DOStudentProfile: "Student Profile",
+  DOViolations: "Violations",
+  DOIncidentReports: "Incident Reports",
+  DOAppointments: "Appointments",
+  ViolationRecord: "Violation Record",
+  ChatPortal: "Chat Portal",
+  ReportsScreen: "Reports",
+  DOHandbookScreen: "Handbook",
 };
 
 const Header = () => {

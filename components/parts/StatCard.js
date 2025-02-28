@@ -1,11 +1,11 @@
 import React from "react";
-import { View, Text, StyleSheet } from "react-native";
+import { View, Text, Image, StyleSheet } from "react-native";
 
 const StatCard = ({ title, icon, count, bgColor }) => {
   return (
     <View style={[styles.card, { backgroundColor: bgColor }]}>
       <Text style={styles.title}>{title}</Text>
-      <Text style={styles.icon}>{icon}</Text>
+      <Image source={icon} style={styles.icon} />
       <Text style={styles.count}>{count}</Text>
     </View>
   );
@@ -13,28 +13,35 @@ const StatCard = ({ title, icon, count, bgColor }) => {
 
 const styles = StyleSheet.create({
   card: {
-    width: "45%", 
-    padding: 15,
-    borderRadius: 20,
+    width: "47%", 
+    padding: 18, 
+    borderRadius: 15,
     alignItems: "center",
-    marginBottom: 10,
+    justifyContent: "center",
+    marginBottom: 8,
     shadowColor: "#000",
-    shadowOffset: { width: 0, height: 4 },
-    shadowOpacity: 0.3,
-    shadowRadius: 5,
-    elevation: 5, 
-  },
-  icon: {
-    fontSize: 30,
+    shadowOffset: { width: 0, height: 3 },
+    shadowOpacity: 0.2,
+    shadowRadius: 4,
+    elevation: 3,
   },
   title: {
     fontWeight: "bold",
-    fontSize: 16,
+    fontSize: 18,
+    color: "#fff",
     textAlign: "left",
+    width: "100%",
+  },
+  icon: {
+    width: 50, 
+    height: 50,
+    tintColor: "#fff",
+    marginBottom: 5,
   },
   count: {
-    fontSize: 24,
+    fontSize: 22,
     fontWeight: "bold",
+    color: "#fff",
   },
 });
 

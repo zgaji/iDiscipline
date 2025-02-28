@@ -7,6 +7,9 @@ import {
   StyleSheet,
   Modal,
   TextInput,
+  Image,
+  Platform,
+  ToastAndroid,
 } from "react-native";
 import Header from "../parts/Header";
 import MenuBar from "../parts/MenuBar";
@@ -23,6 +26,13 @@ const IncidentReportsScreen = () => {
     reportedBy: "",
     dateReported: "",
   });
+
+  const handleChatbotClick = () => {
+    if (Platform.OS === "android") {
+      ToastAndroid.show("Chatbot has been clicked", ToastAndroid.SHORT);
+    } 
+  };
+
 
   const reports = [
     {
@@ -114,6 +124,12 @@ const IncidentReportsScreen = () => {
           </View>
         </View>
       </Modal>
+
+
+      <TouchableOpacity style={styles.fab} onPress={handleChatbotClick}>
+        <Image source={require("../../assets/chatbot.png")} style={styles.fabIcon} />
+      </TouchableOpacity>
+
     </View>
   );
 };
@@ -135,6 +151,23 @@ const styles = StyleSheet.create({
   submitButtonText: { color: "#fff", fontWeight: "bold", fontSize: 16 },
   closeButton: { position: "absolute", top: 10, right: 10 },
   closeButtonText: { fontSize: 16, fontWeight: "bold", color: "#0057FF" },
+  fab: {
+    position: "absolute",
+    bottom: 20,
+    right: 20,
+    backgroundColor: "#007AFF",
+    width: 55,
+    height: 55,
+    borderRadius: 27.5,
+    justifyContent: "center",
+    alignItems: "center",
+    elevation: 5,
+  },
+  fabIcon: {
+    width: 30,
+    height: 30,
+    tintColor: "#fff", 
+  },
 });
 
 export default IncidentReportsScreen;

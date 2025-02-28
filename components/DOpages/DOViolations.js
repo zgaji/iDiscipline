@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { View, Text, TextInput, ScrollView, TouchableOpacity, Modal, StyleSheet } from "react-native";
+import { View, Text, TextInput, ScrollView, TouchableOpacity, Modal, StyleSheet,Platform,ToastAndroid,Image } from "react-native";
 import { FontAwesome } from "@expo/vector-icons";
 import DOMenuBar from "../parts/DOMenuBar";
 import DOViolationsDetails from "./DOViolationsDetails";
@@ -13,12 +13,20 @@ const DOViolations = () => {
     { id: "2025-153", firstName: "John", lastName: "Doe", type: "Late", status: "Unresolved" },
   ];
 
+  const showToast = () => {
+    if (Platform.OS === "android") {
+        ToastAndroid.show("Chatbot has been clicked", ToastAndroid.SHORT);
+      } 
+  };
+
   return (
     <View style={{ flex: 1, backgroundColor: "#F4F9FC", padding: 20, marginTop: 30 }}>
       <View style={{ marginBottom: 15 }}> 
         <Header title="Violations" />
       </View>
-      <DOMenuBar activeTab="Violations"/>
+      <View style={{ marginBottom: 15 }}> 
+        <DOMenuBar activeTab="Violations"/>
+      </View>
 
       <Text style={styles.title}>Violation Record</Text>
 
@@ -83,13 +91,18 @@ const DOViolations = () => {
           </View>
         </View>
       </Modal>
+
+      <TouchableOpacity style={styles.fab} onPress={showToast}>
+          <Image source={require("../../assets/chatbot.png")} style={styles.fabIcon} />
+      </TouchableOpacity>      
+
     </View>
   );
 };
 
 const styles = StyleSheet.create({
   container: { flex: 1, padding: 20, backgroundColor: "#F4F7FC" },
-  title: { fontSize: 18, fontWeight: "bold", marginBottom: 10 },
+  title: { fontSize: 22, fontWeight: "bold", marginBottom: 10 },
   filterContainer: { flexDirection: "row", alignItems: "center", marginBottom: 10 },
   searchInput: { flex: 1, padding: 10, borderWidth: 1, borderColor: "#ddd", borderRadius: 5, backgroundColor: "#fff" },
   filterButton: { padding: 10, backgroundColor: "#E3E3E3", borderRadius: 5, marginLeft: 5 },
@@ -108,7 +121,25 @@ const styles = StyleSheet.create({
   modalTitle: { fontSize: 20, fontWeight: "bold", marginBottom: 10, textAlign: "center" },
   input: { borderWidth: 1, borderColor: "#ddd", borderRadius: 5, padding: 10, marginBottom: 10, backgroundColor: "#fff" },
   addViolationButton: { backgroundColor: "#27AE60", paddingVertical: 10, borderRadius: 8, alignItems: "center" },
+  
   closeButton: { marginTop: 10, alignItems: "center" },
+  fab: {
+    position: "absolute",
+    bottom: 20,
+    right: 20,
+    backgroundColor: "#007AFF",
+    width: 55,
+    height: 55,
+    borderRadius: 27.5,
+    justifyContent: "center",
+    alignItems: "center",
+    elevation: 5,
+  },
+  fabIcon: {
+    width: 30,
+    height: 30,
+    tintColor: "#fff", // Keeps icon color consistent
+  },
 });
 
 export default DOViolations;

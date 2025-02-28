@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import {View, Text, TextInput, ScrollView, TouchableOpacity, Modal, StyleSheet,} from "react-native";
+import {View, Text, TextInput, ScrollView, TouchableOpacity, Modal, StyleSheet,Platform,ToastAndroid,Image} from "react-native";
 import DOMenuBar from "../parts/DOMenuBar";
 import IncidentReportMenu from "../parts/IncidentReportMenu";
 import { FontAwesome } from "@expo/vector-icons";
@@ -26,6 +26,12 @@ const IncidentReports = () => {
       },
     },
   ];
+
+  const showToast = () => {
+    if (Platform.OS === "android") {
+      ToastAndroid.show("Chatbot has been clicked", ToastAndroid.SHORT);
+    } 
+  };
 
   return (
     <View style={{ flex: 1, backgroundColor: "#F4F9FC", padding: 20, marginTop: 30 }}>
@@ -131,6 +137,10 @@ const IncidentReports = () => {
           </View>
         </View>
       </Modal>
+      <TouchableOpacity style={styles.fab} onPress={showToast}>
+        <Image source={require("../../assets/chatbot.png")} style={styles.fabIcon} />
+      </TouchableOpacity>  
+      
     </View>
   );
 };
@@ -262,6 +272,23 @@ const styles = StyleSheet.create({
   violationButtonText: { color: "#fff", fontWeight: "bold" },
   closeButton: { position: "absolute", top: 10, right: 10 },
   closeButtonText: { fontSize: 18, fontWeight: "bold" },
+  fab: {
+    position: "absolute",
+    bottom: 20,
+    right: 20,
+    backgroundColor: "#007AFF",
+    width: 55,
+    height: 55,
+    borderRadius: 27.5,
+    justifyContent: "center",
+    alignItems: "center",
+    elevation: 5,
+  },
+  fabIcon: {
+    width: 30,
+    height: 30,
+    tintColor: "#fff", // Keeps icon color consistent
+  },
 });
 
 export default IncidentReports;
