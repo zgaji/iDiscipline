@@ -14,9 +14,11 @@ const DOViolations = () => {
   ];
 
   return (
-    <View style={styles.container}>
-      <Header title="Violations" />
-      <DOMenuBar activeTab="Violations" />
+    <View style={{ flex: 1, backgroundColor: "#F4F9FC", padding: 20, marginTop: 30 }}>
+      <View style={{ marginBottom: 15 }}> 
+        <Header title="Violations" />
+      </View>
+      <DOMenuBar activeTab="Violations"/>
 
       <Text style={styles.title}>Violation Record</Text>
 

@@ -16,9 +16,11 @@ const DOStudentList = ({ navigation }) => {
   ];
 
   return (
-    <View style={styles.container}>
-      <Header title="Student List" />
-      <MenuBar activeTab="Student List" />
+    <View style={{ flex: 1, backgroundColor: "#F4F9FC", padding: 20, marginTop: 30 }}>
+      <View style={{ marginBottom: 15 }}> 
+        <Header title="StudentList" />
+      </View>
+      <MenuBar activeTab="Student List"/>
 
       <ScrollView contentContainerStyle={styles.content}>
         {/* Students Count */}
@@ -112,7 +114,7 @@ const styles = StyleSheet.create({
     marginBottom: 10,
   },
   studentText: {
-    fontSize: 18,
+    fontSize: 26,
     fontWeight: "bold",
   },
   studentCount: {

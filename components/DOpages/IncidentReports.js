@@ -3,6 +3,7 @@ import {View, Text, TextInput, ScrollView, TouchableOpacity, Modal, StyleSheet,}
 import DOMenuBar from "../parts/DOMenuBar";
 import IncidentReportMenu from "../parts/IncidentReportMenu";
 import { FontAwesome } from "@expo/vector-icons";
+import Header from "../parts/Header";
 
 const IncidentReports = () => {
   const [searchQuery, setSearchQuery] = useState("");
@@ -27,10 +28,11 @@ const IncidentReports = () => {
   ];
 
   return (
-    <View style={styles.container}>
-      {/* Top Menu */}
-      <Text style={styles.headerTitle}>Incident Reports</Text>
-      <DOMenuBar activeTab="Incident Reports" />
+    <View style={{ flex: 1, backgroundColor: "#F4F9FC", padding: 20, marginTop: 30 }}>
+      <View style={{ marginBottom: 15 }}> 
+        <Header title="Incident Reports" />
+      </View>
+      <DOMenuBar activeTab="IncidentReports"/>
 
       <View style={styles.content}>
         <Text style={styles.title}>Incident Reports</Text>

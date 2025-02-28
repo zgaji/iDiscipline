@@ -12,7 +12,6 @@ import { FontAwesome } from "@expo/vector-icons";
 import Header from "../parts/Header";
 import ViolationUpdate from "../parts/ViolationUpdate";
 import { useRoute, useNavigation } from "@react-navigation/native";
-import ViolationDetailsScreen from "./ViolationDetailsScreen";
 
 
 const ChatPortalScreen = () => {
@@ -35,7 +34,7 @@ const ChatPortalScreen = () => {
       <Header title="Chat" />
       <TouchableOpacity 
         style={styles.dropdownIcon} 
-        onPress={() => navigation.navigate("ViolationDetails", { type: "Major", count: 3 })}
+        onPress={() => navigation.navigate("ViolationDetails", { type: selectedCase.category, count: 3 })}
       >
         <FontAwesome name="angle-down" size={24} color="#999" />
       </TouchableOpacity>

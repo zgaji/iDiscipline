@@ -3,16 +3,18 @@ import {View,Text, TextInput, ScrollView, TouchableOpacity,StyleSheet,} from "re
 import { FontAwesome } from "@expo/vector-icons";
 import DOMenuBar from "../parts/DOMenuBar";
 import AppointmentsMenu from "../parts/AppointmentsMenu";
+import Header from "../parts/Header";
 
 const DOAppointments = () => {
   const [searchQuery, setSearchQuery] = useState("");
 
 
   return (
-    <View style={styles.container}>
-      {/* Top Menu */}
-      <Text style={styles.headerTitle}>Appointments</Text>
-      <DOMenuBar activeTab="Appointments" />
+    <View style={{ flex: 1, backgroundColor: "#F4F9FC", padding: 20, marginTop: 30 }}>
+      <View style={{ marginBottom: 15 }}> 
+        <Header title="Appointments" />
+      </View>
+      <DOMenuBar activeTab="Appointments"/>
 
       <View style={styles.content}>
         <Text style={styles.title}>Appointments</Text>

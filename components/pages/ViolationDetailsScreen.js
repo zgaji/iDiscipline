@@ -27,7 +27,7 @@ const ViolationDetailsScreen = () => {
   return (
     <View style={styles.container}>
       <Header title="Violations" />
-      <TouchableOpacity style={styles.dropdownIcon} onPress={() => navigation.navigate("ViolationDetails")}>
+      <TouchableOpacity style={styles.dropdownIcon} onPress={() => navigation.navigate("Violations")}>
         <FontAwesome name="angle-down" size={24} color="#999" />
       </TouchableOpacity>
       <View style={styles.violationInfo}>
