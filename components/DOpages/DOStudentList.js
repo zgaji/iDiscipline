@@ -93,10 +93,6 @@ const DOStudentList = ({ navigation }) => {
               <Text style={styles.infoText}>Email:</Text>
               <Text style={styles.infoText}>Contact Number:</Text>
             </View>
-
-            <TouchableOpacity style={styles.fab} onPress={showToast}>
-              <Image source={require("../../assets/chatbot.png")} style={styles.fabIcon} />
-            </TouchableOpacity>
           </View>
         </View>
       </Modal>

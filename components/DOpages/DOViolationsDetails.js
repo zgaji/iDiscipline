@@ -15,12 +15,12 @@ const DOViolationDetails = () => {
       <Header title="Violations" />
 
       <ScrollView contentContainerStyle={styles.detailsContainer}>
-        {/* Close Button */}
+     
         <TouchableOpacity style={styles.closeButton} onPress={() => navigation.goBack()}>
           <FontAwesome name="times" size={18} color="#666" />
         </TouchableOpacity>
 
-        {/* Case Info */}
+      
         <Text style={styles.caseTitle}>Case #{caseData.id || "N/A"}</Text>
         <Text style={styles.info}>Student Name: {caseData.studentName || "N/A"}</Text>
         <Text style={styles.info}>Status: {caseData.status || "N/A"}</Text>
@@ -29,12 +29,10 @@ const DOViolationDetails = () => {
         <Text style={styles.info}>Time Reported: {caseData.timeReported || "N/A"}</Text>
         <Text style={styles.info}>Notes: {caseData.notes || "No additional notes"}</Text>
 
-        {/* Updates Section */}
         <Text style={styles.updateTitle}>Updates</Text>
         <ViolationUpdate text="Report Sent" date={caseData.date || "Unknown Date"} />
       </ScrollView>
 
-      {/* Message Button */}
       <TouchableOpacity style={styles.messageButton} onPress={() => navigation.navigate("DOChatPortal")}>
         <Text style={styles.messageText}>Message</Text>
       </TouchableOpacity>

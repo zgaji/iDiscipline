@@ -34,7 +34,7 @@ const ChatPortalScreen = () => {
       <Header title="Chat" />
       <TouchableOpacity 
         style={styles.dropdownIcon} 
-        onPress={() => navigation.navigate("ViolationDetails", { type: selectedCase.category, count: 3 })}
+        onPress={() => navigation.navigate("ViolationDetailsScreen", { type: selectedCase.category, count: 3 })}
       >
         <FontAwesome name="angle-down" size={24} color="#999" />
       </TouchableOpacity>

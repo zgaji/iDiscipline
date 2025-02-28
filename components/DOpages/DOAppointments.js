@@ -129,7 +129,7 @@ const DOAppointments = () => {
 
       </View>
 
-      <TouchableOpacity style={styles.fab} onPress={handleChatbotClick}>
+            <TouchableOpacity style={styles.fab} onPress={handleChatbotClick}>
         <Image source={require("../../assets/chatbot.png")} style={styles.fabIcon} />
       </TouchableOpacity>
     </View>
