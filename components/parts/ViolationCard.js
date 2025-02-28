@@ -9,7 +9,7 @@ const ViolationCard = ({ type, count }) => {
   return (
     <TouchableOpacity 
       style={styles.card} 
-      onPress={() => navigation.navigate("ViolationDetails", { type, count })}
+      onPress={() => navigation.navigate("ViolationsDetails", { type, count })}
     >
       <View style={styles.iconContainer}>
         <FontAwesome name="gavel" size={24} color="#0057FF" />

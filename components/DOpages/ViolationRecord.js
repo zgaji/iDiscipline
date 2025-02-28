@@ -24,9 +24,9 @@ const ViolationRecord = ({ navigation }) => {
   return (
     <View style={{ flex: 1, backgroundColor: "#F4F9FC", padding: 20, marginTop: 30 }}>
       <View style={{ marginBottom: 15 }}> 
-        <Header title="Violation Record" />
+        <Header title="DOViolations" />
       </View>
-      <MenuBar activeTab="ViolationRecord"/>
+      <MenuBar activeTab="DOViolations"/>
 
       <ScrollView contentContainerStyle={styles.content}>
         {/* Violation Record Header */}

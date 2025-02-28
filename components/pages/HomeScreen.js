@@ -12,7 +12,7 @@ const stats = [
   { title: "Appointments", icon: require("../../assets/appointment.png"), count: 0, bgColor: "#2C62FF" },
 ];
 
-const HomeScreen = () => {
+const HomeScreen = () => { 
   const showToast = () => {
     if (Platform.OS === "android") {
       ToastAndroid.show("Chatbot has been clicked", ToastAndroid.SHORT);
@@ -49,6 +49,8 @@ const HomeScreen = () => {
       <TouchableOpacity style={styles.fab} onPress={showToast}>
         <Image source={require("../../assets/chatbot.png")} style={styles.fabIcon} />
       </TouchableOpacity>
+
+
     </View>
   );
 };

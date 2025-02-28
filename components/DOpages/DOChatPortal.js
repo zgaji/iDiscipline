@@ -1,17 +1,11 @@
-import React, { useState } from "react";
-import {
-  View,
-  Text,
-  ScrollView,
-  TouchableOpacity,
-  StyleSheet,
-  TextInput,
-  Modal
-} from "react-native";
 import { FontAwesome } from "@expo/vector-icons";
 import Header from "../parts/Header";
 import ViolationUpdate from "../parts/ViolationUpdate";
 import { useRoute, useNavigation } from "@react-navigation/native";
+import { StyleSheet } from "react-native";
+import { useState } from "react";
+import { View, Text, ScrollView, TouchableOpacity, TextInput, Modal } from "react-native";
+
 
 
 const DOChatPortal = () => {
@@ -34,7 +28,7 @@ const DOChatPortal = () => {
       <Header title="Chat" />
       <TouchableOpacity 
         style={styles.dropdownIcon} 
-        onPress={() => navigation.navigate("DOViolationDetails", { type: selectedCase.category, count: 3 })}
+        onPress={() => navigation.navigate("ViolationRecord", { type: selectedCase.category, count: 3 })}
       >
         <FontAwesome name="angle-down" size={24} color="#999" />
       </TouchableOpacity>

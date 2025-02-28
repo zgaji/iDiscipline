@@ -5,7 +5,7 @@ import DOMenuBar from "../parts/DOMenuBar";
 import DOViolationsDetails from "./DOViolationsDetails";
 import Header from "../parts/Header";
 
-const DOViolations = () => {
+const DOViolations = ({ navigation }) => {
   const [selectedViolation, setSelectedViolation] = useState(null);
   const [isAddViolationVisible, setIsAddViolationVisible] = useState(false);
 
@@ -66,8 +66,12 @@ const DOViolations = () => {
       </TouchableOpacity>
 
       <Modal visible={!!selectedViolation} transparent animationType="fade">
-        <DOViolationsDetails data={selectedViolation} onClose={() => setSelectedViolation(null)} />
-      </Modal>
+          <DOViolationsDetails 
+            data={selectedViolation} 
+            onClose={() => setSelectedViolation(null)}
+            navigation={navigation}  
+          />
+        </Modal>
 
       <Modal visible={isAddViolationVisible} transparent animationType="fade">
         <View style={styles.modalContainer}>
