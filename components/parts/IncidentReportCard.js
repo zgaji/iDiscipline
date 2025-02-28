@@ -2,11 +2,9 @@ import React from "react";
 import { View, Text, StyleSheet, TouchableOpacity } from "react-native";
 import { useNavigation } from "@react-navigation/native";
 
-const IncidentReportCard = ({ report }) => {
-  const navigation = useNavigation();
-
+const IncidentReportCard = ({ report, onPress }) => {
   return (
-    <TouchableOpacity style={styles.card} onPress={() => navigation.navigate("IncidentReportForm")}>
+    <TouchableOpacity style={styles.card} onPress={onPress}>
       <View style={styles.cardHeader}>
         <Text style={styles.cardTitle}>{report.type}</Text>
         <View style={styles.statusBadge}>
@@ -15,7 +13,7 @@ const IncidentReportCard = ({ report }) => {
       </View>
       <Text style={styles.cardInfo}>Date Sent: {report.date}</Text>
       <Text style={styles.description}>{report.description}</Text>
-      <TouchableOpacity style={styles.readMore}>
+      <TouchableOpacity style={styles.readMore} onPress={onPress}>
         <Text style={styles.readMoreText}>Read More</Text>
       </TouchableOpacity>
     </TouchableOpacity>

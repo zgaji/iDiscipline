@@ -9,7 +9,7 @@ const InputField = ({ placeholder, secureTextEntry, value, onChangeText }) => {
         placeholder={placeholder}
         secureTextEntry={secureTextEntry}
         value={value}
-        onChangeText={onChangeText} // Ensure this is correctly passed!
+        onChangeText={onChangeText} 
       />
     </View>
   );

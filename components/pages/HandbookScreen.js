@@ -5,9 +5,13 @@ import MenuBar from "../parts/MenuBar";
 
 const HandbookScreen = () => {
   return (
-    <View style={styles.container}>
-      <Header title="Student Handbook" />
-      <MenuBar activeTab="Handbook" />
+    <View style={{ flex: 1, backgroundColor: "#F4F9FC", padding: 20, marginTop: 30 }}>
+      <View style={{ marginBottom: 15 }}> 
+        <Header title="Handbook" />
+      </View>
+      <View style={{ marginBottom: 15 }}> 
+        <MenuBar />
+      </View>
       <ScrollView contentContainerStyle={styles.content}>
         <Image source={require("../../assets/handbook.png")} style={styles.image} resizeMode="contain" />
       </ScrollView>

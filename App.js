@@ -6,7 +6,6 @@ import HomeScreen from './components/pages/HomeScreen';
 import ProfileScreen from './components/pages/ProfileScreen';
 import ViolationsScreen from './components/pages/ViolationsScreen';
 import ViolationDetailsScreen from './components/pages/ViolationDetailsScreen';
-import IncidentReportFormScreen from './components/pages/IncidentReportsFormScreen';
 import IncidentReportsScreen from './components/pages/IncidentReportsScreen';
 import ViolationSlipScreen from "./components/pages/ViolationSlipScreen";
 import ChatPortalScreen from "./components/pages/ChatPortalScreen";
@@ -39,10 +38,9 @@ export default function App() {
         <Stack.Screen name="Violations" component={ViolationsScreen} />
         <Stack.Screen name="ViolationDetails" component={ViolationDetailsScreen} />
         <Stack.Screen name="IncidentReports" component={IncidentReportsScreen} />
-        <Stack.Screen name="IncidentReportForm" component={IncidentReportFormScreen} />
         <Stack.Screen name="ViolationSlip" component={ViolationSlipScreen} />
         <Stack.Screen name="ChatPortal" component={ChatPortalScreen} />
-        <Stack.Screen name="Appoinments" component={AppointmentsScreen} />
+        <Stack.Screen name="Appointments" component={AppointmentsScreen} />
         <Stack.Screen name="CalendarView" component={CalendarView} />
         <Stack.Screen name="Handbook" component={HandbookScreen} />
         <Stack.Screen name="DOHome" component={DOHomeScreen} />

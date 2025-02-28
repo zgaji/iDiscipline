@@ -39,7 +39,7 @@ const navigation = useNavigation();
         </TouchableOpacity>
 
         {/* Behavior Report */}
-        <View style={styles.recordCard}>
+        <View style={styles.behaviorCard}>
           <Text style={styles.behaviorText}>Behavior Report</Text>
           <Text style={styles.behaviorSubtext}>This student is in immediate need of counseling</Text>
         </View>
@@ -133,6 +133,16 @@ const styles = StyleSheet.create({
     marginBottom: 10,
   },
   recordCard: {
+    backgroundColor: "#fff",
+    borderRadius: 10,
+    padding: 15,
+    marginBottom: 10,
+    flexDirection: "row",
+    justifyContent: "space-between",
+    alignItems: "center",
+    elevation: 3,
+  },
+  behaviorCard: {
     backgroundColor: "#fff",
     borderRadius: 10,
     padding: 15,

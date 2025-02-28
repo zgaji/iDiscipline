@@ -3,12 +3,12 @@ import { View, Text, Image, TouchableOpacity, StyleSheet } from "react-native";
 import { useNavigation } from "@react-navigation/native";
 
 const StudentCard = ({ name, year }) => {
-  const navigation = useNavigation(); // ✅ Get navigation object
+  const navigation = useNavigation(); 
 
   return (
     <TouchableOpacity 
       style={styles.card} 
-      onPress={() => navigation.navigate("DOStudentProfile", { studentName: name, studentYear: year })} // ✅ Navigate with data
+      onPress={() => navigation.navigate("DOStudentProfile", { studentName: name, studentYear: year })}
     >
       <View style={styles.row}>
         <Image source={require("../../assets/user.png")} style={styles.avatar} />

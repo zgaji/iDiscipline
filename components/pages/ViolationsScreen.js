@@ -1,12 +1,14 @@
 import React, { useState } from "react";
 import { View, ScrollView, StyleSheet, TouchableOpacity, Text } from "react-native";
 import { FontAwesome } from "@expo/vector-icons";
+import { Picker } from "@react-native-picker/picker";
 import Header from "../parts/Header";
 import MenuBar from "../parts/MenuBar";
 import ViolationCard from "../parts/ViolationCard";
 
 const ViolationsScreen = () => {
   const [selectedFilter, setSelectedFilter] = useState("All");
+  const [sortOrder, setSortOrder] = useState("Highest");
 
   const violations = [
     { type: "Bullying", count: 2 },
@@ -16,11 +18,30 @@ const ViolationsScreen = () => {
   ];
 
   return (
-    <View style={styles.container}>
-      <Header title="Violations" />
-      <MenuBar />
+    <View style={{ flex: 1, backgroundColor: "#F4F9FC", padding: 20, marginTop: 30 }}>
+      <View style={{ marginBottom: 15 }}> 
+        <Header title="Violations" />
+      </View>
+      <View style={{ marginBottom: 15 }}> 
+        <MenuBar />
+      </View>
 
-      {/* Filter Buttons */}
+      {/* Filter Section */}
+      <View style={styles.filterSection}>
+        <Text style={styles.filterTitle}>Violation Records</Text>
+        <View style={styles.dropdownContainer}>
+          <Picker
+            selectedValue={sortOrder}
+            onValueChange={(itemValue) => setSortOrder(itemValue)}
+            style={styles.picker}
+          >
+            <Picker.Item label="Highest" value="Highest" />
+            <Picker.Item label="Lowest" value="Lowest" />
+          </Picker>
+        </View>
+      </View>
+
+      {/* Category Buttons */}
       <View style={styles.filterContainer}>
         <ScrollView horizontal showsHorizontalScrollIndicator={false}>
           {["All", "Major Offense", "Minor Offense"].map((filter) => (
@@ -29,7 +50,9 @@ const ViolationsScreen = () => {
               style={[styles.filterButton, selectedFilter === filter && styles.activeFilter]}
               onPress={() => setSelectedFilter(filter)}
             >
-              <Text style={[styles.filterText, selectedFilter === filter && styles.activeFilterText]}>{filter}</Text>
+              <Text style={[styles.filterText, selectedFilter === filter && styles.activeFilterText]}>
+                {filter}
+              </Text>
             </TouchableOpacity>
           ))}
         </ScrollView>
@@ -51,21 +74,44 @@ const ViolationsScreen = () => {
 };
 
 const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: "#F4F7FC",
-    paddingHorizontal: 20,
+  filterSection: {
+    flexDirection: "row",
+    justifyContent: "space-between",
+    alignItems: "center",
+    marginBottom: 15,
+  },
+  filterTitle: {
+    fontSize: 20,
+    fontWeight: "bold",
+    color: "#000",
+  },
+  dropdownContainer: {
+    borderWidth: 1,
+    borderColor: "#ccc",
+    borderRadius: 10,
+    overflow: "hidden",
+    backgroundColor: "#fff",
+  },
+  picker: {
+    height: 30,
+    width: 120,
   },
   filterContainer: {
-    marginVertical: 10,
     flexDirection: "row",
+    marginBottom: 15,
   },
   filterButton: {
-    paddingVertical: 8,
-    paddingHorizontal: 20,
-    backgroundColor: "#E5E5E5",
-    borderRadius: 20,
-    marginHorizontal: 5,
+    paddingVertical: 15,
+    paddingHorizontal: 22,
+    backgroundColor: "#FFFFFF",
+    borderRadius: 12,
+    marginHorizontal: 6,
+    elevation: 3, 
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.1,
+    shadowRadius: 4,
+    borderWidth: 1,
+    borderColor: "#E0E0E0",
   },
   activeFilter: {
     backgroundColor: "#0057FF",

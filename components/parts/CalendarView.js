@@ -6,10 +6,8 @@ const CalendarView = () => {
 
   // Example events
   const events = [
-    { date: 11, title: "Meeting", time: "10:00 am to 1:00 pm", color: "#0057FF" },
-    { date: 19, title: "Video Conference", time: "10:00 am to 1:00 pm", color: "#0057FF" },
-    { date: 22, title: "Study", time: "10:00 am to 1:00 pm", color: "#0057FF" },
-    { date: 28, title: "Travel", time: "10:00 am to 1:00 pm", color: "#0057FF" },
+    { date: 11, title: "Case #1: Parent Meeting", time: "10:00 am to 11:00 pm", color: "#0057FF" },
+    { date: 19, title: "Case #2: Student Counselling", time: "11:15 am to 11:40 pm", color: "#0057FF" },
   ];
 
   return (

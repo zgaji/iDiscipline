@@ -1,28 +1,47 @@
-import React from "react";
+import React, { useRef, useEffect } from "react";
 import { View, Text, ScrollView, TouchableOpacity, StyleSheet } from "react-native";
 import { useNavigation, useRoute } from "@react-navigation/native";
 
 const MenuBar = () => {
   const navigation = useNavigation();
-  const route = useRoute(); // Get current screen name
+  const route = useRoute();
+  const scrollViewRef = useRef(null);
+  const buttonRefs = useRef({}); // Stores refs for each button
 
-  const menuItems = ["Home", "Profile", "Violations", "IncidentReports", "Appoinments", "Handbook"]; // ✅ Fixed IncidentReports name
+  const menuItems = ["Home", "Profile", "Violations", "IncidentReports", "Appointments", "Handbook"];
 
   const handlePress = (item) => {
     navigation.navigate(item);
   };
 
+  useEffect(() => {
+    if (buttonRefs.current[route.name] && scrollViewRef.current) {
+      buttonRefs.current[route.name].measureLayout(
+        scrollViewRef.current,
+        (x) => {
+          scrollViewRef.current.scrollTo({ x: x - 50, animated: true });
+        }
+      );
+    }
+  }, [route.name]);
+
   return (
     <View style={styles.container}>
-      <ScrollView horizontal showsHorizontalScrollIndicator={false}>
+      <ScrollView
+        ref={scrollViewRef}
+        horizontal
+        showsHorizontalScrollIndicator={false}
+        contentContainerStyle={styles.scrollContainer}
+      >
         {menuItems.map((item) => (
           <TouchableOpacity
             key={item}
-            style={[styles.button, route.name === item && styles.activeButton]} // ✅ Ensures active state works
+            ref={(el) => (buttonRefs.current[item] = el)} // Store ref for each button
+            style={[styles.button, route.name === item && styles.activeButton]}
             onPress={() => handlePress(item)}
           >
             <Text style={[styles.text, route.name === item && styles.activeText]}>
-              {item.replace(/([A-Z])/g, " $1").trim()} 
+              {item.replace(/([A-Z])/g, " $1").trim()}
             </Text>
           </TouchableOpacity>
         ))}
@@ -34,6 +53,11 @@ const MenuBar = () => {
 const styles = StyleSheet.create({
   container: {
     paddingVertical: 10,
+  },
+  scrollContainer: {
+    flexDirection: "row",
+    alignItems: "center",
+    paddingHorizontal: 10, // Prevents clipping on small screens
   },
   button: {
     paddingVertical: 11,
@@ -48,7 +72,7 @@ const styles = StyleSheet.create({
     elevation: 5,
   },
   activeButton: {
-    backgroundColor: "#0056FF", // ✅ Fix for blue highlight
+    backgroundColor: "#0056FF",
   },
   text: {
     color: "#333",

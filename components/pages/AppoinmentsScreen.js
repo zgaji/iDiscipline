@@ -6,9 +6,13 @@ import CalendarView from "../parts/CalendarView";
 
 const AppointmentsScreen = () => {
   return (
-    <View style={styles.container}>
-      <Header title="Appointment" />
-      <MenuBar activeTab="Appointments" />
+    <View style={{ flex: 1, backgroundColor: "#F4F9FC", padding: 20, marginTop: 30 }}>
+    <View style={{ marginBottom: 15 }}> 
+      <Header title="Appointments" />
+    </View>
+    <View style={{ marginBottom: 15 }}> 
+      <MenuBar />
+    </View>
       <CalendarView />
     </View>
   );

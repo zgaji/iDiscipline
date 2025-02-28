@@ -1,25 +1,24 @@
 import React from "react";
-import { View, ScrollView, StyleSheet, TouchableOpacity } from "react-native";
-import { FontAwesome } from "@expo/vector-icons";
+import { View, ScrollView } from "react-native";
 import Header from "../parts/Header";
-import StudentCard from "../parts/StudentCard";
-import StatCard from "../parts/StatCard";
 import MenuBar from "../parts/MenuBar";
+import StudentCard from "../parts/StudentCard";
+import InfoCard from "../parts/InfoCard";
 
 const ProfileScreen = () => {
   return (
-    <View style={{ flex: 1, backgroundColor: "#F4F9FC", padding: 20 }}>
-      <Header title="Student Profile" />
+    <View style={{ flex: 1, backgroundColor: "#F4F9FC", padding: 20, marginTop: 30 }}>
+      <View style={{ marginBottom: 15 }}> 
+        <Header title="Student Profile" />
+      </View>
+      <View style={{ marginBottom: 15 }}> 
+        <MenuBar />
+      </View>
+      <StudentCard />
+      <ScrollView contentContainerStyle={{ alignItems: "center" }}>
 
-      {/* Category Buttons (Horizontal Scroll) */}
-      <MenuBar />
 
-      {/* Profile Content */}
-      <ScrollView>
-        <StudentCard />
-
-        {/* Student Details */}
-        <StatCard
+        <InfoCard
           title="Student Details"
           details={{
             "First Name": "",
@@ -31,8 +30,7 @@ const ProfileScreen = () => {
           }}
         />
 
-        {/* Emergency Contact */}
-        <StatCard
+        <InfoCard
           title="Emergency Contact"
           details={{
             "Parent/Guardian": "",
@@ -42,32 +40,8 @@ const ProfileScreen = () => {
           titleStyle={{ color: "red", fontStyle: "italic" }}
         />
       </ScrollView>
-
-      {/* Floating Button */}
-      <TouchableOpacity style={styles.fab}>
-        <FontAwesome name="plus" size={24} color="white" />
-      </TouchableOpacity>
     </View>
   );
 };
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: "#F4F7FC",
-  },
-  fab: {
-    position: "absolute",
-    bottom: 20,
-    right: 20,
-    backgroundColor: "#007AFF",
-    width: 50,
-    height: 50,
-    borderRadius: 25,
-    justifyContent: "center",
-    alignItems: "center",
-    elevation: 5,
-  },
-});
 
 export default ProfileScreen;

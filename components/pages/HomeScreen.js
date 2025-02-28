@@ -7,9 +7,13 @@ import MenuBar from "../parts/MenuBar";
 
 const HomeScreen = () => {
   return (
-    <View style={{ flex: 1, backgroundColor: "#F4F9FC", padding: 20 }}>
-      <Header />
-      <MenuBar />
+    <View style={{ flex: 1, backgroundColor: "#F4F9FC", padding: 20, marginTop: 30}}>
+      <View style={{ marginBottom: 15 }}> 
+        <Header />
+      </View>
+      <View style={{ marginBottom: 15 }}> 
+        <MenuBar />
+      </View>
       <StudentCard />
       <View style={{ flexDirection: "row", flexWrap: "wrap", justifyContent: "space-between" }}>
         <StatCard title="Violation" icon="⚖️" count="0" bgColor="#FF5E5B" />
