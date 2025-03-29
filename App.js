@@ -25,6 +25,7 @@ import DOHandbookScreen from './components/DOpages/DOHandbookScreen';
 import ReportsScreen from './components/DOpages/ReportsScreen';
 import DOViolationsDetails from './components/DOpages/DOViolationsDetails';
 import DOViolationDetails from './components/DOpages/DOViolationDetails';
+import ParentHomeScreen from './components/pages/ParentHomeScreen';
 const Stack = createNativeStackNavigator(); 
 
 export default function App() {
@@ -55,6 +56,7 @@ export default function App() {
         <Stack.Screen name="DOHandbook" component={DOHandbookScreen} />
         <Stack.Screen name="Reports" component={ReportsScreen}/>
         <Stack.Screen name="DOViolationDetails" component={DOViolationDetails} />
+        <Stack.Screen name="ParentHomeScreen" component={ParentHomeScreen} />
 
       
       </Stack.Navigator>

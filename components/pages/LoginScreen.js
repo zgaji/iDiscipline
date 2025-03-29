@@ -9,6 +9,7 @@ import { useNavigation } from '@react-navigation/native';
 const USERS = {
   student: { email: 'user', password: '123', role: 'student' },
   admin: { email: 'admin', password: '321', role: 'admin' },
+  parent: { email: 'parent' , password: '123', role: 'parent' },
 };
 
 const LoginScreen = () => {
@@ -30,11 +31,12 @@ const LoginScreen = () => {
     if (user) {
       Alert.alert('Login Successful', `Welcome, ${user.role}!`);
       
-      // Navigate based on role
       if (user.role === 'admin') {
-        navigation.navigate('DOHome');  // Navigate to DOHomeScreen
+        navigation.navigate('DOHome'); // Admin's Home Screen
+      } else if (user.role === 'parent') {
+        navigation.navigate('ParentHomeScreen'); // Parent's Home Screen
       } else {
-        navigation.navigate('Home');  // Navigate to the regular HomeScreen
+        navigation.navigate('Home'); // Student's Home Screen
       }
     } else {
       Alert.alert('Login Failed', 'Invalid email or password');
