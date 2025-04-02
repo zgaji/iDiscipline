@@ -7,7 +7,7 @@ import * as FileSystem from "expo-file-system";
 import * as Sharing from "expo-sharing";
 
 const HandbookScreen = () => {
-  const pdfUrl = "https://mipss.edu.ph/shb25.pdf"; // Ensure this URL is accessible
+  const pdfUrl = "https://mipss.edu.ph/shb25.pdf"; 
   const [fileUri, setFileUri] = useState(null);
 
   useEffect(() => {
@@ -38,7 +38,7 @@ const HandbookScreen = () => {
     }
   };
 
-  const openPDFOffline = async () => {
+  const downloadPDF = async () => {
     if (fileUri) {
       if (await Sharing.isAvailableAsync()) {
         await Sharing.shareAsync(fileUri);
@@ -46,7 +46,7 @@ const HandbookScreen = () => {
         Alert.alert("Sharing is not available on this device.");
       }
     } else {
-      Alert.alert("PDF not available offline. Please try again after downloading.");
+      Alert.alert("PDF not available. Please try again.");
     }
   };
 
@@ -55,7 +55,7 @@ const HandbookScreen = () => {
       <Header title="Student Handbook" />
       <MenuBar />
 
-      {/* Online PDF Viewer using Google Docs */}
+      {/* Online PDF Viewer */}
       <View style={{ flex: 1, height: 500 }}>
         <WebView 
           source={{ uri: `https://docs.google.com/gview?embedded=true&url=${pdfUrl}` }} 
@@ -63,12 +63,10 @@ const HandbookScreen = () => {
         />
       </View>
 
-      {/* Offline PDF Access */}
       <View style={{ marginVertical: 20 }}>
-        <Button title="Open Offline PDF" onPress={openPDFOffline} />
+        <Button title="Download Student Handbook" onPress={downloadPDF} />
       </View>
 
-      {/* Chatbot Button */}
       <TouchableOpacity style={styles.fab} onPress={handleChatbotClick}>
         <Image source={require("../../assets/chatbot.png")} style={styles.fabIcon} />
       </TouchableOpacity>

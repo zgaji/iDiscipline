@@ -12,17 +12,17 @@ const IncidentReports = () => {
   const incidents = [
     {
       status: "Under Review",
-      firstName: "John",
-      lastName: "Doe",
+      firstName: "Matthew",
+      lastName: "Ke",
       type: "Major Offense",
-      dateSent: "2-17-2025",
+      dateSent: "April 3, 2025",
       details: {
-        dateTime: "2-17-2025, 10:30 AM",
+        dateTime: "April 3, 2025, 10:30 AM",
         location: "Hallway B",
-        parties: "John Doe (Offender), Jane Smith (Witness)",
-        description: "John Doe was caught vandalizing a classroom door.",
-        reportedBy: "Mr. Anderson",
-        dateReported: "2-17-2025",
+        parties: "Matthew Ke (Offender), Raven Baldueza (Witness)",
+        description: "Nagdadabog si ke.",
+        reportedBy: "Raven Baldueza",
+        dateReported: "April 3, 2025",
       },
     },
   ];

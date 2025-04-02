@@ -15,7 +15,7 @@ const styles = StyleSheet.create({
   card: {
     width: "47%", 
     padding: 18, 
-    borderRadius: 15,
+    borderRadius: 20,
     alignItems: "center",
     justifyContent: "center",
     marginBottom: 8,
@@ -27,21 +27,25 @@ const styles = StyleSheet.create({
   },
   title: {
     fontWeight: "bold",
-    fontSize: 18,
+    fontSize: 20,
     color: "#fff",
-    textAlign: "left",
     width: "100%",
+    marginBottom: 5,
   },
   icon: {
-    width: 50, 
-    height: 50,
+    width: 55, 
+    height: 55,
     tintColor: "#fff",
+    alignSelf: "left",
     marginBottom: 5,
   },
   count: {
-    fontSize: 22,
+    fontSize: 34,
     fontWeight: "bold",
     color: "#fff",
+    position: "absolute",
+    right: 20,
+    bottom: 15, 
   },
 });
 

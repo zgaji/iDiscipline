@@ -46,6 +46,7 @@ const ViolationsScreen = () => {
         </View>
       </View>
 
+
       {/* Category Buttons */}
       <View style={styles.filterContainer}>
         <ScrollView horizontal showsHorizontalScrollIndicator={false}>
@@ -130,14 +131,14 @@ const styles = StyleSheet.create({
     color: "#fff",
   },
   listContainer: {
-    paddingBottom: 80, // Prevents overlap with floating button
+    paddingBottom: 80, 
   },
   fab: {
     position: "absolute",
     bottom: 20,
     right: 20,
     backgroundColor: "#007AFF",
-    width: 55, // Slightly bigger button
+    width: 55,
     height: 55,
     borderRadius: 27.5,
     justifyContent: "center",
@@ -147,7 +148,7 @@ const styles = StyleSheet.create({
   fabIcon: {
     width: 30,
     height: 30,
-    tintColor: "#fff", // Keeps icon color consistent
+    tintColor: "#fff",
   },
 });
 

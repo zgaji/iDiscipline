@@ -5,6 +5,7 @@ import MenuBar from "../parts/DOMenuBar";
 import StudentCard from "../parts/StudentCard";
 import DOViolationCard from "../parts/DOViolationCard";
 
+//clickable student card
 
 const ViolationRecord = ({ navigation }) => {
   const [selectedFilter, setSelectedFilter] = useState("All");

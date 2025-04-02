@@ -1,16 +1,5 @@
 import React, { useState } from "react";
-import {
-  View,
-  Text,
-  ScrollView,
-  TouchableOpacity,
-  StyleSheet,
-  Modal,
-  TextInput,
-  Image,
-  Platform,
-  ToastAndroid,
-} from "react-native";
+import { View, Text, ScrollView, TouchableOpacity, StyleSheet, Modal, TextInput, Image, Platform, ToastAndroid } from "react-native";
 import Header from "../parts/Header";
 import MenuBar from "../parts/MenuBar";
 import IncidentReportCard from "../parts/IncidentReportCard";
@@ -19,6 +8,7 @@ const IncidentReportsScreen = () => {
   const [selectedReport, setSelectedReport] = useState(null);
   const [modalVisible, setModalVisible] = useState(false);
   const [formData, setFormData] = useState({
+    type: "",
     dateTime: "",
     location: "",
     parties: "",
@@ -30,37 +20,36 @@ const IncidentReportsScreen = () => {
   const handleChatbotClick = () => {
     if (Platform.OS === "android") {
       ToastAndroid.show("Chatbot has been clicked", ToastAndroid.SHORT);
-    } 
+    }
   };
 
+  const handleInputChange = (name, value) => {
+    setFormData({ ...formData, [name]: value });
+  };
 
   const reports = [
     {
       id: 1,
       type: "Incident Report #1",
-      date: "Dec 25 2025",
+      date: "April 3, 2025",
       description:
         "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.",
       status: "Reviewed",
       details: {
-        dateTime: "Dec 25 2025, 10:30 AM",
-        location: "Hallway B",
-        parties: "John Doe (Offender), Jane Smith (Witness)",
-        description: "John Doe was caught vandalizing a classroom door.",
-        reportedBy: "Mr. Anderson",
-        dateReported: "Dec 25 2025",
+        dateTime: "April 3, 2025, 10:30 AM",
+        location: "Garden",
+        parties: "Matthew Ke (Offender), Raven Baldueza (Witness)",
+        description: "Nagdadabog si Ke.",
+        reportedBy: "Raven Baldueza",
+        dateReported: "April 3, 2025",
       },
     },
   ];
 
   return (
     <View style={{ flex: 1, backgroundColor: "#F4F9FC", padding: 20, marginTop: 30 }}>
-      <View style={{ marginBottom: 15 }}> 
-        <Header title="Incident Reports" />
-      </View>
-      <View style={{ marginBottom: 15 }}> 
-        <MenuBar />
-      </View>
+      <Header title="Incident Reports" />
+      <MenuBar />
 
       <ScrollView contentContainerStyle={styles.content}>
         <Text style={styles.title}>Incident Reports</Text>
@@ -81,9 +70,9 @@ const IncidentReportsScreen = () => {
             <TouchableOpacity style={styles.closeButton} onPress={() => setSelectedReport(null)}>
               <Text style={styles.closeButtonText}>X</Text>
             </TouchableOpacity>
-            <Text style={styles.modalTitle}>Incident Report</Text>
             {selectedReport && (
               <>
+                <Text style={styles.modalTitle}>{selectedReport.type}</Text>
                 <Text style={styles.modalLabel}>Date & Time of the Incident:</Text>
                 <Text style={styles.modalText}>{selectedReport.details.dateTime}</Text>
                 <Text style={styles.modalLabel}>Location:</Text>
@@ -102,55 +91,156 @@ const IncidentReportsScreen = () => {
         </View>
       </Modal>
 
-      {/* Modal for Making an Incident Report */}
-      <Modal visible={modalVisible} animationType="slide" transparent={true}>
+      <Modal visible={modalVisible} animationType="slide" transparent>
         <View style={styles.modalBackground}>
           <View style={styles.modalContainer}>
             <TouchableOpacity style={styles.closeButton} onPress={() => setModalVisible(false)}>
               <Text style={styles.closeButtonText}>X</Text>
             </TouchableOpacity>
-            <Text style={styles.modalTitle}>Incident Report</Text>
+            
+            <Text style={styles.modalTitle}>Make a Incident Report</Text>
+            
             <ScrollView contentContainerStyle={styles.formContainer}>
-              {["Date & Time of the incident:", "Location:", "Parties Involved (Victim, Offender, Witness):", "Description of the Incident (Factual Narrative):", "Reported by:", "Date Reported:"].map((label, index) => (
-                <View key={index} style={styles.inputContainer}>
-                  <Text style={styles.inputLabel}>{label}</Text>
-                  <TextInput placeholder={label} style={styles.input} />
-                </View>
-              ))}
+              <View style={styles.inputContainer}>
+                <Text style={styles.inputLabel}>Date & Time of the incident:</Text>
+                <TextInput style={styles.input} value={formData.dateTime} onChangeText={(text) => handleInputChange('dateTime', text)} />
+              </View>
+              
+              <View style={styles.inputContainer}>
+                <Text style={styles.inputLabel}>Location:</Text>
+                <TextInput style={styles.input} value={formData.location} onChangeText={(text) => handleInputChange('location', text)} />
+              </View>
+              
+              <View style={styles.inputContainer}>
+                <Text style={styles.inputLabel}>Parties Involved (Victim, Offender, Witness):</Text>
+                <TextInput style={styles.input} value={formData.partiesInvolved} onChangeText={(text) => handleInputChange('partiesInvolved', text)} />
+              </View>
+              
+              <View style={styles.inputContainer}>
+                <Text style={styles.inputLabel}>Description of the Incident (Factual Narrative):</Text>
+                <TextInput style={styles.input} value={formData.description} onChangeText={(text) => handleInputChange('description', text)} multiline />
+              </View>
+              
+              <View style={styles.inputContainer}>
+                <Text style={styles.inputLabel}>Reported by:</Text>
+                <TextInput style={styles.input} value={formData.reportedBy} onChangeText={(text) => handleInputChange('reportedBy', text)} />
+              </View>
+              
+              <View style={styles.inputContainer}>
+                <Text style={styles.inputLabel}>Date Reported:</Text>
+                <TextInput style={styles.input} value={formData.dateReported} onChangeText={(text) => handleInputChange('dateReported', text)} />
+              </View>
+              
               <TouchableOpacity style={styles.submitButton}>
-                <Text style={styles.submitButtonText}>Submit</Text>
+                <Text style={styles.submitButtonText}>Submit Report</Text>
               </TouchableOpacity>
             </ScrollView>
           </View>
         </View>
       </Modal>
 
-
       <TouchableOpacity style={styles.fab} onPress={handleChatbotClick}>
         <Image source={require("../../assets/chatbot.png")} style={styles.fabIcon} />
       </TouchableOpacity>
-
     </View>
   );
 };
 
 const styles = StyleSheet.create({
-  content: { paddingHorizontal: 20, paddingBottom: 80 },
-  title: { fontSize: 22, fontWeight: "bold", marginBottom: 10 },
-  reportButton: { backgroundColor: "#0057FF", padding: 10, borderRadius: 10, marginBottom: 15 },
-  reportButtonText: { color: "#fff", fontSize: 14, fontWeight: "bold" },
-  modalBackground: { flex: 1, backgroundColor: "rgba(0,0,0,0.5)", justifyContent: "center", alignItems: "center" },
-  modalContainer: { width: "85%", backgroundColor: "#fff", borderRadius: 10, padding: 20, elevation: 5 },
-  modalTitle: { fontSize: 18, fontWeight: "bold", marginBottom: 15, textAlign: "center" },
-  modalLabel: { fontWeight: "bold", marginTop: 10 },
-  modalText: { fontSize: 14, marginBottom: 5 },
-  inputContainer: { backgroundColor: "#fff", borderRadius: 10, padding: 10, marginBottom: 10, elevation: 2 },
-  inputLabel: { fontSize: 14, fontWeight: "bold", marginBottom: 5 },
-  input: { fontSize: 14, color: "#333", padding: 5, borderBottomWidth: 1, borderColor: "#ccc" },
-  submitButton: { backgroundColor: "#2BC999", paddingVertical: 10, borderRadius: 10, alignItems: "center", marginTop: 10 },
-  submitButtonText: { color: "#fff", fontWeight: "bold", fontSize: 16 },
-  closeButton: { position: "absolute", top: 10, right: 10 },
-  closeButtonText: { fontSize: 16, fontWeight: "bold", color: "#0057FF" },
+  content: { 
+    paddingHorizontal: 20, 
+    paddingBottom: 80 
+  },
+  title: { 
+    fontSize: 22, 
+    fontWeight: "bold", 
+    marginBottom: 10,
+  },
+  reportButton: { 
+    backgroundColor: "#0057FF", 
+    padding: 8, 
+    borderRadius: 20, 
+    marginBottom: 15,
+    width: "65%",
+  },
+  reportButtonText: { 
+    color: "#fff", 
+    fontSize: 14, 
+    fontWeight: "bold",
+    alignSelf: "center",
+  },
+  modalBackground: { 
+    flex: 1, 
+    backgroundColor: "rgba(0,0,0,0.5)", 
+    justifyContent: "center", 
+    alignItems: "center" 
+  },
+  modalContainer: { 
+    width: "85%", 
+    backgroundColor: "#fff", 
+    borderRadius: 10, 
+    padding: 20, 
+    elevation: 5 
+  },
+  modalTitle: { 
+    fontSize: 24, 
+    fontWeight: "bold", 
+    color: "#0144F2",
+    marginBottom: 15, 
+    textAlign: "left" 
+  },
+  modalLabel: { 
+    fontWeight: "bold", 
+    color: "#605E5E ",
+    marginTop: 10 
+  },
+  modalText: { 
+    fontSize: 14, 
+    marginBottom: 5 
+  },
+  inputContainer: { 
+    backgroundColor: "#fff", 
+    borderRadius: 10, 
+    padding: 10, 
+    marginBottom: 10,
+    elevation: 2 
+  },
+  inputLabel: { 
+    fontSize: 14, 
+    fontWeight: "bold", 
+    marginBottom: 5 
+  },
+  input: { 
+    fontSize: 14, 
+    color: "#605E5E", 
+    padding: 5, 
+    borderBottomWidth: 1, 
+    borderColor: "#ccc" 
+  },
+  submitButton: { 
+    backgroundColor: "#3656D7",
+    paddingVertical: 5, 
+    borderRadius: 20, 
+    marginTop: 10,
+    width: "50%",
+    alignSelf: "flex-end", 
+  },
+  submitButtonText: { 
+    color: "#fff", 
+    fontWeight: "bold", 
+    fontSize: 15,
+    alignSelf: "center",
+  },
+  closeButton: { 
+    position: "absolute", 
+    top: 10, 
+    right: 15 
+  },
+  closeButtonText: { 
+    fontSize: 20, 
+    fontWeight: "bold", 
+    color: "#605E5E" 
+  },
   fab: {
     position: "absolute",
     bottom: 20,

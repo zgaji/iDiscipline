@@ -6,13 +6,11 @@ import {
   TouchableOpacity,
   StyleSheet,
   TextInput,
-  Modal
 } from "react-native";
 import { FontAwesome } from "@expo/vector-icons";
 import Header from "../parts/Header";
-import ViolationUpdate from "../parts/ViolationUpdate";
+import CaseDetails from "../parts/CaseDetails";
 import { useRoute, useNavigation } from "@react-navigation/native";
-
 
 const ChatPortalScreen = () => {
   const [modalVisible, setModalVisible] = useState(false);
@@ -64,41 +62,15 @@ const ChatPortalScreen = () => {
           placeholder="Chat Here..."
           value={message}
           onChangeText={setMessage}
+          editable={!modalVisible} // Disable input when modal is open
         />
-        <TouchableOpacity style={styles.sendButton}>
+        <TouchableOpacity style={[styles.sendButton, modalVisible && styles.disabledButton]} disabled={modalVisible}>
           <Text style={styles.sendText}>Send</Text>
         </TouchableOpacity>
       </View>
 
       {/* Case Details Modal */}
-      <Modal visible={modalVisible} animationType="slide" transparent={true}>
-        <View style={styles.modalContainer}>
-          <View style={styles.modalContent}>
-           {/* Close Button */}
-           <TouchableOpacity
-            style={styles.closeButton}
-            onPress={() => {
-              console.log("Close button clicked!");
-              setModalVisible(false);
-            }}
-          >
-            <FontAwesome name="times" size={20} color="#666" />
-          </TouchableOpacity>
-            <ScrollView>
-              <Text style={styles.caseTitle}>Case #{selectedCase.id}</Text>
-              <Text style={styles.info}><Text style={styles.boldText}>Student Name:</Text> {selectedCase.studentName}</Text>
-              <Text style={styles.info}><Text style={styles.boldText}>Status:</Text> {selectedCase.status}</Text>
-              <Text style={styles.info}><Text style={styles.boldText}>Category:</Text> {selectedCase.category}</Text>
-              <Text style={styles.info}><Text style={styles.boldText}>Violation:</Text> {selectedCase.violation}</Text>
-              <Text style={styles.info}><Text style={styles.boldText}>Time Reported:</Text> {selectedCase.timeReported}</Text>
-              <Text style={styles.info}><Text style={styles.boldText}>Notes:</Text> {selectedCase.notes}</Text>
-              <View style={styles.divider} />
-              <Text style={styles.updateTitle}>Updates</Text>
-              <ViolationUpdate text="Report Sent" date={selectedCase.dateSent} />
-            </ScrollView>
-          </View>
-        </View>
-      </Modal>
+      <CaseDetails visible={modalVisible} caseData={selectedCase} onClose={() => setModalVisible(false)} />
     </View>
   );
 };
@@ -107,13 +79,6 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: "#F4F7FC",
-  },
-  closeButton: {
-    position: "absolute",
-    top: 15,
-    right: 15,
-    padding: 10,
-    zIndex: 10, 
   },
   caseDetails: {
     flexDirection: "row",
@@ -188,29 +153,8 @@ const styles = StyleSheet.create({
     color: "#fff",
     fontWeight: "bold",
   },
-  modalContainer: {
-    flex: 1,
-    justifyContent: "center",
-    alignItems: "center",
-    backgroundColor: "rgba(0,0,0,0.5)",
-  },
-  modalContent: {
-    width: "90%",
-    backgroundColor: "white",
-    borderRadius: 10,
-    padding: 20,
-  },
-  divider: {
-    borderBottomWidth: 1,
-    borderBottomColor: "#000",
-    marginVertical: 10,
-  },
-  updateTitle: {
-    fontSize: 20,
-    fontWeight: "bold",
-    color: "#0057FF",
-    textAlign: "center",
-    marginBottom: 20,
+  disabledButton: {
+    backgroundColor: "#ccc",
   },
   dropdownIcon: {
     alignSelf: "center",

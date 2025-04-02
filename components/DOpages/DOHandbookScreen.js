@@ -7,7 +7,7 @@ import * as FileSystem from "expo-file-system";
 import * as Sharing from "expo-sharing";
 
 const DOHandbookScreen = () => {
-  const pdfUrl = "https://mipss.edu.ph/shb25.pdf"; // Ensure this URL is accessible
+  const pdfUrl = "https://mipss.edu.ph/shb25.pdf";
   const [fileUri, setFileUri] = useState(null);
 
   useEffect(() => {

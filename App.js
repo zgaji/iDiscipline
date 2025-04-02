@@ -36,7 +36,13 @@ export default function App() {
         <Stack.Screen name="Home" component={HomeScreen} />
         <Stack.Screen name="Profile" component={ProfileScreen} />
         <Stack.Screen name="Violations" component={ViolationsScreen} />
-        <Stack.Screen name="ViolationDetailsScreen" component={ViolationDetailsScreen} />
+        <Stack.Screen 
+          name="ViolationDetailsScreen" 
+          component={ViolationDetailsScreen} 
+          options={{
+            animation: 'slide_from_bottom',
+          }}
+        />
         <Stack.Screen name="IncidentReports" component={IncidentReportsScreen} />
         <Stack.Screen name="ViolationSlip" component={ViolationSlipScreen} />
         <Stack.Screen name="ChatPortal" component={ChatPortalScreen} />

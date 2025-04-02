@@ -4,7 +4,7 @@ import { useNavigation, useRoute } from "@react-navigation/native";
 
 
 const screenTitles = {
-  Home: "Dashboard",
+  Home: "Home",
   Profile: "Student Profile",
   Violations: "Violations",
   IncidentReports: "Incident Reports",

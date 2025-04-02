@@ -5,6 +5,9 @@ import { FontAwesome } from "@expo/vector-icons";
 import Header from "../parts/Header";
 import ViolationUpdate from "../parts/ViolationUpdate";
 
+
+//should be a modal, fix layout
+
 const DOViolationDetails = () => {
   const route = useRoute();
   const navigation = useNavigation();

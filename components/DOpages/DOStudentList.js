@@ -5,6 +5,11 @@ import Header from "../parts/Header";
 import MenuBar from "../parts/DOMenuBar";
 import StudentCard from "../parts/DOStudentCard";
 
+
+// To modify: input field for the form, submit button, and any other necessary components
+
+
+
 const DOStudentList = ({ navigation }) => {
   const [modalVisible, setModalVisible] = useState(false);
 

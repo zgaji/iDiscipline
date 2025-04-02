@@ -6,6 +6,9 @@ import MenuBar from "../parts/DOMenuBar";
 import { FontAwesome } from "@expo/vector-icons";
 import StudentCard from "../parts/StudentCard";
 
+
+// To modify: student card clickable
+
 const DOStudentProfile = () => {
 const navigation = useNavigation(); 
   const [modalVisible, setModalVisible] = useState(false); // ✅ Manage modal state

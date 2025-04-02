@@ -5,6 +5,8 @@ import DOMenuBar from "../parts/DOMenuBar";
 import DOViolationsDetails from "./DOViolationsDetails";
 import Header from "../parts/Header";
 
+
+//add violations modal fix layout
 const DOViolations = ({ navigation }) => {
   const [selectedViolation, setSelectedViolation] = useState(null);
   const [isAddViolationVisible, setIsAddViolationVisible] = useState(false);
