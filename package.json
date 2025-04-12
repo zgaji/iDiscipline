@@ -9,6 +9,7 @@
     "web": "expo start --web"
   },
   "dependencies": {
+    "@expo/metro-runtime": "~4.0.1",
     "@react-native-community/datetimepicker": "8.2.0",
     "@react-native-picker/picker": "2.9.0",
     "@react-navigation/native": "^7.0.14",
@@ -18,12 +19,17 @@
     "expo-file-system": "^18.0.12",
     "expo-sharing": "^13.0.1",
     "expo-status-bar": "~2.0.1",
+    "firebase": "^11.6.0",
     "react": "18.3.1",
+    "react-dom": "18.3.1",
     "react-native": "0.76.7",
     "react-native-date-picker": "^5.0.10",
     "react-native-fs": "^2.20.0",
+    "react-native-modal-datetime-picker": "^18.0.0",
     "react-native-pdf": "^6.7.7",
     "react-native-picker": "^4.3.7",
+    "react-native-picker-select": "^9.3.1",
+    "react-native-web": "~0.19.13",
     "react-native-webview": "^13.13.5"
   },
   "devDependencies": {

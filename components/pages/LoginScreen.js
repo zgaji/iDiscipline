@@ -4,12 +4,8 @@ import InputField from '../parts/InputField';
 import Button from '../parts/Button';
 import Checkbox from '../parts/CheckBox';
 import { useNavigation } from '@react-navigation/native';
-
-const USERS = {
-  student: { email: 'user', password: '123', role: 'student' },
-  admin: { email: 'admin', password: '321', role: 'admin' },
-  parent: { email: 'parent', password: '123', role: 'parent' },
-};
+import { auth } from '../firebaseConfig'; 
+import { signInWithEmailAndPassword } from 'firebase/auth';
 
 const LoginScreen = () => {
   const navigation = useNavigation();
@@ -37,45 +33,32 @@ const LoginScreen = () => {
     return () => clearInterval(timer);
   }, [isLocked]);
 
-  const handleLogin = () => {
+  const handleLogin = async () => {
     if (isLocked) {
       Alert.alert("Too Many Attempts", `Please wait ${remainingTime} seconds before trying again.`);
       return;
     }
 
-    const enteredEmail = email.toLowerCase().trim();
-    const enteredPassword = password.trim();
+    try {
+      const userCredential = await signInWithEmailAndPassword(auth, email.trim(), password.trim());
+      const user = userCredential.user;
 
-    const user = Object.values(USERS).find(u => u.email.toLowerCase() === enteredEmail);
-
-    if (user) {
-      if (user.password === enteredPassword) {
-        Alert.alert("Login Successful", `Welcome, ${user.role}!`);
-        setAttempts(0); // Reset attempts after successful login
+      if (user) {
+        const role = user.email === 'admin@example.com' ? 'admin' : 'student'; // Update as necessary
+        Alert.alert("Login Successful", `Welcome, ${role}!`);
+        setAttempts(0);
 
         // Navigate based on role
-        if (user.role === 'admin') {
+        if (role === 'admin') {
           navigation.navigate('DOHome');
-        } else if (user.role === 'parent') {
-          navigation.navigate('ParentHomeScreen');
         } else {
           navigation.navigate('Home');
         }
-      } else {
-        const newAttempts = attempts + 1;
-        setAttempts(newAttempts);
-        Alert.alert("Login Failed", "Incorrect password. Please try again.");
-
-        if (newAttempts >= 3) {
-          setIsLocked(true);
-          setRemainingTime(180);
-          Alert.alert("Account Locked", "Too many failed attempts. Please try again in 3 minutes.");
-        }
       }
-    } else {
+    } catch (error) {
       const newAttempts = attempts + 1;
       setAttempts(newAttempts);
-      Alert.alert("Login Failed", "Invalid email. Please try again.");
+      Alert.alert("Login Failed", "Incorrect email or password. Please try again.");
 
       if (newAttempts >= 3) {
         setIsLocked(true);
@@ -88,8 +71,7 @@ const LoginScreen = () => {
   return (
     <View style={styles.container}>
       {/* Blue Background */}
-      <View style={styles.blueBackground}>
-      </View>
+      <View style={styles.blueBackground}></View>
 
       {/* White Login Form with Rounded Top */}
       <View style={styles.whiteContainer}>

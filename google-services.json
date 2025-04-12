@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "229338411328",
+    "project_id": "idisicipline",
+    "storage_bucket": "idisicipline.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:229338411328:android:9cf6f4d6bea1a707260aa5",
+        "android_client_info": {
+          "package_name": "com.altf4.idiscipline"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyB8fq8Q3uVbr2gazJdbWfJn8i0Ee-Ycgcg"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
