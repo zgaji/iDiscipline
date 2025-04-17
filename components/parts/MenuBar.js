@@ -6,7 +6,7 @@ const MenuBar = () => {
   const navigation = useNavigation();
   const route = useRoute();
   const scrollViewRef = useRef(null);
-  const buttonRefs = useRef({}); // Stores refs for each button
+  const buttonRefs = useRef({});
 
   const menuItems = ["Home", "Profile", "Violations", "IncidentReports", "Appointments", "Handbook"];
 
@@ -57,7 +57,7 @@ const styles = StyleSheet.create({
   scrollContainer: {
     flexDirection: "row",
     alignItems: "center",
-    paddingHorizontal: 10, // Prevents clipping on small screens
+    paddingHorizontal: 10,
   },
   button: {
     paddingVertical: 11,

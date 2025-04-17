@@ -64,10 +64,8 @@ const IncidentReportsScreen = () => {
       },
     };
 
-    // Add the new report to the reports state
     setReports([...reports, newReport]);
 
-    // Reset form data after submission
     setFormData({
       type: "",
       dateTime: "",
@@ -78,7 +76,6 @@ const IncidentReportsScreen = () => {
       dateReported: "",
     });
 
-    // Close the modal
     setModalVisible(false);
   };
 

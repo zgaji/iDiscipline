@@ -4,7 +4,7 @@ import InputField from '../parts/InputField';
 import Button from '../parts/Button';
 import Checkbox from '../parts/CheckBox';
 import { useNavigation } from '@react-navigation/native';
-import { auth } from '../firebaseConfig'; 
+import { auth } from '../../firebaseConfig'; 
 import { signInWithEmailAndPassword } from 'firebase/auth';
 
 const LoginScreen = () => {
@@ -44,15 +44,14 @@ const LoginScreen = () => {
       const user = userCredential.user;
 
       if (user) {
-        const role = user.email === 'admin@example.com' ? 'admin' : 'student'; // Update as necessary
+        const role = user.email === 'admin@email.com' ? 'admin' : 'student'; // Update as necessary
         Alert.alert("Login Successful", `Welcome, ${role}!`);
         setAttempts(0);
 
-        // Navigate based on role
         if (role === 'admin') {
           navigation.navigate('DOHome');
         } else {
-          navigation.navigate('Home');
+          navigation.navigate('HomeScreen');
         }
       }
     } catch (error) {
@@ -60,7 +59,7 @@ const LoginScreen = () => {
       setAttempts(newAttempts);
       Alert.alert("Login Failed", "Incorrect email or password. Please try again.");
 
-      if (newAttempts >= 3) {
+      if (newAttempts >= 10) {
         setIsLocked(true);
         setRemainingTime(180);
         Alert.alert("Account Locked", "Too many failed attempts. Please try again in 3 minutes.");

@@ -1,43 +1,16 @@
-import React, { useState, useRef } from 'react';
-import { View, Text, StyleSheet, Image, TouchableOpacity, ScrollView, Animated } from 'react-native';
+import React, { useState } from 'react';
+import { View, Text, StyleSheet, Image, TouchableOpacity, ScrollView } from 'react-native';
 import { useNavigation, useRoute } from '@react-navigation/native';
 import { MaterialIcons, FontAwesome5, Entypo } from '@expo/vector-icons';
 
-const MenuScreen = ({ closeMenu }) => {
+const MenuScreen = ({ closeMenu, userRole }) => {
   const navigation = useNavigation();
   const route = useRoute();
   const currentRoute = route.name;
 
-  const [menuVisible, setMenuVisible] = useState(false);
-  const slideAnim = useRef(new Animated.Value(-280)).current;  // Starts off-screen
-
-  const openMenu = () => {
-    setMenuVisible(true);
-    Animated.timing(slideAnim, {
-      toValue: 0,  // Slide to the center of the screen
-      duration: 300,
-      useNativeDriver: true,
-    }).start();
-  };
-
-  const closeMenuHandler = () => {
-    Animated.timing(slideAnim, {
-      toValue: -280,  // Slide back off-screen
-      duration: 300,
-      useNativeDriver: true,
-    }).start(() => {
-      setMenuVisible(false);
-      if (closeMenu) closeMenu();
-    });
-  };
-
-  const handleNavigate = (screen) => {
-    navigation.navigate(screen);
-    closeMenuHandler();  // Close the menu when navigation happens
-  };
-
-  const menuItems = [
-    { name: 'Home', icon: <MaterialIcons name="home" size={24} />, screen: 'HomeScreen' },
+  // Define the menu items for Admin
+  const adminMenuItems = [
+    { name: 'Home', icon: <MaterialIcons name="home" size={24} />, screen: 'DOHomeScreen' },
     { name: 'Violations', icon: <MaterialIcons name="gavel" size={24} />, screen: 'DOViolations' },
     { name: 'Student List', icon: <FontAwesome5 name="user" size={20} />, screen: 'DOStudentList' },
     { name: 'Incident Reports', icon: <FontAwesome5 name="user-friends" size={20} />, screen: 'DOIncidentReports' },
@@ -46,9 +19,44 @@ const MenuScreen = ({ closeMenu }) => {
     { name: 'Student Handbook', icon: <MaterialIcons name="menu-book" size={24} />, screen: 'DOHandbookScreen' },
   ];
 
+  // Define the menu items for Student
+  const studentMenuItems = [
+    { name: 'Home', icon: <MaterialIcons name="home" size={24} />, screen: 'HomeScreen' },
+    { name: 'Profile', icon: <MaterialIcons name="person" size={24} />, screen: 'StudentProfile' },
+    { name: 'Violations', icon: <MaterialIcons name="gavel" size={24} />, screen: 'ViolationsScreen' },
+    { name: 'Incident Reports', icon: <FontAwesome5 name="user-friends" size={20} />, screen: 'IncidentReportsScreen' },
+    { name: 'Appointments', icon: <MaterialIcons name="calendar-today" size={24} />, screen: 'AppointmentsScreen' },
+    { name: 'Handbook', icon: <MaterialIcons name="menu-book" size={24} />, screen: 'HandbookScreen' },
+  ];
+
+  // Choose the appropriate menu items based on the user role
+  const menuItems = userRole === 'admin' ? adminMenuItems : studentMenuItems;
+
+  const [menuVisible, setMenuVisible] = useState(true);  // Set to true to make menu visible initially
+
+  const openMenu = () => {
+    setMenuVisible(true);  // Show menu
+  };
+
+  const closeMenuHandler = () => {
+    setMenuVisible(false);  // Hide menu
+    if (closeMenu) closeMenu();
+    navigation.goBack(); // Go back to the previous screen when menu is closed
+  };
+
+  const handleNavigate = (screen) => {
+    if (screen === currentRoute) {
+      // If the menu item is the current screen, do not navigate
+      closeMenuHandler();  // Close the menu if already on the current screen
+      return;
+    }
+    
+    navigation.navigate(screen);  // Navigate to the new screen
+    closeMenuHandler();  // Close the menu when navigation happens
+  };
+
   return (
-    <Animated.View style={[styles.container, { transform: [{ translateX: slideAnim }] }]}>
-      {/* Header */}
+    <View style={[styles.container, { display: menuVisible ? 'flex' : 'none' }]}>
       <View style={styles.header}>
         <Image source={require('../../assets/logo.png')} style={styles.logo} />
         <TouchableOpacity onPress={closeMenuHandler}>
@@ -56,13 +64,11 @@ const MenuScreen = ({ closeMenu }) => {
         </TouchableOpacity>
       </View>
 
-      {/* User Info */}
       <View style={styles.userInfo}>
         <Image source={require('../../assets/user.png')} style={styles.avatar} />
         <Text style={styles.userName}>User</Text>
       </View>
 
-      {/* Menu Items */}
       <ScrollView style={styles.menuList}>
         {menuItems.map((item, index) => {
           const isActive = currentRoute === item.screen;
@@ -70,22 +76,22 @@ const MenuScreen = ({ closeMenu }) => {
           return (
             <TouchableOpacity
               key={index}
-              style={[styles.menuItem, isActive && styles.activeItem]}
-              onPress={() => handleNavigate(item.screen)}
+              style={[styles.menuItem, isActive && styles.activeItem]}  // Add active style
+              onPress={() => handleNavigate(item.screen)}  // Use handleNavigate for navigation
             >
               <View style={styles.iconContainer}>
                 {React.cloneElement(item.icon, {
-                  color: isActive ? '#fff' : '#000',
+                  color: isActive ? '#fff' : '#000',  // Set icon color to white if active
                 })}
               </View>
-              <Text style={[styles.menuText, isActive && styles.activeText]}>
+              <Text style={[styles.menuText, isActive && styles.activeText]}>  // Apply active text style
                 {item.name}
               </Text>
             </TouchableOpacity>
           );
         })}
       </ScrollView>
-    </Animated.View>
+    </View>
   );
 };
 
@@ -93,14 +99,16 @@ export default MenuScreen;
 
 const styles = StyleSheet.create({
   container: {
-    width: 280,
-    height: '100%',
+    flex: 1,  // Full screen layout
     backgroundColor: '#fff',
-    paddingTop: 40,
-    elevation: 5,
-    position: 'absolute',  // Ensure the menu overlays the screen
-    left: 0,
+    position: 'absolute',
     top: 0,
+    left: 0,
+    right: 0,
+    bottom: 0,
+    zIndex: 999,  // Ensure it overlays content
+    elevation: 10,
+    paddingTop: 40,
   },
   header: {
     backgroundColor: '#0057FF',
@@ -146,7 +154,7 @@ const styles = StyleSheet.create({
     marginBottom: 5,
   },
   activeItem: {
-    backgroundColor: '#0057FF',
+    backgroundColor: '#0057FF',  // Highlight active item with background color
   },
   iconContainer: {
     width: 30,
@@ -159,6 +167,6 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
   },
   activeText: {
-    color: '#fff',
+    color: '#fff',  // Change active text color to white
   },
 });

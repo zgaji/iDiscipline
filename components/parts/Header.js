@@ -1,9 +1,11 @@
 import React from 'react';
 import { View, Text, TouchableOpacity, StyleSheet, Image, Alert } from 'react-native';
 import { useNavigation, useRoute } from '@react-navigation/native';
+import { auth } from '../../firebaseConfig'; // Import Firebase auth
+import { signOut } from 'firebase/auth';  // Import Firebase signOut
 
 const screenTitles = {
-  Home: "Home",
+  HomeScreen: "Home",
   Profile: "Student Profile",
   Violations: "Violations",
   IncidentReports: "Incident Reports",
@@ -33,11 +35,17 @@ const Header = ({ openMenu }) => {
     ]);
   };
 
-  const handleLogout = () => {
-    navigation.reset({
-      index: 0,
-      routes: [{ name: "Login" }],
-    });
+  const handleLogout = async () => {
+    try {
+      await signOut(auth);  // Sign out from Firebase
+      navigation.reset({
+        index: 0, // Reset to the first screen
+        routes: [{ name: 'LoginScreen' }]  // Navigate to LoginScreen after logout
+      });
+    } catch (error) {
+      console.error("Error signing out: ", error);
+      Alert.alert("Error", "There was a problem logging out. Please try again.");
+    }
   };
 
   const handleNotification = () => {
@@ -46,12 +54,12 @@ const Header = ({ openMenu }) => {
 
   return (
     <View style={styles.container}>
-      {/* Left: Menu Button with Square Background */}
-      <TouchableOpacity onPress={openMenu} style={styles.menuWrapper}>
+      {/* Menu Button */}
+      <TouchableOpacity onPress={() => navigation.navigate('MenuScreen')} style={styles.menuWrapper}>
         <Image source={require("../../assets/menu.png")} style={styles.menuIcon} />
       </TouchableOpacity>
 
-      {/* Center Title */}
+      {/* Title */}
       <View style={styles.titleWrapper}>
         <Text style={styles.title}>{title}</Text>
       </View>
@@ -71,11 +79,11 @@ const Header = ({ openMenu }) => {
 
 const styles = StyleSheet.create({
   container: {
-    height: 60,
+    height: 80,
     flexDirection: "row",
     alignItems: "center",
     backgroundColor: "#F5F8FA",
-    paddingHorizontal: 15,
+    paddingHorizontal: 20,
     borderBottomWidth: 1,
     borderBottomColor: "#ddd",
   },
@@ -85,7 +93,7 @@ const styles = StyleSheet.create({
     padding: 6,
     justifyContent: "center",
     alignItems: "center",
-    zIndex: 10, // Ensure the menu button is on top of other elements
+    zIndex: 10,
   },
   menuIcon: {
     width: 22,
@@ -99,9 +107,10 @@ const styles = StyleSheet.create({
     marginLeft: 10,
   },
   title: {
-    fontSize: 16,
+    fontSize: 20,
     fontWeight: "bold",
     color: "#000",
+    textAlign: "center",
   },
   rightIcons: {
     flexDirection: "row",
