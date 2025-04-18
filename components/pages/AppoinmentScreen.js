@@ -20,9 +20,6 @@ const AppointmentsScreen = () => {
       <View style={{ marginBottom: 15 }}>
         <Header title="Appointments" /> {/* Ensure Header component works */}
       </View>
-      <View style={{ marginBottom: 15 }}>
-        <MenuBar /> {/* Ensure MenuBar component is defined */}
-      </View>
       <CalendarView /> {/* Make sure CalendarView renders correctly */}
 
       {/* Floating Action Button */}

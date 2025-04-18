@@ -1,9 +1,16 @@
 import React, { useState } from "react";
-import { View, FlatList, TouchableOpacity, Image, ToastAndroid, Platform, StyleSheet } from "react-native";
+import {
+  View,
+  FlatList,
+  TouchableOpacity,
+  Image,
+  ToastAndroid,
+  Platform,
+  StyleSheet,
+} from "react-native";
 import Header from "../parts/Header";
 import StudentCard from "../parts/StudentCard";
 import StatCard from "../parts/StatCard";
-import MenuBar from "../parts/MenuBar";
 import MenuScreen from "./MenuScreen";
 
 const stats = [
@@ -15,6 +22,7 @@ const stats = [
 
 const HomeScreen = () => {
   const [menuVisible, setMenuVisible] = useState(false);
+
   const showToast = () => {
     if (Platform.OS === "android") {
       ToastAndroid.show("Chatbot has been clicked", ToastAndroid.SHORT);
@@ -22,14 +30,9 @@ const HomeScreen = () => {
   };
 
   return (
-    <View style={{ flex: 1, backgroundColor: "#F4F9FC", padding: 20, marginTop: 30 }}>
-      <View style={{ marginBottom: 10 }}>
-        {/* Pass the openMenu function to the Header */}
+    <View style={styles.container}>
+      <View style={styles.headerWrapper}>
         <Header openMenu={() => setMenuVisible(true)} />
-      </View>
-
-      <View style={{ marginBottom: 10 }}>
-        <MenuBar />
       </View>
 
       <StudentCard />
@@ -37,10 +40,15 @@ const HomeScreen = () => {
       <FlatList
         data={stats}
         numColumns={2}
-        columnWrapperStyle={{ justifyContent: "space-between", marginBottom: 5 }}
+        columnWrapperStyle={styles.columnWrapper}
         keyExtractor={(item) => item.title}
         renderItem={({ item }) => (
-          <StatCard title={item.title} icon={item.icon} count={item.count} bgColor={item.bgColor} />
+          <StatCard
+            title={item.title}
+            icon={item.icon}
+            count={item.count}
+            bgColor={item.bgColor}
+          />
         )}
       />
 
@@ -48,9 +56,8 @@ const HomeScreen = () => {
         <Image source={require("../../assets/chatbot.png")} style={styles.fabIcon} />
       </TouchableOpacity>
 
-      {/* Show the menu as overlay */}
       {menuVisible && (
-        <View style={StyleSheet.absoluteFillObject}>
+        <View style={styles.overlay}>
           <MenuScreen closeMenu={() => setMenuVisible(false)} />
         </View>
       )}
@@ -59,6 +66,19 @@ const HomeScreen = () => {
 };
 
 const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    backgroundColor: "#F4F9FC",
+    padding: 20,
+    paddingTop: 30,
+  },
+  headerWrapper: {
+    marginBottom: 10,
+  },
+  columnWrapper: {
+    justifyContent: "space-between",
+    marginBottom: 5,
+  },
   fab: {
     position: "absolute",
     bottom: 20,
@@ -75,6 +95,10 @@ const styles = StyleSheet.create({
     width: 30,
     height: 30,
     tintColor: "#fff",
+  },
+  overlay: {
+    ...StyleSheet.absoluteFillObject,
+    zIndex: 10, // ensure it overlays other components
   },
 });
 

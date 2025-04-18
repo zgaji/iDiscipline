@@ -6,11 +6,11 @@ import { signOut } from 'firebase/auth';  // Import Firebase signOut
 
 const screenTitles = {
   HomeScreen: "Home",
-  Profile: "Student Profile",
-  Violations: "Violations",
-  IncidentReports: "Incident Reports",
-  Appointments: "Appointments",
-  Handbook: "Student Handbook",
+  ProfileScreen: "Student Profile",
+  ViolationsScreen: "Violations",
+  IncidentReportsScreen: "Incident Reports",
+  AppointmentScreen: "Appointments",
+  HandbookScreen: "Student Handbook",
   DOHome: "Dashboard",
   DOStudentList: "Student List",
   DOStudentProfile: "Student Profile",
@@ -37,11 +37,9 @@ const Header = ({ openMenu }) => {
 
   const handleLogout = async () => {
     try {
-      await signOut(auth);  // Sign out from Firebase
-      navigation.reset({
-        index: 0, // Reset to the first screen
-        routes: [{ name: 'LoginScreen' }]  // Navigate to LoginScreen after logout
-      });
+      await signOut(auth); // This will trigger onAuthStateChanged to set isAuthenticated to false
+      // After logging out, navigate to the login screen
+      navigation.replace('LoginScreen'); // Or any other screen you want to navigate to after logout
     } catch (error) {
       console.error("Error signing out: ", error);
       Alert.alert("Error", "There was a problem logging out. Please try again.");

@@ -27,9 +27,6 @@ const ViolationsScreen = () => {
       <View style={{ marginBottom: 15 }}> 
         <Header title="Violations" />
       </View>
-      <View style={{ marginBottom: 15 }}> 
-        <MenuBar />
-      </View>
 
       {/* Filter Section */}
       <View style={styles.filterSection}>

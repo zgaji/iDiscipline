@@ -11,7 +11,7 @@ const DOHomeScreen = () => {
       ToastAndroid.show("Chatbot has been clicked", ToastAndroid.SHORT);
     } 
   };
-
+  console.log('DOHomeScreen rendered!');
   const stats = [
     { title: "Violation", count: 0, bgColor: "#FF5E5B", icon: require("../../assets/violation.png") },
     { title: "Incident Reports", count: 0, bgColor: "#2BC999", icon: require("../../assets/inc.png") },
@@ -38,8 +38,9 @@ const DOHomeScreen = () => {
               />
             </View>
           ))}
-        </View>
 
+        </View>
+        <Text>Welcome to DO Home Screen!</Text>
         {/* Upcoming Appointments Section */}
         <View style={styles.appointmentsSection}>
           <Text style={styles.sectionTitle}>Upcoming Appointments</Text>

@@ -3,10 +3,12 @@ import { View, Text, StyleSheet, Image, TouchableOpacity, ScrollView } from 'rea
 import { useNavigation, useRoute } from '@react-navigation/native';
 import { MaterialIcons, FontAwesome5, Entypo } from '@expo/vector-icons';
 
-const MenuScreen = ({ closeMenu, userRole }) => {
+const MenuScreen = ({ closeMenu }) => {
   const navigation = useNavigation();
   const route = useRoute();
-  const currentRoute = route.name;
+  const { userRole } = route.params || {};  // ✅ Get userRole from route params
+
+  console.log('userRole from route:', userRole); 
 
   // Define the menu items for Admin
   const adminMenuItems = [
@@ -22,37 +24,34 @@ const MenuScreen = ({ closeMenu, userRole }) => {
   // Define the menu items for Student
   const studentMenuItems = [
     { name: 'Home', icon: <MaterialIcons name="home" size={24} />, screen: 'HomeScreen' },
-    { name: 'Profile', icon: <MaterialIcons name="person" size={24} />, screen: 'StudentProfile' },
+    { name: 'Profile', icon: <MaterialIcons name="person" size={24} />, screen: 'ProfileScreen' },
     { name: 'Violations', icon: <MaterialIcons name="gavel" size={24} />, screen: 'ViolationsScreen' },
     { name: 'Incident Reports', icon: <FontAwesome5 name="user-friends" size={20} />, screen: 'IncidentReportsScreen' },
     { name: 'Appointments', icon: <MaterialIcons name="calendar-today" size={24} />, screen: 'AppointmentsScreen' },
     { name: 'Handbook', icon: <MaterialIcons name="menu-book" size={24} />, screen: 'HandbookScreen' },
   ];
 
-  // Choose the appropriate menu items based on the user role
+  // Choose menu items based on role
   const menuItems = userRole === 'admin' ? adminMenuItems : studentMenuItems;
 
-  const [menuVisible, setMenuVisible] = useState(true);  // Set to true to make menu visible initially
-
-  const openMenu = () => {
-    setMenuVisible(true);  // Show menu
-  };
+  const [menuVisible, setMenuVisible] = useState(true);  
 
   const closeMenuHandler = () => {
-    setMenuVisible(false);  // Hide menu
+    setMenuVisible(false);
     if (closeMenu) closeMenu();
-    navigation.goBack(); // Go back to the previous screen when menu is closed
+    navigation.goBack();
   };
 
   const handleNavigate = (screen) => {
-    if (screen === currentRoute) {
-      // If the menu item is the current screen, do not navigate
-      closeMenuHandler();  // Close the menu if already on the current screen
+    if (route.name === screen) {
+
+      closeMenuHandler();
       return;
     }
-    
-    navigation.navigate(screen);  // Navigate to the new screen
-    closeMenuHandler();  // Close the menu when navigation happens
+
+    navigation.navigate(screen, { userRole }); // pass userRole to next screen if needed
+    console.log('Navigating to:', screen);
+    closeMenuHandler();
   };
 
   return (
@@ -66,25 +65,25 @@ const MenuScreen = ({ closeMenu, userRole }) => {
 
       <View style={styles.userInfo}>
         <Image source={require('../../assets/user.png')} style={styles.avatar} />
-        <Text style={styles.userName}>User</Text>
+        <Text style={styles.userName}>{userRole === 'admin' ? 'Admin' : 'Student'}</Text>
       </View>
 
       <ScrollView style={styles.menuList}>
         {menuItems.map((item, index) => {
-          const isActive = currentRoute === item.screen;
+          const isActive = route.name === item.screen;
 
           return (
             <TouchableOpacity
               key={index}
-              style={[styles.menuItem, isActive && styles.activeItem]}  // Add active style
-              onPress={() => handleNavigate(item.screen)}  // Use handleNavigate for navigation
+              style={[styles.menuItem, isActive && styles.activeItem]}
+              onPress={() => handleNavigate(item.screen)}
             >
               <View style={styles.iconContainer}>
                 {React.cloneElement(item.icon, {
-                  color: isActive ? '#fff' : '#000',  // Set icon color to white if active
+                  color: isActive ? '#fff' : '#000',
                 })}
               </View>
-              <Text style={[styles.menuText, isActive && styles.activeText]}>  // Apply active text style
+              <Text style={[styles.menuText, isActive && styles.activeText]}>
                 {item.name}
               </Text>
             </TouchableOpacity>
@@ -99,14 +98,14 @@ export default MenuScreen;
 
 const styles = StyleSheet.create({
   container: {
-    flex: 1,  // Full screen layout
+    flex: 1,
     backgroundColor: '#fff',
     position: 'absolute',
     top: 0,
     left: 0,
     right: 0,
     bottom: 0,
-    zIndex: 999,  // Ensure it overlays content
+    zIndex: 999,
     elevation: 10,
     paddingTop: 40,
   },
@@ -154,7 +153,7 @@ const styles = StyleSheet.create({
     marginBottom: 5,
   },
   activeItem: {
-    backgroundColor: '#0057FF',  // Highlight active item with background color
+    backgroundColor: '#0057FF',
   },
   iconContainer: {
     width: 30,
@@ -167,6 +166,6 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
   },
   activeText: {
-    color: '#fff',  // Change active text color to white
+    color: '#fff',
   },
 });

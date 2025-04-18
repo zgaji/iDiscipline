@@ -1,12 +1,15 @@
 import React from "react";
-import { View, ScrollView, StyleSheet, TouchableOpacity, Image,Platform,ToastAndroid, } from "react-native";
+import { View, ScrollView, StyleSheet, TouchableOpacity, Image, Platform, ToastAndroid } from "react-native";
 import Header from "../parts/Header";
 import MenuBar from "../parts/MenuBar";
 import StudentCard from "../parts/StudentCard";
 import InfoCard from "../parts/InfoCard";
-
+import { SafeAreaView } from 'react-native-safe-area-context';
+import { useRoute } from '@react-navigation/native'; // ✅
 
 const ProfileScreen = () => {
+  const route = useRoute();
+  const { userRole } = route.params || {}; // ✅ Grab userRole
 
   const handleChatbotClick = () => {
     if (Platform.OS === "android") {
@@ -15,17 +18,13 @@ const ProfileScreen = () => {
   };
 
   return (
-    <View style={{ flex: 1, backgroundColor: "#F4F9FC", padding: 20, marginTop: 30 }}>
+    <SafeAreaView style={{ flex: 1, backgroundColor: "#F4F9FC", padding: 20 }}>
       <View style={{ marginBottom: 15 }}> 
         <Header title="Student Profile" />
       </View>
-      <View style={{ marginBottom: 15 }}> 
-        <MenuBar />
-      </View>
+
       <StudentCard />
       <ScrollView contentContainerStyle={{ alignItems: "center" }}>
-
-
         <InfoCard
           title="Student Details"
           details={{
@@ -37,7 +36,6 @@ const ProfileScreen = () => {
             Address: "",
           }}
         />
-
         <InfoCard
           title="Emergency Contact"
           details={{
@@ -49,14 +47,14 @@ const ProfileScreen = () => {
         />
       </ScrollView>
 
-
       {/* Floating Chatbot Button */}
       <TouchableOpacity style={styles.fab} onPress={handleChatbotClick}>
         <Image source={require("../../assets/chatbot.png")} style={styles.fabIcon} />
       </TouchableOpacity>
-    </View>
+    </SafeAreaView>
   );
 };
+
 const styles = StyleSheet.create({
   fab: {
     position: "absolute",

@@ -14,7 +14,8 @@ const LoginScreen = () => {
   const [attempts, setAttempts] = useState(0);
   const [isLocked, setIsLocked] = useState(false);
   const [remainingTime, setRemainingTime] = useState(0);
-
+  const [loading, setLoading] = useState(true);
+  
   useEffect(() => {
     let timer;
     if (isLocked) {
@@ -38,27 +39,24 @@ const LoginScreen = () => {
       Alert.alert("Too Many Attempts", `Please wait ${remainingTime} seconds before trying again.`);
       return;
     }
-
+  
     try {
       const userCredential = await signInWithEmailAndPassword(auth, email.trim(), password.trim());
       const user = userCredential.user;
-
+  
       if (user) {
         const role = user.email === 'admin@email.com' ? 'admin' : 'student'; // Update as necessary
         Alert.alert("Login Successful", `Welcome, ${role}!`);
         setAttempts(0);
-
-        if (role === 'admin') {
-          navigation.navigate('DOHome');
-        } else {
-          navigation.navigate('HomeScreen');
-        }
+  
+        // Navigate to the redirect screen after login
+        navigation.replace('RedirectScreen', { isAuthenticated: true, userRole: role });
       }
     } catch (error) {
       const newAttempts = attempts + 1;
       setAttempts(newAttempts);
       Alert.alert("Login Failed", "Incorrect email or password. Please try again.");
-
+  
       if (newAttempts >= 10) {
         setIsLocked(true);
         setRemainingTime(180);

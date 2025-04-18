@@ -53,7 +53,6 @@ const HandbookScreen = () => {
   return (
     <View style={{ flex: 1, backgroundColor: "#F4F9FC", padding: 20, marginTop: 30 }}>
       <Header title="Student Handbook" />
-      <MenuBar />
 
       {/* Online PDF Viewer */}
       <View style={{ flex: 1, height: 500 }}>
