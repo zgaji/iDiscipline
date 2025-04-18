@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import {
   View,
   FlatList,
@@ -12,6 +12,7 @@ import Header from "../parts/Header";
 import StudentCard from "../parts/StudentCard";
 import StatCard from "../parts/StatCard";
 import MenuScreen from "./MenuScreen";
+import { useRoute } from '@react-navigation/native';
 
 const stats = [
   { title: "Violation", icon: require("../../assets/violation.png"), count: 0, bgColor: "#FF5A5F" },
@@ -22,12 +23,20 @@ const stats = [
 
 const HomeScreen = () => {
   const [menuVisible, setMenuVisible] = useState(false);
+  const route = useRoute();
+  const { userRole } = route.params || {};
+
+  console.log('HomeScreen - userRole:', userRole);
 
   const showToast = () => {
     if (Platform.OS === "android") {
       ToastAndroid.show("Chatbot has been clicked", ToastAndroid.SHORT);
     }
   };
+
+  useEffect(() => {
+    console.log('HomeScreen - userRole:', userRole);
+  }, []);
 
   return (
     <View style={styles.container}>

@@ -2,14 +2,17 @@ import React, { useState } from 'react';
 import { View, Text, StyleSheet, Image, TouchableOpacity, ScrollView } from 'react-native';
 import { useNavigation, useRoute } from '@react-navigation/native';
 import { MaterialIcons, FontAwesome5, Entypo } from '@expo/vector-icons';
+import { useIsFocused } from '@react-navigation/native';
 
 const MenuScreen = ({ closeMenu }) => {
   const navigation = useNavigation();
   const route = useRoute();
   const { userRole } = route.params || {};  // ✅ Get userRole from route params
+  const isFocused = useIsFocused();
 
   console.log('userRole from route:', userRole); 
 
+  
   // Define the menu items for Admin
   const adminMenuItems = [
     { name: 'Home', icon: <MaterialIcons name="home" size={24} />, screen: 'DOHomeScreen' },
@@ -62,33 +65,33 @@ const MenuScreen = ({ closeMenu }) => {
           <Text style={styles.closeIcon}>✕</Text>
         </TouchableOpacity>
       </View>
-
+    
       <View style={styles.userInfo}>
         <Image source={require('../../assets/user.png')} style={styles.avatar} />
         <Text style={styles.userName}>{userRole === 'admin' ? 'Admin' : 'Student'}</Text>
       </View>
 
       <ScrollView style={styles.menuList}>
-        {menuItems.map((item, index) => {
-          const isActive = route.name === item.screen;
+      {menuItems.map((item, index) => {
+        const isActive = route.name === item.screen;
 
-          return (
-            <TouchableOpacity
-              key={index}
-              style={[styles.menuItem, isActive && styles.activeItem]}
-              onPress={() => handleNavigate(item.screen)}
-            >
-              <View style={styles.iconContainer}>
-                {React.cloneElement(item.icon, {
-                  color: isActive ? '#fff' : '#000',
-                })}
-              </View>
-              <Text style={[styles.menuText, isActive && styles.activeText]}>
-                {item.name}
-              </Text>
-            </TouchableOpacity>
-          );
-        })}
+        return (
+          <TouchableOpacity
+            key={index}
+            style={[styles.menuItem, isActive && styles.activeItem]}
+            onPress={() => handleNavigate(item.screen)}
+          >
+            <View style={styles.iconContainer}>
+              {React.cloneElement(item.icon, {
+                color: isActive ? '#fff' : '#000',
+              })}
+            </View>
+            <Text style={[styles.menuText, isActive && styles.activeText]}>
+              {item.name}
+            </Text>
+          </TouchableOpacity>
+        );
+      })}
       </ScrollView>
     </View>
   );

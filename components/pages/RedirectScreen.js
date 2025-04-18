@@ -7,14 +7,15 @@ const RedirectScreen = ({ navigation, route }) => {
   useEffect(() => {
     if (isAuthenticated) {
       if (userRole === 'admin') {
-        navigation.replace('DOHomeScreen');
+        navigation.replace('DOHomeScreen', { userRole });
       } else {
-        navigation.replace('HomeScreen');
+        navigation.replace('HomeScreen', { userRole });
       }
     } else {
       navigation.replace('LoginScreen');
     }
   }, [isAuthenticated, userRole]);
+  
 
   return (
     <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>

@@ -9,7 +9,9 @@ import { useRoute } from '@react-navigation/native'; // ✅
 
 const ProfileScreen = () => {
   const route = useRoute();
-  const { userRole } = route.params || {}; // ✅ Grab userRole
+  const { userRole } = route.params || {};
+
+  console.log('ProfileScreen - userRole:', userRole);
 
   const handleChatbotClick = () => {
     if (Platform.OS === "android") {

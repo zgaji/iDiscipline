@@ -21,8 +21,7 @@ import DOHandbookScreen from './components/DOpages/DOHandbookScreen';
 import IncidentReportsScreen from './components/pages/IncidentReportsScreen';
 import HandbookScreen from './components/pages/HandbookScreen';
 import ProfileScreen from './components/pages/ProfileScreen';
-import RedirectScreen from './components/pages/RedirectScreen'; // Add this at the top
-
+import RedirectScreen from './components/pages/RedirectScreen'; 
 
 const Stack = createStackNavigator();
 
