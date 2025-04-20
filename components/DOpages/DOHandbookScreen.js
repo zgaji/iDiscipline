@@ -53,7 +53,6 @@ const DOHandbookScreen = () => {
   return (
     <View style={{ flex: 1, backgroundColor: "#F4F9FC", padding: 20, marginTop: 30 }}>
       <Header title="Student Handbook" />
-      <DOMenuBar />
 
       {/* Online PDF Viewer using Google Docs */}
       <View style={{ flex: 1, height: 500 }}>

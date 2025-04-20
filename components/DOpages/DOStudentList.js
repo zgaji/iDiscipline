@@ -31,7 +31,6 @@ const DOStudentList = ({ navigation }) => {
       <View style={{ marginBottom: 15 }}> 
         <Header title="StudentList" />
       </View>
-      <MenuBar activeTab="Student List"/>
 
       <ScrollView contentContainerStyle={styles.content}>
         {/* Students Count */}

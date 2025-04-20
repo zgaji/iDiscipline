@@ -23,7 +23,6 @@ const navigation = useNavigation();
       <View style={{ marginBottom: 15 }}> 
         <Header title="Student List" />
       </View>
-      <MenuBar activeTab="StudentList"/>
       
       <ScrollView contentContainerStyle={styles.content}>
         <StudentCard></StudentCard>

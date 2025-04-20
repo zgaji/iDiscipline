@@ -27,7 +27,6 @@ const ViolationRecord = ({ navigation }) => {
       <View style={{ marginBottom: 15 }}> 
         <Header title="DOViolations" />
       </View>
-      <MenuBar activeTab="DOViolations"/>
 
       <ScrollView contentContainerStyle={styles.content}>
         {/* Violation Record Header */}

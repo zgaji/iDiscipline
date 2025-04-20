@@ -20,8 +20,8 @@ const DOHomeScreen = () => {
 
   return (
     <View style={styles.container}>
-      <View style={styles.headerContainer}> 
-        <Header title="Dashboard" />
+      <View style={{ marginBottom: 15 }}> 
+        <Header title="StudentList" />
       </View>
 
       {/* Scrollable Content */}
@@ -40,7 +40,7 @@ const DOHomeScreen = () => {
           ))}
 
         </View>
-        <Text>Welcome to DO Home Screen!</Text>
+
         {/* Upcoming Appointments Section */}
         <View style={styles.appointmentsSection}>
           <Text style={styles.sectionTitle}>Upcoming Appointments</Text>

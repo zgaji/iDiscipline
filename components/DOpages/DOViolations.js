@@ -26,9 +26,6 @@ const DOViolations = ({ navigation }) => {
       <View style={{ marginBottom: 15 }}> 
         <Header title="Violations" />
       </View>
-      <View style={{ marginBottom: 15 }}> 
-        <DOMenuBar activeTab="Violations"/>
-      </View>
 
       <Text style={styles.title}>Violation Record</Text>
 

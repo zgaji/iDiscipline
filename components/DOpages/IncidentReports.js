@@ -38,7 +38,6 @@ const IncidentReports = () => {
       <View style={{ marginBottom: 15 }}> 
         <Header title="Incident Reports" />
       </View>
-      <DOMenuBar activeTab="IncidentReports"/>
 
       <View style={styles.content}>
         <Text style={styles.title}>Incident Reports</Text>
@@ -289,6 +288,7 @@ const styles = StyleSheet.create({
     height: 30,
     tintColor: "#fff", // Keeps icon color consistent
   },
+  
 });
 
 export default IncidentReports;

@@ -48,7 +48,6 @@ const DOAppointments = () => {
       <View style={{ marginBottom: 15 }}> 
         <Header title="Appointments" />
       </View>
-      <DOMenuBar activeTab="Appointments"/>
 
       <View style={styles.content}>
         <Text style={styles.title}>Appointments</Text>

@@ -79,7 +79,7 @@ const MenuScreen = ({ closeMenu }) => {
           <TouchableOpacity
             key={index}
             style={[styles.menuItem, isActive && styles.activeItem]}
-            onPress={() => handleNavigate(item.screen)}
+            onPress={() => navigation.navigate(item.screen, { userRole })}
           >
             <View style={styles.iconContainer}>
               {React.cloneElement(item.icon, {
