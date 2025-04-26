@@ -7,11 +7,11 @@ import { useIsFocused } from '@react-navigation/native';
 const MenuScreen = ({ closeMenu }) => {
   const navigation = useNavigation();
   const route = useRoute();
-  const { userRole } = route.params || {};  // ✅ Get userRole from route params
+  const { student, userRole } = route.params; 
   const isFocused = useIsFocused();
 
   console.log('userRole from route:', userRole); 
-
+  console.log('student from route:', student);
   
   // Define the menu items for Admin
   const adminMenuItems = [
@@ -43,6 +43,7 @@ const MenuScreen = ({ closeMenu }) => {
     setMenuVisible(false);
     if (closeMenu) closeMenu();
     navigation.goBack();
+    console.log('student:', student);
   };
 
   const handleNavigate = (screen) => {
@@ -52,11 +53,17 @@ const MenuScreen = ({ closeMenu }) => {
       return;
     }
 
-    navigation.navigate(screen, { userRole }); // pass userRole to next screen if needed
+    navigation.navigate(screen, { userRole, student }); // pass userRole to next screen if needed
     console.log('Navigating to:', screen);
     closeMenuHandler();
   };
 
+  const userName = userRole === 'admin' 
+  ? 'Admin' 
+  : student 
+  ? `${student.firstName} ${student.lastName}` 
+  : 'Student';
+    
   return (
     <View style={[styles.container, { display: menuVisible ? 'flex' : 'none' }]}>
       <View style={styles.header}>
@@ -68,30 +75,30 @@ const MenuScreen = ({ closeMenu }) => {
     
       <View style={styles.userInfo}>
         <Image source={require('../../assets/user.png')} style={styles.avatar} />
-        <Text style={styles.userName}>{userRole === 'admin' ? 'Admin' : 'Student'}</Text>
+        <Text style={styles.userName}>{userName}</Text>
       </View>
 
       <ScrollView style={styles.menuList}>
-      {menuItems.map((item, index) => {
-        const isActive = route.name === item.screen;
+        {menuItems.map((item, index) => {
+          const isActive = route.name === item.screen;
 
-        return (
-          <TouchableOpacity
-            key={index}
-            style={[styles.menuItem, isActive && styles.activeItem]}
-            onPress={() => navigation.navigate(item.screen, { userRole })}
-          >
-            <View style={styles.iconContainer}>
-              {React.cloneElement(item.icon, {
-                color: isActive ? '#fff' : '#000',
-              })}
-            </View>
-            <Text style={[styles.menuText, isActive && styles.activeText]}>
-              {item.name}
-            </Text>
-          </TouchableOpacity>
-        );
-      })}
+          return (
+            <TouchableOpacity
+              key={index}
+              style={[styles.menuItem, isActive && styles.activeItem]}
+              onPress={() => navigation.navigate(item.screen, { userRole })}
+            >
+              <View style={styles.iconContainer}>
+                {React.cloneElement(item.icon, {
+                  color: isActive ? '#fff' : '#000',
+                })}
+              </View>
+              <Text style={[styles.menuText, isActive && styles.activeText]}>
+                {item.name}
+              </Text>
+            </TouchableOpacity>
+          );
+        })}
       </ScrollView>
     </View>
   );
@@ -113,7 +120,7 @@ const styles = StyleSheet.create({
     paddingTop: 40,
   },
   header: {
-    backgroundColor: '#0057FF',
+    backgroundColor: '#0F296F',
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'space-between',
@@ -141,7 +148,7 @@ const styles = StyleSheet.create({
   },
   userName: {
     marginTop: 10,
-    fontSize: 16,
+    fontSize: 20,
     fontWeight: 'bold',
   },
   menuList: {

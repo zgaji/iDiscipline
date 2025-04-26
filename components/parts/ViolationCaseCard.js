@@ -15,7 +15,7 @@ const ViolationCaseCard = ({ caseData, openModal }) => {
       <Text style={styles.caseInfo}>Date Sent: {caseData.dateSent}</Text>
       <Text style={styles.description}>{caseData.description}</Text>
 
-      {/* Read More Button */}
+    
       <TouchableOpacity style={styles.readMore} onPress={() => openModal(caseData)}>
         <Text style={styles.readMoreText}>Read More</Text>
         <FontAwesome name="chevron-right" size={14} color="#007AFF" />

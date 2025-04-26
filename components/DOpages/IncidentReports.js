@@ -1,6 +1,5 @@
 import React, { useState } from "react";
 import {View, Text, TextInput, ScrollView, TouchableOpacity, Modal, StyleSheet,Platform,ToastAndroid,Image} from "react-native";
-import DOMenuBar from "../parts/DOMenuBar";
 import IncidentReportMenu from "../parts/IncidentReportMenu";
 import { FontAwesome } from "@expo/vector-icons";
 import Header from "../parts/Header";

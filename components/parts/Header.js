@@ -1,7 +1,7 @@
 import React from 'react';
 import { View, Text, TouchableOpacity, StyleSheet, Image, Alert } from 'react-native';
 import { useNavigation, useRoute } from '@react-navigation/native';
-import { auth } from '../../firebaseConfig'; // Import Firebase auth
+import { auth } from '../backend/firebaseConfig'; // Import Firebase auth
 import { signOut } from 'firebase/auth';  // Import Firebase signOut
 
 const screenTitles = {
@@ -11,9 +11,9 @@ const screenTitles = {
   IncidentReportsScreen: "Incident Reports",
   AppointmentScreen: "Appointments",
   HandbookScreen: "Student Handbook",
-  DOHome: "Dashboard",
+  DOHomeScreen: "Dashboard",
   DOStudentList: "Student List",
-  DOStudentProfile: "Student Profile",
+  DOStudentProfileScreen: "Student Profile",
   DOViolations: "Violations",
   DOIncidentReports: "Incident Reports",
   DOAppointments: "Appointments",
@@ -86,7 +86,7 @@ const styles = StyleSheet.create({
     borderBottomColor: "#ddd",
   },
   menuWrapper: {
-    backgroundColor: "#0144F2",
+    backgroundColor: "#0F296F",
     borderRadius: 6,
     padding: 6,
     justifyContent: "center",

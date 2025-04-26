@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { View, Image, StyleSheet, TouchableOpacity, Platform, ToastAndroid, Button, Alert } from "react-native";
 import Header from "../parts/Header";
-import DOMenuBar from "../parts/DOMenuBar";
 import { WebView } from "react-native-webview";
 import * as FileSystem from "expo-file-system";
 import * as Sharing from "expo-sharing";

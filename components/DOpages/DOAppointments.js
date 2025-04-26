@@ -10,7 +10,6 @@ import {
   Platform,ToastAndroid,Image
 } from "react-native";
 import { FontAwesome } from "@expo/vector-icons";
-import DOMenuBar from "../parts/DOMenuBar";
 import AppointmentsMenu from "../parts/AppointmentsMenu";
 import Header from "../parts/Header";
 

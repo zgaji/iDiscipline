@@ -1,13 +1,14 @@
 import React, { useState } from "react";
 import { View, Text, Image, TouchableOpacity, StyleSheet, ScrollView,Platform,ToastAndroid} from "react-native";
 import Header from "../parts/Header";
-import MenuBar from "../parts/DOMenuBar";
 import StudentCard from "../parts/StudentCard";
 import DOViolationCard from "../parts/DOViolationCard";
 
 //clickable student card
 
 const ViolationRecord = ({ navigation }) => {
+  const route = useRoute(); // ADD THIS
+  const { student } = route.params || {}; // ADD THIS
   const [selectedFilter, setSelectedFilter] = useState("All");
 
   const violations = [
@@ -33,7 +34,7 @@ const ViolationRecord = ({ navigation }) => {
         <Text style={styles.sectionTitle}>Violation Record</Text>
 
 
-        <StudentCard></StudentCard>
+        <StudentCard student={student} onPress={() => setModalVisible(true)} />
         <View style={styles.filterContainer}>
         <ScrollView horizontal showsHorizontalScrollIndicator={false}>
           {["All", "Major Offense", "Minor Offense"].map((filter) => (

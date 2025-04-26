@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
-import { View, Text, ScrollView, TouchableOpacity, StyleSheet, Modal, TextInput, Image, Platform, ToastAndroid } from "react-native";
-import { firestore } from "../../firebaseConfig"; // Adjust the import based on your project structure
-import { collection, addDoc, getDocs } from "firebase/firestore";
+import { View, Text, ScrollView, TouchableOpacity, StyleSheet, Modal, Image } from "react-native";
+import { firestore } from "../backend/firebaseConfig"; // Adjust the import based on your project structure
+import { collection, getDocs } from "firebase/firestore";
 import Header from "../parts/Header";
 import IncidentReportCard from "../parts/IncidentReportCard";
 import IncidentReportModal from "../parts/IncidentReportModal";
@@ -10,7 +10,6 @@ const IncidentReportsScreen = () => {
   const [selectedReport, setSelectedReport] = useState(null);
   const [modalVisible, setModalVisible] = useState(false);
   const [reports, setReports] = useState([]);
-  const [isDateTimePickerVisible, setDateTimePickerVisible] = useState(false);
 
   useEffect(() => {
     fetchReports();
@@ -28,13 +27,13 @@ const IncidentReportsScreen = () => {
 
   const handleSubmitReport = async (data) => {
     try {
-      // Add new report to Firestore with "Under Review" status
-      const docRef = await addDoc(collection(firestore, "incidentReports"), {
+      // Add new report to Firestore
+      await addDoc(collection(firestore, "incidentReports"), {
         ...data,
         status: "Under Review",
-        incidentReportNo: `Report #${new Date().getTime()}`, // Unique Report No
+        incidentReportNo: `Report #${new Date().getTime()}`,
       });
-      fetchReports(); // Fetch the updated reports list
+      fetchReports(); // Refresh the reports list
       setModalVisible(false); // Close the modal
     } catch (error) {
       console.error("Error submitting report:", error);
@@ -72,17 +71,37 @@ const IncidentReportsScreen = () => {
             </TouchableOpacity>
             {selectedReport && (
               <>
-                <Text style={styles.modalTitle}>{selectedReport.incidentReportNo}</Text>
+                <Text style={styles.modalTitle}>Incident {selectedReport.incidentReportNo}</Text>
+
                 <Text style={styles.modalLabel}>Date & Time of the Incident:</Text>
                 <Text style={styles.modalText}>{selectedReport.dateTime}</Text>
+
                 <Text style={styles.modalLabel}>Location:</Text>
                 <Text style={styles.modalText}>{selectedReport.location}</Text>
-                <Text style={styles.modalLabel}>Parties Involved:</Text>
-                <Text style={styles.modalText}>{selectedReport.parties}</Text>
-                <Text style={styles.modalLabel}>Description of the Incident:</Text>
+
+                <Text style={styles.modalLabel}>Violation Category:</Text>
+                <Text style={styles.modalText}>{selectedReport.violationCategory}</Text>
+
+                <Text style={styles.modalLabel}>Violation Type:</Text>
+                <Text style={styles.modalText}>{selectedReport.violationType}</Text>
+
+                <Text style={styles.modalLabel}>Parties Involved
+                (Victim, Offender, Witness): </Text>
+                <Text style={styles.modalLabel}>Victim:</Text>
+                <Text style={styles.modalText}>{selectedReport.victim}</Text>
+
+                <Text style={styles.modalLabel}>Offender:</Text>
+                <Text style={styles.modalText}>{selectedReport.offender}</Text>
+
+                <Text style={styles.modalLabel}>Witness:</Text>
+                <Text style={styles.modalText}>{selectedReport.witness}</Text>
+
+                <Text style={styles.modalLabel}>Description of the Incident (Factual Narrative):</Text>
                 <Text style={styles.modalText}>{selectedReport.description}</Text>
-                <Text style={styles.modalLabel}>Reported by:</Text>
+
+                <Text style={styles.modalLabel}>Reported By:</Text>
                 <Text style={styles.modalText}>{selectedReport.reportedBy}</Text>
+
                 <Text style={styles.modalLabel}>Date Reported:</Text>
                 <Text style={styles.modalText}>{selectedReport.dateReported}</Text>
               </>

@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useState, useEffect } from "react";
 import {
   View,
   FlatList,
@@ -6,6 +6,7 @@ import {
   Image,
   ToastAndroid,
   Platform,
+  Text,
   StyleSheet,
 } from "react-native";
 import Header from "../parts/Header";
@@ -15,18 +16,19 @@ import MenuScreen from "./MenuScreen";
 import { useRoute } from '@react-navigation/native';
 
 const stats = [
-  { title: "Violation", icon: require("../../assets/violation.png"), count: 0, bgColor: "#FF5A5F" },
-  { title: "Incident Reports", icon: require("../../assets/inc.png"), count: 0, bgColor: "#2BC999" },
-  { title: "Pending Cases", icon: require("../../assets/pending.png"), count: 0, bgColor: "#FBB41A" },
-  { title: "Appointments", icon: require("../../assets/appointment.png"), count: 0, bgColor: "#2C62FF" },
+  { title: "Violation", icon: require("../../assets/violation.png"), count: 0, bgColor: "#D04B49" },
+  { title: "Incident Reports", icon: require("../../assets/inc.png"), count: 0, bgColor: "#169971" },
+  { title: "Pending Cases", icon: require("../../assets/pending.png"), count: 0, bgColor: "#DF9D0E" },
+  { title: "Appointments", icon: require("../../assets/appointment.png"), count: 0, bgColor: "#10349E" },
 ];
 
 const HomeScreen = () => {
   const [menuVisible, setMenuVisible] = useState(false);
   const route = useRoute();
-  const { userRole } = route.params || {};
+  const { student, userRole } = route.params || {};
 
-  console.log('HomeScreen - userRole:', userRole);
+
+  console.log('HomeScreen - student:', student);  // Debugging to check student data
 
   const showToast = () => {
     if (Platform.OS === "android") {
@@ -35,8 +37,8 @@ const HomeScreen = () => {
   };
 
   useEffect(() => {
-    console.log('HomeScreen - userRole:', userRole);
-  }, []);
+    console.log('HomeScreen - student:', student);  // Log student to check data
+  }, [student]);
 
   return (
     <View style={styles.container}>
@@ -44,7 +46,12 @@ const HomeScreen = () => {
         <Header openMenu={() => setMenuVisible(true)} />
       </View>
 
-      <StudentCard />
+      {/* Ensure student exists before rendering StudentCard */}
+      {student ? (
+        <StudentCard student={student} />
+      ) : (
+        <Text>Loading student information...</Text>
+      )}
 
       <FlatList
         data={stats}
@@ -67,7 +74,11 @@ const HomeScreen = () => {
 
       {menuVisible && (
         <View style={styles.overlay}>
-          <MenuScreen closeMenu={() => setMenuVisible(false)} />
+          <MenuScreen 
+            closeMenu={() => setMenuVisible(false)} 
+            student={student}  
+            userRole={userRole} 
+          />
         </View>
       )}
     </View>
@@ -107,7 +118,7 @@ const styles = StyleSheet.create({
   },
   overlay: {
     ...StyleSheet.absoluteFillObject,
-    zIndex: 10, // ensure it overlays other components
+    zIndex: 10,
   },
 });
 

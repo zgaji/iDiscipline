@@ -29,7 +29,7 @@ const ViolationDetailsScreen = () => {
       duration: 300,
       useNativeDriver: true,
     }).start(() => {
-      navigation.navigate("Violations");
+      navigation.navigate("ViolationsScreen");
     });
   };
 
@@ -66,7 +66,7 @@ const ViolationDetailsScreen = () => {
         visible={modalVisible}
         caseData={selectedCase}
         onClose={() => setModalVisible(false)}
-        onMessage={() => navigation.navigate("ChatPortal")}
+        onMessage={() => navigation.navigate("ChatPortalScreen")}
       />
     </Animated.View>
   );

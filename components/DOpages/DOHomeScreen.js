@@ -1,7 +1,6 @@
 import React from "react";
 import { View, ScrollView, StyleSheet, TouchableOpacity, Platform, ToastAndroid, Text, Image } from "react-native";
 import Header from "../parts/Header";
-import MenuBar from "../parts/DOMenuBar";
 import DOStatCard from "../parts/DOStatCard"; 
 import AppointmentCard from "../parts/AppointmentCard"; // Add the AppointmentCard component
 
@@ -13,9 +12,9 @@ const DOHomeScreen = () => {
   };
   console.log('DOHomeScreen rendered!');
   const stats = [
-    { title: "Violation", count: 0, bgColor: "#FF5E5B", icon: require("../../assets/violation.png") },
-    { title: "Incident Reports", count: 0, bgColor: "#2BC999", icon: require("../../assets/inc.png") },
-    { title: "Appointment", count: 0, bgColor: "#2C62FF", icon: require("../../assets/appointment.png") },
+    { title: "Violation", count: 0, bgColor: "#D04B49", icon: require("../../assets/violation.png") },
+    { title: "Incident Reports", count: 0, bgColor: "#169971", icon: require("../../assets/inc.png") },
+    { title: "Appointment", count: 0, bgColor: "#10349E", icon: require("../../assets/appointment.png") },
   ];
 
   return (
@@ -93,9 +92,10 @@ const styles = StyleSheet.create({
   sectionTitle: {
     fontSize: 30,
     fontWeight: "bold",
+    marginLeft: 10,
     marginTop: 10,
     marginBottom: 10,
-    color: "#007AFF", // Blue title
+    color: "#0D078E", // Blue title
   },
   fab: {
     position: "absolute",

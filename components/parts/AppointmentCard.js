@@ -24,7 +24,7 @@ const styles = StyleSheet.create({
   line: {
     width: 5,  // Width of the left blue line
     height: '100%',
-    backgroundColor: '#007AFF',  // Blue color for the line
+    backgroundColor: '#0D078E',  // Blue color for the line
     marginLeft: 10,  // Space between the line and text
   },
   textContainer: {
@@ -33,7 +33,7 @@ const styles = StyleSheet.create({
   title: {
     fontSize: 18,
     fontWeight: 'bold',
-    color: '#333',  // Dark color for title
+    color: '#0D078E',  // Dark color for title
   },
   dateTime: {
     fontSize: 14,

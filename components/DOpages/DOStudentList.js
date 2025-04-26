@@ -1,118 +1,233 @@
-import React, { useState } from "react";
-import { View, Text, TextInput, ScrollView, TouchableOpacity, StyleSheet, Modal,Platform,ToastAndroid,Image } from "react-native";
+import React, { useState, useEffect } from "react";
+import {
+  View,
+  Text,
+  TextInput,
+  ScrollView,
+  TouchableOpacity,
+  StyleSheet,
+  Platform,
+  ToastAndroid,
+  Image,
+} from "react-native";
 import { FontAwesome } from "@expo/vector-icons";
+import { Picker } from "@react-native-picker/picker";
 import Header from "../parts/Header";
-import MenuBar from "../parts/DOMenuBar";
-import StudentCard from "../parts/DOStudentCard";
-
-
-// To modify: input field for the form, submit button, and any other necessary components
-
-
+import DOStudentCard from "../parts/DOStudentCard";
+import AddStudentModal from "../parts/AddStudentModal";
+import { firestore } from "../backend/firebaseConfig";
+import { collection, getDocs, query, where } from "firebase/firestore";
 
 const DOStudentList = ({ navigation }) => {
   const [modalVisible, setModalVisible] = useState(false);
+  const [students, setStudents] = useState([]);
+  const [filteredStudents, setFilteredStudents] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [searchQuery, setSearchQuery] = useState("");
+  const [selectedYear, setSelectedYear] = useState("");
+  const [selectedSection, setSelectedSection] = useState("");
+  const [activeTab, setActiveTab] = useState("all");
 
-  const students = [
-    { name: "Full Name", year: "Year" },
-    { name: "Full Name", year: "Year" },
-    { name: "Full Name", year: "Year" },
-    { name: "Full Name", year: "Year" },
-  ];
+  const sectionOptions = {
+    "7th Grade": ["St. Pedro", "St. Aloysious", "St. Dominic"],
+    "8th Grade": ["St. Stephen", "St. Maximillian", "St. Lorenzo"],
+    "9th Grade": ["St. Philip", "St. Andrew", "St. Bartholomew"],
+    "10th Grade": ["St. Matthew", "St. John", "St. Paul"],
+    "11th Grade": ["St. John Bosco", "St. Vincent"],
+    "12th Grade": ["St. Benedict", "St. Sebastian"],
+  };
 
-    const showToast = () => {
-      if (Platform.OS === "android") {
-        ToastAndroid.show("Chatbot has been clicked", ToastAndroid.SHORT);
-      } 
-    };
+  useEffect(() => {
+    fetchStudents();
+  }, []);
+
+  const fetchStudents = async () => {
+    setLoading(true);
+    const studentsCollection = collection(firestore, "users");
+    const q = query(studentsCollection, where("role", "==", "student"));
+    try {
+      const querySnapshot = await getDocs(q);
+      const studentList = querySnapshot.docs.map((doc) => doc.data());
+      setStudents(studentList);
+      setFilteredStudents(studentList);
+    } catch (error) {
+      console.error("Error fetching students: ", error);
+    }
+    setLoading(false);
+  };
+
+  const handleSearch = (query) => {
+    setSearchQuery(query);
+    filterStudents(query, selectedYear, selectedSection);
+  };
+
+  const filterStudents = (query, year, section) => {
+    let filtered = students;
+
+    if (query) {
+      filtered = filtered.filter(
+        (student) =>
+          student.firstName.toLowerCase().includes(query.toLowerCase()) ||
+          student.lastName.toLowerCase().includes(query.toLowerCase())
+      );
+    }
+
+    if (year) {
+      filtered = filtered.filter((student) => student.year === year);
+    }
+
+    if (section) {
+      filtered = filtered.filter((student) => student.section === section);
+    }
+
+    setFilteredStudents(filtered);
+  };
+
+  const showToast = () => {
+    if (Platform.OS === "android") {
+      ToastAndroid.show("Chatbot has been clicked", ToastAndroid.SHORT);
+    }
+  };
 
   return (
     <View style={{ flex: 1, backgroundColor: "#F4F9FC", padding: 20, marginTop: 30 }}>
-      <View style={{ marginBottom: 15 }}> 
-        <Header title="StudentList" />
+      <Header title="Student List" />
+
+      {/* Student Count */}
+      <View style={styles.studentHeader}>
+        <Text style={styles.studentText}>Students</Text>
+        <View style={styles.studentCount}>
+          <Text style={styles.countText}>{filteredStudents.length}</Text>
+        </View>
       </View>
 
-      <ScrollView contentContainerStyle={styles.content}>
-        {/* Students Count */}
-        <View style={styles.studentHeader}>
-          <Text style={styles.studentText}>Students</Text>
-          <View style={styles.studentCount}>
-            <Text style={styles.countText}>20</Text>
-          </View>
-          <TouchableOpacity style={styles.yearButton}>
-            <Text style={styles.yearText}>Year</Text>
-            <FontAwesome name="caret-down" size={14} color="#000" />
-          </TouchableOpacity>
-        </View>
+      {/* Search */}
+      <View style={styles.searchContainer}>
+        <TextInput
+          placeholder="Search.."
+          placeholderTextColor="#999"
+          style={styles.searchInput}
+          value={searchQuery}
+          onChangeText={handleSearch}
+        />
+        <FontAwesome name="search" size={16} color="#666" />
+      </View>
 
-        {/* Search Bar */}
-        <View style={styles.searchContainer}>
-          <TextInput placeholder="Search" style={styles.searchInput} />
-          <FontAwesome name="times-circle" size={18} color="#999" />
-        </View>
-
-        {/* Add Student Button */}
+      {/* Add + Filters */}
+      <View style={styles.actionRow}>
         <TouchableOpacity style={styles.addButton} onPress={() => setModalVisible(true)}>
           <Text style={styles.addButtonText}>Add Student</Text>
         </TouchableOpacity>
 
-        {/* Student List */}
-        {students.map((student, index) => (
-          <StudentCard
-            key={index}
-            name={student.name}
-            year={student.year}
-            onPress={() => navigation.navigate("DOStudentProfile")}
-          />
-        ))}
-      </ScrollView>
+        <View style={styles.pickerWrapper}>
+          <Picker
+            selectedValue={selectedYear}
+            onValueChange={(itemValue) => {
+              if (itemValue !== "") {
+                setSelectedYear(itemValue);
+                setSelectedSection("");
+                filterStudents(searchQuery, itemValue, "");
+              }
+            }}
+            style={styles.picker}
+          >
+            <Picker.Item label="Select Year" value="" color="#888" />
+            <Picker.Item label="7th Grade" value="7th Grade" />
+            <Picker.Item label="8th Grade" value="8th Grade" />
+            <Picker.Item label="9th Grade" value="9th Grade" />
+            <Picker.Item label="10th Grade" value="10th Grade" />
+            <Picker.Item label="11th Grade" value="11th Grade" />
+            <Picker.Item label="12th Grade" value="12th Grade" />
+          </Picker>
+        </View>
 
+        <View style={styles.pickerWrapper}>
+          <Picker
+            selectedValue={selectedSection}
+            enabled={!!selectedYear}
+            onValueChange={(itemValue) => {
+              if (itemValue !== "") {
+                setSelectedSection(itemValue);
+                filterStudents(searchQuery, selectedYear, itemValue);
+              }
+            }}
+            style={styles.picker}
+          >
+            <Picker.Item label="Select Section" value="" color="#888" />
+            {(sectionOptions[selectedYear] || []).map((section, idx) => (
+              <Picker.Item key={idx} label={section} value={section} />
+            ))}
+          </Picker>
+        </View>
+      </View>
+
+      <View style={styles.tabRow}>
+      <TouchableOpacity
+        style={[styles.tabButton, activeTab === "all" && styles.tabButtonActive]}
+        onPress={() => {
+          setActiveTab("all");
+          setSelectedYear("");
+          setSelectedSection("");
+          setSearchQuery("");
+          setFilteredStudents(students);
+        }}
+      >
+        <Text style={[styles.tabText, activeTab === "all" && styles.tabTextActive]}>
+          All
+        </Text>
+      </TouchableOpacity>
+
+      <TouchableOpacity
+        style={[styles.tabButton, activeTab === "archive" && styles.tabButtonActive]}
+        onPress={() => {
+          setActiveTab("archive");
+          const archived = students.filter((student) => student.isArchived); // assuming `isArchived` field
+          setFilteredStudents(archived);
+        }}
+      >
+        <Text style={[styles.tabText, activeTab === "archive" && styles.tabTextActive]}>
+          Archive
+        </Text>
+      </TouchableOpacity>
+    </View>
+
+      {/* Student List */}
+      {loading ? (
+        <Text>Loading students...</Text>
+      ) : (
+        <ScrollView contentContainerStyle={styles.content}>
+          {filteredStudents.map((student, index) => (
+            <DOStudentCard
+              key={index}
+              student={student}
+              onPress={() =>
+                navigation.navigate("DOStudentProfile", {
+                  student: student,
+                })
+              }
+            />
+          ))}
+        </ScrollView>
+      )}
+
+      {/* Chatbot FAB */}
       <TouchableOpacity style={styles.fab} onPress={showToast}>
         <Image source={require("../../assets/chatbot.png")} style={styles.fabIcon} />
       </TouchableOpacity>
 
-      {/* Add Student Modal */}
-      <Modal animationType="fade" transparent={true} visible={modalVisible} onRequestClose={() => setModalVisible(false)}>
-        <View style={styles.modalOverlay}>
-          <View style={styles.modalContainer}>
-            {/* Close Button */}
-            <TouchableOpacity style={styles.closeButton} onPress={() => setModalVisible(false)}>
-              <Text style={styles.closeText}>×</Text>
-            </TouchableOpacity>
-
-            {/* Modal Content */}
-            <Text style={styles.modalTitle}>Create New Student Account</Text>
-            <View style={styles.infoContainer}>
-              <Text style={styles.infoText}>First Name:</Text>
-              <Text style={styles.infoText}>Middle Name:</Text>
-              <Text style={styles.infoText}>Last Name:</Text>
-              <Text style={styles.infoText}>Gender:</Text>
-              <Text style={styles.infoText}>Birth Date:</Text>
-              <Text style={styles.infoText}>Address:</Text>
-              <Text style={styles.infoText}>Year & Section:</Text>
-              <Text style={styles.infoText}>Adviser:</Text>
-
-              <Text style={[styles.infoText, styles.emergencyContact]}>Emergency Contact</Text>
-              <Text style={styles.infoText}>Parent/Guardian:</Text>
-              <Text style={styles.infoText}>Email:</Text>
-              <Text style={styles.infoText}>Contact Number:</Text>
-            </View>
-          </View>
-        </View>
-      </Modal>
+      {/* Modal */}
+      <AddStudentModal
+        modalVisible={modalVisible}
+        setModalVisible={setModalVisible}
+        onSubmit={(studentData) => console.log(studentData)}
+      />
     </View>
   );
 };
 
 const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: "#F4F7FC",
-  },
-  content: {
-    padding: 20,
-  },
   studentHeader: {
+    marginTop: 20,
     flexDirection: "row",
     alignItems: "center",
     marginBottom: 10,
@@ -122,49 +237,71 @@ const styles = StyleSheet.create({
     fontWeight: "bold",
   },
   studentCount: {
-    backgroundColor: "#E3E3E3",
-    borderRadius: 12,
-    paddingHorizontal: 10,
-    marginLeft: 10,
+    borderWidth: 2,
+    borderColor: "#B0B0B0",
+    borderRadius: 15,
+    paddingHorizontal: 20,
+    paddingVertical: 2,
+    marginLeft: 15,
   },
   countText: {
-    fontWeight: "bold",
-  },
-  yearButton: {
-    flexDirection: "row",
-    alignItems: "center",
-    marginLeft: 10,
-    backgroundColor: "#E3E3E3",
-    paddingHorizontal: 10,
-    borderRadius: 10,
-  },
-  yearText: {
-    marginRight: 5,
+    fontSize: 16,
+    color: "#00008B",
+    fontWeight: "600",
   },
   searchContainer: {
     flexDirection: "row",
     alignItems: "center",
-    backgroundColor: "#fff",
-    paddingHorizontal: 10,
-    borderRadius: 8,
-    marginBottom: 10,
+    backgroundColor: "#F8F9FC",
+    borderColor: "#D1D1D1",
+    borderWidth: 1,
+    borderRadius: 25,
+    paddingHorizontal: 15,
+    marginBottom: 15,
+    height: 45,
+    shadowColor: "#000",
+    shadowOffset: { width: 0, height: 1 },
     shadowOpacity: 0.1,
-    elevation: 3,
+    shadowRadius: 1,
+    elevation: 1,
   },
   searchInput: {
     flex: 1,
-    padding: 10,
+    fontSize: 16,
+    color: "#333",
+  },
+  actionRow: {
+    flexDirection: "row",
+    alignItems: "center",
+    marginBottom: 15,
+    gap: 5,
   },
   addButton: {
     backgroundColor: "#27AE60",
     paddingVertical: 10,
-    borderRadius: 8,
+    paddingHorizontal: 30,
+    borderRadius: 999,
     alignItems: "center",
-    marginBottom: 10,
+    justifyContent: "center",
   },
   addButtonText: {
     color: "#fff",
     fontWeight: "bold",
+    fontSize: 14,
+  },
+  pickerWrapper: {
+    borderWidth: 1,
+    borderColor: "#C4C4C4",
+    borderRadius: 8,
+    backgroundColor: "#fff",
+    overflow: "hidden",
+    width: 100,
+    height: 36,
+    justifyContent: "center",
+  },
+  picker: {
+    fontSize: 12,
+    height: 36,
   },
   fab: {
     position: "absolute",
@@ -181,60 +318,39 @@ const styles = StyleSheet.create({
   fabIcon: {
     width: 30,
     height: 30,
-    tintColor: "#fff", // Keeps icon color consistent
+    tintColor: "#fff",
   },
-
-  // Modal Styles
-  modalOverlay: {
-    flex: 1,
-    backgroundColor: "rgba(0, 0, 0, 0.5)", // ✅ Blurred background effect
+  tabRow: {
+    flexDirection: "row",
     justifyContent: "center",
-    alignItems: "center",
+    marginBottom: 15,
+    gap: 10,
   },
-  modalContainer: {
-    width: "80%",
+  
+  tabButton: {
     backgroundColor: "#fff",
-    borderRadius: 10,
-    padding: 20,
-  },
-  closeButton: {
-    position: "absolute",
-    top: 10,
-    right: 10,
-  },
-  closeText: {
-    fontSize: 22,
-    fontWeight: "bold",
-  },
-  modalTitle: {
-    fontSize: 18,
-    fontWeight: "bold",
-    color: "#0057FF",
-    textAlign: "center",
-  },
-  infoContainer: {
-    marginTop: 10,
-  },
-  infoText: {
-    fontSize: 14,
-    marginBottom: 3,
-  },
-  emergencyContact: {
-    fontWeight: "bold",
-    color: "#0057FF",
-    marginTop: 10,
-  },
-  createButton: {
-    backgroundColor: "#F4B400",
+    borderRadius: 12,
     paddingVertical: 10,
-    borderRadius: 10,
-    alignItems: "center",
-    marginTop: 15, // ✅ Ensures proper spacing at the bottom
+    paddingHorizontal: 68,
+    borderWidth: 1,
+    borderColor: "#ccc",
+    elevation: 2,
   },
-  createButtonText: {
+  
+  tabButtonActive: {
+    backgroundColor: "#0D2B79", // navy blue
+    borderColor: "#0D2B79",
+  },
+  
+  tabText: {
+    color: "#555",
+    fontWeight: "600",
+    fontSize: 14,
+  },
+  
+  tabTextActive: {
     color: "#fff",
-    fontWeight: "bold",
-  },
+  },  
 });
 
 export default DOStudentList;

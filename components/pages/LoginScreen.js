@@ -4,8 +4,9 @@ import InputField from '../parts/InputField';
 import Button from '../parts/Button';
 import Checkbox from '../parts/CheckBox';
 import { useNavigation } from '@react-navigation/native';
-import { auth } from '../../firebaseConfig'; 
-import { signInWithEmailAndPassword } from 'firebase/auth';
+import { signInWithEmailAndPassword, getIdTokenResult } from 'firebase/auth'; // ✅ import getIdTokenResult
+import { getDoc, doc } from 'firebase/firestore'; 
+import { auth, firestore } from '../backend/firebaseConfig'; // adjust if needed
 
 const LoginScreen = () => {
   const navigation = useNavigation();
@@ -14,7 +15,6 @@ const LoginScreen = () => {
   const [attempts, setAttempts] = useState(0);
   const [isLocked, setIsLocked] = useState(false);
   const [remainingTime, setRemainingTime] = useState(0);
-  const [loading, setLoading] = useState(true);
   
   useEffect(() => {
     let timer;
@@ -45,12 +45,43 @@ const LoginScreen = () => {
       const user = userCredential.user;
   
       if (user) {
-        const role = user.email === 'admin@email.com' ? 'admin' : 'student'; // Update as necessary
-        Alert.alert("Login Successful", `Welcome, ${role}!`);
-        setAttempts(0);
+        // 1️⃣ Verify email first
+        if (!user.emailVerified) {
+          Alert.alert(
+            "Email Not Verified",
+            "Please verify your email address before logging in. A verification email has been sent to your inbox."
+          );
+          return;
+        }
   
-        // Navigate to the redirect screen after login
-        navigation.replace('RedirectScreen', { isAuthenticated: true, userRole: role });
+        // 2️⃣ Fetch custom claims (role)
+        const idTokenResult = await getIdTokenResult(user);
+        const role = idTokenResult.claims.role;
+  
+        console.log("🔥 Custom claims role:", role);
+  
+        if (!role) {
+          Alert.alert("Error", "No role assigned to this user. Please contact support.");
+          return;
+        }
+  
+        if (role === 'admin') {
+          // ✅ If Admin, no need to fetch student data
+          navigation.replace('DOHomeScreen', { userRole: role });
+        } else if (role === 'student') {
+          // ✅ Fetch additional student data
+          const userDocRef = doc(firestore, "users", user.email);
+          const userDoc = await getDoc(userDocRef);
+  
+          if (userDoc.exists()) {
+            const studentData = userDoc.data();
+            navigation.replace('HomeScreen', { userRole: role, student: studentData });
+          } else {
+            Alert.alert("Error", "Student record not found.");
+          }
+        } else {
+          Alert.alert("Error", "Unrecognized user role.");
+        }
       }
     } catch (error) {
       const newAttempts = attempts + 1;
@@ -64,13 +95,12 @@ const LoginScreen = () => {
       }
     }
   };
+  
 
   return (
     <View style={styles.container}>
-      {/* Blue Background */}
       <View style={styles.blueBackground}></View>
 
-      {/* White Login Form with Rounded Top */}
       <View style={styles.whiteContainer}>
         <Text style={styles.title}>Login</Text>
 
@@ -94,7 +124,7 @@ const LoginScreen = () => {
           </TouchableOpacity>
         </View>
 
-        <Button title="Sign In" onPress={handleLogin} disabled={isLocked} />
+        <Button title="Sign In" onPress={handleLogin} disabled={isLocked} style={styles.btn}/>
 
         {isLocked && (
           <Text style={styles.lockoutText}>
@@ -109,17 +139,12 @@ const LoginScreen = () => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: "#007AFF", 
+    backgroundColor: "#E3EBF3", 
   },
   blueBackground: {
     height: "40%", 
     justifyContent: "center",
     alignItems: "center",
-  },
-  headerText: {
-    color: "#FFF",
-    fontSize: 28,
-    fontWeight: "bold",
   },
   whiteContainer: {
     flex: 1,
@@ -130,11 +155,11 @@ const styles = StyleSheet.create({
     marginTop: -30, 
   },
   title: {
-    fontSize: 24,
+    fontSize: 28,
     fontWeight: "bold",
     marginBottom: 20,
     textAlign: "left",
-    color: '#0057ff',
+    color: '#0F296F',
   },
   optionsRow: {
     flexDirection: "row",
@@ -150,6 +175,11 @@ const styles = StyleSheet.create({
     textAlign: "center",
     marginTop: 10,
   },
+  btn: {
+    backgroundColor: '#0F296F',
+    marginTop: 20,
+  },
+
 });
 
 export default LoginScreen;

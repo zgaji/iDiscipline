@@ -1,13 +1,5 @@
 import React, { useState, useEffect } from "react";
-import {
-  Modal,
-  View,
-  Text,
-  TouchableOpacity,
-  TextInput,
-  ScrollView,
-  StyleSheet,
-} from "react-native";
+import { Modal, View, Text, TouchableOpacity, TextInput, ScrollView, StyleSheet, Alert } from "react-native";
 import RNPickerSelect from "react-native-picker-select";
 import DateTimePickerModal from "react-native-modal-datetime-picker";
 
@@ -28,7 +20,6 @@ const IncidentReportModal = ({ visible, onClose, onSubmit }) => {
   const [isDateTimePickerVisible, setDateTimePickerVisible] = useState(false);
 
   useEffect(() => {
-    // Automatically set the "Date Reported" field to the current date when modal is visible
     if (visible) {
       const currentDate = new Date().toLocaleDateString(); // Get current date in a readable format
       setFormData((prevState) => ({
@@ -47,9 +38,40 @@ const IncidentReportModal = ({ visible, onClose, onSubmit }) => {
     setDateTimePickerVisible(false);
   };
 
+  const validateForm = () => {
+    // Check required fields
+    if (!formData.dateTime) {
+      Alert.alert("Validation Error", "Please select the date and time of the incident.");
+      return false;
+    }
+    if (!formData.location) {
+      Alert.alert("Validation Error", "Location is required.");
+      return false;
+    }
+    if (!formData.violationCategory) {
+      Alert.alert("Validation Error", "Violation category is required.");
+      return false;
+    }
+    if (!formData.violationType) {
+      Alert.alert("Validation Error", "Violation type is required.");
+      return false;
+    }
+    if (!formData.offender) {
+      Alert.alert("Validation Error", "Offender is required.");
+      return false;
+    }
+    if (!formData.description) {
+      Alert.alert("Validation Error", "Description of the incident is required.");
+      return false;
+    }
+    return true;
+  };
+
   const handleSubmit = () => {
-    onSubmit(formData);
-    onClose();
+    if (validateForm()) {
+      onSubmit(formData); // Only submit if validation is passed
+      onClose(); // Close the modal
+    }
   };
 
   return (
@@ -88,29 +110,25 @@ const IncidentReportModal = ({ visible, onClose, onSubmit }) => {
 
             <Text style={styles.label}>Violation Category:</Text>
             <RNPickerSelect
-              onValueChange={(value) =>
-                handleInputChange("violationCategory", value)
-              }
+              onValueChange={(value) => handleInputChange("violationCategory", value)}
               value={formData.violationCategory}
               style={pickerStyles}
               items={[
                 { label: "Minor", value: "minor" },
                 { label: "Major", value: "major" },
-                { label: "Critical", value: "critical" },
               ]}
             />
 
             <Text style={styles.label}>Violation Type:</Text>
             <RNPickerSelect
-              onValueChange={(value) =>
-                handleInputChange("violationType", value)
-              }
+              onValueChange={(value) => handleInputChange("violationType", value)}
               value={formData.violationType}
               style={pickerStyles}
               items={[
                 { label: "Verbal", value: "verbal" },
                 { label: "Physical", value: "physical" },
                 { label: "Cyber", value: "cyber" },
+                { label: "Late", value: "Late" },
               ]}
             />
 
@@ -199,6 +217,7 @@ const styles = StyleSheet.create({
     fontWeight: "bold",
     color: "#1E1E1E",
     marginBottom: 10,
+    justifyContent: "center",
   },
   scrollContent: {
     paddingBottom: 20,
@@ -208,6 +227,7 @@ const styles = StyleSheet.create({
     fontWeight: "bold",
     marginTop: 10,
     marginBottom: 5,
+    color: "#605E5E",
   },
   input: {
     borderWidth: 1,
