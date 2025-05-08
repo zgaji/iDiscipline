@@ -1,23 +1,33 @@
-import React, { useState, useEffect } from "react";
-import { View, Text, ScrollView, TouchableOpacity, StyleSheet, Modal, Image } from "react-native";
-import { firestore } from "../backend/firebaseConfig"; // Adjust the import based on your project structure
-import { collection, getDocs } from "firebase/firestore";
+import React, { useState, useEffect, useContext } from "react";
+import { View, Text, ScrollView, TouchableOpacity, StyleSheet, Modal, Image, Platform, ToastAndroid } from "react-native";
+import { firestore } from "../backend/firebaseConfig";
+import { collection, getDocs, addDoc, query, where } from "firebase/firestore"; 
 import Header from "../parts/Header";
 import IncidentReportCard from "../parts/IncidentReportCard";
 import IncidentReportModal from "../parts/IncidentReportModal";
+import { UserContext } from "../contexts/UserContext";
 
 const IncidentReportsScreen = () => {
+  const { student } = useContext(UserContext);
   const [selectedReport, setSelectedReport] = useState(null);
   const [modalVisible, setModalVisible] = useState(false);
   const [reports, setReports] = useState([]);
 
   useEffect(() => {
-    fetchReports();
-  }, []);
+    if (student) {
+      fetchReports();
+    }
+  }, [student]);
 
   const fetchReports = async () => {
     try {
-      const querySnapshot = await getDocs(collection(firestore, "incidentReports"));
+      if (!student) return;
+
+      const q = query(
+        collection(firestore, "incidentReports"),
+        where("reportedBy", "==", student.studentNo)
+      );
+      const querySnapshot = await getDocs(q);
       const reportsData = querySnapshot.docs.map((doc) => ({ id: doc.id, ...doc.data() }));
       setReports(reportsData);
     } catch (error) {
@@ -25,20 +35,46 @@ const IncidentReportsScreen = () => {
     }
   };
 
+  const generateIncidentReportNo = () => {
+    const randomDigits = Math.floor(10000 + Math.random() * 90000);
+    return `IR-${randomDigits}`;
+  };
+
+  const checkIncidentReportNoExists = async (incidentReportNo) => {
+    const q = query(
+      collection(firestore, "incidentReports"),
+      where("incidentReportNo", "==", incidentReportNo)
+    );
+    const snapshot = await getDocs(q);
+    return !snapshot.empty;
+  };
+
   const handleSubmitReport = async (data) => {
     try {
-      // Add new report to Firestore
-      await addDoc(collection(firestore, "incidentReports"), {
+      let incidentReportNo = generateIncidentReportNo();
+      let exists = await checkIncidentReportNoExists(incidentReportNo);
+  
+      while (exists) {
+        incidentReportNo = generateIncidentReportNo();
+        exists = await checkIncidentReportNoExists(incidentReportNo);
+      }
+  
+      const reportData = {
         ...data,
+        reportedByStudentNo: student?.studentNo || "Unknown",
+        reportedByName: `${student?.firstName || ""} ${student?.lastName || ""}`,
+        incidentReportNo,
         status: "Under Review",
-        incidentReportNo: `Report #${new Date().getTime()}`,
-      });
-      fetchReports(); // Refresh the reports list
-      setModalVisible(false); // Close the modal
+      };
+  
+      await addDoc(collection(firestore, "incidentReports"), reportData);
+      fetchReports();
+      setModalVisible(false);
     } catch (error) {
       console.error("Error submitting report:", error);
     }
   };
+  
 
   const handleChatbotClick = () => {
     if (Platform.OS === "android") {
@@ -57,69 +93,53 @@ const IncidentReportsScreen = () => {
           <Text style={styles.reportButtonText}>Make an Incident Report</Text>
         </TouchableOpacity>
 
-        {reports.map((report) => (
+        {reports.length === 0 ? (
+        <View style={styles.noReportsContainer}>
+          <Text style={styles.noReportsText}>No incident reports submitted.</Text>
+        </View>
+      ) : (
+        reports.map((report) => (
           <IncidentReportCard key={report.id} report={report} onPress={() => setSelectedReport(report)} />
-        ))}
+        ))
+      )}
       </ScrollView>
 
-      {/* Modal for Viewing Incident Report Details */}
       <Modal visible={!!selectedReport} transparent animationType="fade">
         <View style={styles.modalBackground}>
           <View style={styles.modalContainer}>
             <TouchableOpacity style={styles.closeButton} onPress={() => setSelectedReport(null)}>
               <Text style={styles.closeButtonText}>X</Text>
             </TouchableOpacity>
+
             {selectedReport && (
               <>
                 <Text style={styles.modalTitle}>Incident {selectedReport.incidentReportNo}</Text>
-
-                <Text style={styles.modalLabel}>Date & Time of the Incident:</Text>
-                <Text style={styles.modalText}>{selectedReport.dateTime}</Text>
-
-                <Text style={styles.modalLabel}>Location:</Text>
-                <Text style={styles.modalText}>{selectedReport.location}</Text>
-
-                <Text style={styles.modalLabel}>Violation Category:</Text>
-                <Text style={styles.modalText}>{selectedReport.violationCategory}</Text>
-
-                <Text style={styles.modalLabel}>Violation Type:</Text>
-                <Text style={styles.modalText}>{selectedReport.violationType}</Text>
-
-                <Text style={styles.modalLabel}>Parties Involved
-                (Victim, Offender, Witness): </Text>
-                <Text style={styles.modalLabel}>Victim:</Text>
-                <Text style={styles.modalText}>{selectedReport.victim}</Text>
-
-                <Text style={styles.modalLabel}>Offender:</Text>
-                <Text style={styles.modalText}>{selectedReport.offender}</Text>
-
-                <Text style={styles.modalLabel}>Witness:</Text>
-                <Text style={styles.modalText}>{selectedReport.witness}</Text>
-
-                <Text style={styles.modalLabel}>Description of the Incident (Factual Narrative):</Text>
-                <Text style={styles.modalText}>{selectedReport.description}</Text>
-
-                <Text style={styles.modalLabel}>Reported By:</Text>
-                <Text style={styles.modalText}>{selectedReport.reportedBy}</Text>
-
-                <Text style={styles.modalLabel}>Date Reported:</Text>
-                <Text style={styles.modalText}>{selectedReport.dateReported}</Text>
+                {["dateTime", "location", "violationCategory", "violationType", "victim", "offender", "witness", "description", "reportedBy", "dateReported"].map((field, index) => (
+                  <View key={index}>
+                    <Text style={styles.modalLabel}>{field.replace(/([A-Z])/g, ' $1').toUpperCase()}:</Text>
+                    <Text style={styles.modalText}>{selectedReport[field]}</Text>
+                  </View>
+                ))}
               </>
             )}
           </View>
         </View>
       </Modal>
 
-      {/* Modal for Adding Incident Report */}
-      <IncidentReportModal visible={modalVisible} onClose={() => setModalVisible(false)} onSubmit={handleSubmitReport} />
+      <IncidentReportModal 
+        visible={modalVisible} 
+        onClose={() => setModalVisible(false)} 
+        onSubmit={handleSubmitReport} 
+      />
 
-      {/* Floating Action Button for Chatbot */}
       <TouchableOpacity style={styles.fab} onPress={handleChatbotClick}>
         <Image source={require("../../assets/chatbot.png")} style={styles.fabIcon} />
       </TouchableOpacity>
     </View>
   );
 };
+
+export default IncidentReportsScreen;
 
 const styles = StyleSheet.create({
   container: { flex: 1, backgroundColor: "#F4F9FC", padding: 20, marginTop: 30 },
@@ -129,13 +149,22 @@ const styles = StyleSheet.create({
   reportButtonText: { color: "#fff", fontSize: 14, fontWeight: "bold", alignSelf: "center" },
   modalBackground: { flex: 1, backgroundColor: "rgba(0,0,0,0.5)", justifyContent: "center", alignItems: "center" },
   modalContainer: { width: "85%", backgroundColor: "#fff", borderRadius: 10, padding: 20, elevation: 5 },
-  modalTitle: { fontSize: 24, fontWeight: "bold", color: "#0144F2", marginBottom: 15, textAlign: "left" },
+  modalTitle: { fontSize: 24, fontWeight: "bold", color: "#0144F2", marginBottom: 15 },
   modalLabel: { fontWeight: "bold", color: "#605E5E", marginTop: 10 },
   modalText: { fontSize: 14, marginBottom: 5 },
   closeButton: { position: "absolute", top: 10, right: 15 },
   closeButtonText: { fontSize: 20, fontWeight: "bold", color: "#605E5E" },
   fab: { position: "absolute", bottom: 20, right: 20, backgroundColor: "#007AFF", width: 55, height: 55, borderRadius: 27.5, justifyContent: "center", alignItems: "center", elevation: 5 },
   fabIcon: { width: 30, height: 30, tintColor: "#fff" },
+  noReportsContainer: {
+    marginTop: 40,
+    alignItems: "center",
+    justifyContent: "center",
+  },
+  noReportsText: {
+    fontSize: 16,
+    color: "#888",
+    fontStyle: "italic",
+  },
+  
 });
-
-export default IncidentReportsScreen;

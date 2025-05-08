@@ -7,6 +7,9 @@ import { useNavigation } from '@react-navigation/native';
 import { signInWithEmailAndPassword, getIdTokenResult } from 'firebase/auth'; // ✅ import getIdTokenResult
 import { getDoc, doc } from 'firebase/firestore'; 
 import { auth, firestore } from '../backend/firebaseConfig'; // adjust if needed
+import { useContext } from 'react';
+import { UserContext } from '../contexts/UserContext';
+import { sendPasswordResetEmail } from 'firebase/auth';
 
 const LoginScreen = () => {
   const navigation = useNavigation();
@@ -15,6 +18,7 @@ const LoginScreen = () => {
   const [attempts, setAttempts] = useState(0);
   const [isLocked, setIsLocked] = useState(false);
   const [remainingTime, setRemainingTime] = useState(0);
+  const { setUserRole, setStudent, setIsAuthenticated } = useContext(UserContext);
   
   useEffect(() => {
     let timer;
@@ -33,6 +37,26 @@ const LoginScreen = () => {
     }
     return () => clearInterval(timer);
   }, [isLocked]);
+
+  // Handle Forgot Password functionality
+  const handleForgotPassword = () => {
+    if (!email) {
+      Alert.alert("Error", "Please enter your email address.");
+      return;
+    }
+
+    sendPasswordResetEmail(auth, email.trim())
+      .then(() => {
+        Alert.alert(
+          "Password Reset",
+          "An email with password reset instructions has been sent to your inbox."
+        );
+      })
+      .catch((error) => {
+        console.error(error);
+        Alert.alert("Error", "There was an issue sending the password reset email. Please try again.");
+      });
+  };
 
   const handleLogin = async () => {
     if (isLocked) {
@@ -66,21 +90,29 @@ const LoginScreen = () => {
         }
   
         if (role === 'admin') {
-          // ✅ If Admin, no need to fetch student data
-          navigation.replace('DOHomeScreen', { userRole: role });
+          setUserRole('admin');
+          setIsAuthenticated(true);
+          navigation.replace('DOHomeScreen');
         } else if (role === 'student') {
-          // ✅ Fetch additional student data
           const userDocRef = doc(firestore, "users", user.email);
           const userDoc = await getDoc(userDocRef);
-  
+      
           if (userDoc.exists()) {
             const studentData = userDoc.data();
-            navigation.replace('HomeScreen', { userRole: role, student: studentData });
+  
+            // 🛡️ Block login if archived
+            if (studentData.isArchived || studentData.isDisabled) {
+              Alert.alert("Account Archived", "This account has been disabled. Please contact the administration.");
+              return;
+            }
+  
+            setStudent(studentData);
+            setUserRole('student');
+            setIsAuthenticated(true);
+            navigation.replace('HomeScreen');
           } else {
             Alert.alert("Error", "Student record not found.");
           }
-        } else {
-          Alert.alert("Error", "Unrecognized user role.");
         }
       }
     } catch (error) {
@@ -95,6 +127,7 @@ const LoginScreen = () => {
       }
     }
   };
+  
   
 
   return (
@@ -119,7 +152,7 @@ const LoginScreen = () => {
 
         <View style={styles.optionsRow}>
           <Checkbox label="Remember Me" />
-          <TouchableOpacity>
+          <TouchableOpacity onPress={handleForgotPassword}>
             <Text style={styles.forgotText}>Forgot your password?</Text>
           </TouchableOpacity>
         </View>

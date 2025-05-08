@@ -1,10 +1,12 @@
-import React, { useState } from "react";
-import { View, ScrollView, StyleSheet, TouchableOpacity, Text, Image, ToastAndroid, Platform,  } from "react-native";
+import React, { useState, useContext } from "react";
+import { View, ScrollView, StyleSheet, TouchableOpacity, Text, Image, ToastAndroid, Platform } from "react-native";
 import { Picker } from "@react-native-picker/picker";
 import Header from "../parts/Header";
 import ViolationCard from "../parts/ViolationCard";
+import { UserContext } from "../contexts/UserContext"; // ✅ import
 
 const ViolationsScreen = () => {
+  const { student } = useContext(UserContext); // ✅ Use Context here
   const [selectedFilter, setSelectedFilter] = useState("All");
   const [sortOrder, setSortOrder] = useState("Highest");
 
@@ -18,14 +20,21 @@ const ViolationsScreen = () => {
   const handleChatbotClick = () => {
     if (Platform.OS === "android") {
       ToastAndroid.show("Chatbot has been clicked", ToastAndroid.SHORT);
-    } 
+    }
   };
 
   return (
     <View style={{ flex: 1, backgroundColor: "#F4F9FC", padding: 20, marginTop: 30 }}>
-      <View style={{ marginBottom: 15 }}> 
+      <View style={{ marginBottom: 15 }}>
         <Header title="Violations" />
       </View>
+
+      {/* Optional Greeting */}
+      {student && (
+        <Text style={styles.greetingText}>
+          Hello, {student.firstName} {student.lastName}!
+        </Text>
+      )}
 
       {/* Filter Section */}
       <View style={styles.filterSection}>
@@ -41,7 +50,6 @@ const ViolationsScreen = () => {
           </Picker>
         </View>
       </View>
-
 
       {/* Category Buttons */}
       <View style={styles.filterContainer}>
@@ -76,6 +84,12 @@ const ViolationsScreen = () => {
 };
 
 const styles = StyleSheet.create({
+  greetingText: {
+    fontSize: 16,
+    fontWeight: "bold",
+    color: "#333",
+    marginBottom: 15,
+  },
   filterSection: {
     flexDirection: "row",
     justifyContent: "space-between",
@@ -108,7 +122,7 @@ const styles = StyleSheet.create({
     backgroundColor: "#FFFFFF",
     borderRadius: 12,
     marginHorizontal: 6,
-    elevation: 3, 
+    elevation: 3,
     shadowOffset: { width: 0, height: 2 },
     shadowOpacity: 0.1,
     shadowRadius: 4,
@@ -127,7 +141,7 @@ const styles = StyleSheet.create({
     color: "#fff",
   },
   listContainer: {
-    paddingBottom: 80, 
+    paddingBottom: 80,
   },
   fab: {
     position: "absolute",

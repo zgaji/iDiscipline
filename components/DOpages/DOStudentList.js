@@ -17,6 +17,8 @@ import DOStudentCard from "../parts/DOStudentCard";
 import AddStudentModal from "../parts/AddStudentModal";
 import { firestore } from "../backend/firebaseConfig";
 import { collection, getDocs, query, where } from "firebase/firestore";
+import { checkVerificationAndSendPassword } from "../scripts/verificationCheck";
+
 
 const DOStudentList = ({ navigation }) => {
   const [modalVisible, setModalVisible] = useState(false);
@@ -49,7 +51,11 @@ const DOStudentList = ({ navigation }) => {
       const querySnapshot = await getDocs(q);
       const studentList = querySnapshot.docs.map((doc) => doc.data());
       setStudents(studentList);
-      setFilteredStudents(studentList);
+      await checkVerificationAndSendPassword();
+      // 🛡️ Only show non-archived students initially
+      const activeStudents = studentList.filter((student) => !student.isArchived);
+      setFilteredStudents(activeStudents);
+  
     } catch (error) {
       console.error("Error fetching students: ", error);
     }
@@ -169,7 +175,8 @@ const DOStudentList = ({ navigation }) => {
           setSelectedYear("");
           setSelectedSection("");
           setSearchQuery("");
-          setFilteredStudents(students);
+          const activeStudents = students.filter((student) => !student.isArchived); 
+          setFilteredStudents(activeStudents);
         }}
       >
         <Text style={[styles.tabText, activeTab === "all" && styles.tabTextActive]}>
@@ -181,8 +188,8 @@ const DOStudentList = ({ navigation }) => {
         style={[styles.tabButton, activeTab === "archive" && styles.tabButtonActive]}
         onPress={() => {
           setActiveTab("archive");
-          const archived = students.filter((student) => student.isArchived); // assuming `isArchived` field
-          setFilteredStudents(archived);
+          const archivedStudents = students.filter((student) => student.isArchived); 
+          setFilteredStudents(archivedStudents);
         }}
       >
         <Text style={[styles.tabText, activeTab === "archive" && styles.tabTextActive]}>
@@ -219,7 +226,11 @@ const DOStudentList = ({ navigation }) => {
       <AddStudentModal
         modalVisible={modalVisible}
         setModalVisible={setModalVisible}
-        onSubmit={(studentData) => console.log(studentData)}
+        onSubmit={(studentData) => {
+          fetchStudents();
+          setModalVisible(false);
+          ToastAndroid.show("Student added successfully!", ToastAndroid.SHORT);
+        }}
       />
     </View>
   );
@@ -338,7 +349,7 @@ const styles = StyleSheet.create({
   },
   
   tabButtonActive: {
-    backgroundColor: "#0D2B79", // navy blue
+    backgroundColor: "#0D2B79", 
     borderColor: "#0D2B79",
   },
   

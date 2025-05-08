@@ -1,16 +1,13 @@
-import React from "react";
-import { View, ScrollView, StyleSheet, TouchableOpacity, Image, Platform, ToastAndroid } from "react-native";
+import React, { useContext } from "react";
+import { View, ScrollView, StyleSheet, TouchableOpacity, Image, Platform, ToastAndroid, Text } from "react-native";
 import Header from "../parts/Header";
 import StudentCard from "../parts/StudentCard";
 import InfoCard from "../parts/InfoCard";
 import { SafeAreaView } from 'react-native-safe-area-context';
-import { useRoute } from '@react-navigation/native'; // ✅
+import { UserContext } from "../contexts/UserContext"; // ✅ use context instead
 
 const ProfileScreen = () => {
-  const route = useRoute();
-  const { userRole } = route.params || {};
-
-  console.log('ProfileScreen - userRole:', userRole);
+  const { student, userRole } = useContext(UserContext); // ✅ get student & role globally
 
   const handleChatbotClick = () => {
     if (Platform.OS === "android") {
@@ -27,31 +24,34 @@ const ProfileScreen = () => {
       {student ? (
         <StudentCard student={student} />
       ) : (
-        <Text>Loading student information...</Text> 
+        <Text style={styles.loadingText}>Loading student information...</Text> 
       )}
+
       <ScrollView contentContainerStyle={{ alignItems: "center" }}>
-        <InfoCard
+      <InfoCard
           title="Student Details"
           details={{
-            "First Name": "",
-            "Middle Name": "",
-            "Last Name": "",
-            Gender: "",
-            Address: "",
+            "First Name": student?.firstName || "-",
+            "Middle Name": student?.middleName || "-",
+            "Last Name": student?.lastName || "-",
+            Gender: student?.gender || "-",
+            Address: student?.address || "-",
+            "Year & Section": student?.year && student?.section ? `${student.year} - ${student.section}` : "-",
+            Adviser: student?.adviser || "-",
+            "Student Email": student?.studentEmail || "-",
           }}
         />
         <InfoCard
           title="Emergency Contact"
           details={{
-            "Parent/Guardian": "",
-            Email: "",
-            "Contact Number": "",
+            "Parent/Guardian": student?.parentGuardian || "-",
+            Email: student?.emergencyEmail || "-",
+            "Contact Number": student?.contactNumber || "-",
           }}
           titleStyle={{ color: "red", fontStyle: "italic" }}
         />
       </ScrollView>
 
-      {/* Floating Chatbot Button */}
       <TouchableOpacity style={styles.fab} onPress={handleChatbotClick}>
         <Image source={require("../../assets/chatbot.png")} style={styles.fabIcon} />
       </TouchableOpacity>
@@ -77,5 +77,12 @@ const styles = StyleSheet.create({
     height: 30,
     tintColor: "#fff", 
   },
+  loadingText: {
+    fontSize: 16,
+    color: "#666",
+    textAlign: "center",
+    marginVertical: 20,
+  },
 });
+
 export default ProfileScreen;

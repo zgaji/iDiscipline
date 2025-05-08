@@ -1,33 +1,33 @@
 import React, { useState } from "react";
 import { View, Text, Modal, StyleSheet, ToastAndroid, ScrollView, Image, TouchableOpacity } from "react-native";
 import { FontAwesome } from "@expo/vector-icons";
-import StudentCard from "../parts/StudentCard"; // Import the existing StudentCard component
+import StudentCard from "../parts/StudentCard";
 import Header from "../parts/Header";
-import EditStudentModal from "../parts/EditStudentModal"; // Import the EditStudentModal component
+import EditStudentModal from "../parts/EditStudentModal"; 
 import { useNavigation } from "@react-navigation/native";
 import { doc, updateDoc } from "firebase/firestore";
 import { firestore } from "../backend/firebaseConfig";
 
 const DOStudentProfile = ({ route }) => {
-  const { student } = route.params; // Ensure student is passed correctly
+  const { student } = route.params; 
   const navigation = useNavigation(); 
   const [editVisible, setEditVisible] = useState(false);
 
   if (!student) {
-    return <Text>Loading student data...</Text>; // Handle missing student data
+    return <Text>Loading student data...</Text>; 
   }
 
   const [modalVisible, setModalVisible] = useState(false);
   
   const handleArchive = async () => {
     try {
-      const studentRef = doc(firestore, "users", student.studentEmail); // assuming email is doc ID
+      const studentRef = doc(firestore, "users", student.studentEmail); 
       await updateDoc(studentRef, {
         isArchived: true,
         isDisabled: true,
       });
       ToastAndroid.show("Student has been archived.", ToastAndroid.SHORT);
-      navigation.goBack(); // return to student list
+      navigation.goBack();
     } catch (error) {
       console.error("Archiving failed:", error);
       ToastAndroid.show("Failed to archive student.", ToastAndroid.SHORT);
@@ -261,7 +261,7 @@ const styles = StyleSheet.create({
   },
   
   archiveButton: {
-    backgroundColor: "#D94A3D", // red tone
+    backgroundColor: "#D94A3D",
     borderRadius: 20,
     paddingVertical: 8,
     paddingHorizontal: 40,

@@ -8,18 +8,27 @@ const ViolationCaseCard = ({ caseData, openModal }) => {
       <View style={styles.caseHeader}>
         <Text style={styles.caseTitle}>Case #{caseData.id}</Text>
         <View style={styles.statusBadge}>
-          <Text style={styles.statusText}>Status</Text>
+          <Text style={styles.statusText}>{caseData.status || "Under Review"}</Text>
         </View>
       </View>
+
       <Text style={styles.caseInfo}>Student ID: {caseData.studentId}</Text>
+
+      <Text style={styles.caseInfo}>
+        Violation Category & Type: {caseData.category} - {caseData.violation}
+      </Text>
+
       <Text style={styles.caseInfo}>Date Sent: {caseData.dateSent}</Text>
       <Text style={styles.description}>{caseData.description}</Text>
 
-    
-      <TouchableOpacity style={styles.readMore} onPress={() => openModal(caseData)}>
-        <Text style={styles.readMoreText}>Read More</Text>
-        <FontAwesome name="chevron-right" size={14} color="#007AFF" />
-      </TouchableOpacity>
+      
+      <View style={styles.readMoreContainer}>
+        <TouchableOpacity style={styles.readMore} onPress={() => openModal(caseData)}>
+          <Text style={styles.readMoreText}>Read More</Text>
+          <FontAwesome name="chevron-right" size={14} color="#007AFF" />
+        </TouchableOpacity>
+      </View>
+
     </TouchableOpacity>
   );
 };
@@ -30,10 +39,6 @@ const styles = StyleSheet.create({
     padding: 15,
     borderRadius: 10,
     marginVertical: 8,
-    shadowColor: "#000",
-    shadowOffset: { width: 0, height: 3 },
-    shadowOpacity: 0.1,
-    shadowRadius: 4,
     elevation: 3,
   },
   caseHeader: {
@@ -66,10 +71,14 @@ const styles = StyleSheet.create({
     color: "#333",
     marginVertical: 8,
   },
+  readMoreContainer: {
+    flexDirection: "row",
+    justifyContent: "flex-end", 
+    marginTop: 10,
+  },
   readMore: {
     flexDirection: "row",
     alignItems: "center",
-    marginTop: 5,
   },
   readMoreText: {
     color: "#007AFF",

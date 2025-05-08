@@ -7,18 +7,25 @@ const DOViolationCard = ({ type, count }) => {
   const navigation = useNavigation();
 
   return (
-    <TouchableOpacity 
-      style={styles.card} 
+    <TouchableOpacity
+      style={styles.card}
       onPress={() => navigation.navigate("DOViolationDetails", { type, count })}
     >
+      {/* Left: Gavel Icon in rounded box */}
       <View style={styles.iconContainer}>
-        <FontAwesome name="gavel" size={24} color="#0057FF" />
+        <FontAwesome name="gavel" size={20} color="#2453C6" />
       </View>
-      <View style={styles.info}>
+
+      {/* Middle: Violation Type */}
+      <View style={styles.middle}>
         <Text style={styles.type}>{type}</Text>
-        <Text style={styles.count}>{count}</Text>
       </View>
-      <FontAwesome name="chevron-right" size={18} color="#999" />
+
+      {/* Right: Count + Arrow */}
+      <View style={styles.right}>
+        <Text style={styles.count}>{count}</Text>
+        <FontAwesome name="chevron-right" size={16} color="#999" />
+      </View>
     </TouchableOpacity>
   );
 };
@@ -27,28 +34,38 @@ const styles = StyleSheet.create({
   card: {
     flexDirection: "row",
     alignItems: "center",
-    backgroundColor: "#E8F0FF",
-    padding: 15,
-    borderRadius: 10,
-    marginBottom: 10,
+    borderRadius: 20,
+    paddingVertical: 12,
+    paddingHorizontal: 16,
+    marginBottom: 16,
   },
   iconContainer: {
-    backgroundColor: "#CDE3FF",
-    padding: 10,
-    borderRadius: 50,
-    marginRight: 15,
+    backgroundColor: "#8DB7FF",
+    width: 50,
+    height: 50,
+    borderRadius: 15,
+    justifyContent: "center",
+    alignItems: "center",
+    marginRight: 16,
   },
-  info: {
+  middle: {
     flex: 1,
   },
   type: {
     fontSize: 16,
-    fontWeight: "bold",
-    color: "#333",
+    fontWeight: "600",
+    color: "#1E1E1E",
+  },
+  right: {
+    flexDirection: "row",
+    alignItems: "center",
+    gap: 8,
   },
   count: {
-    fontSize: 14,
-    color: "#666",
+    fontSize: 16,
+    fontWeight: "500",
+    color: "#1E1E1E",
+    marginRight: 4,
   },
 });
 

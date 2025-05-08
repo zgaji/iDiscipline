@@ -1,19 +1,80 @@
-import React, { useState } from 'react';
-import { View, Text, StyleSheet, Image, TouchableOpacity, ScrollView } from 'react-native';
+import React, { useState, useEffect, useContext } from 'react';
+import { View, Text, StyleSheet, Image, TouchableOpacity, ScrollView, Animated, Dimensions, TouchableWithoutFeedback } from 'react-native';
 import { useNavigation, useRoute } from '@react-navigation/native';
 import { MaterialIcons, FontAwesome5, Entypo } from '@expo/vector-icons';
+import { UserContext } from '../contexts/UserContext'; 
 import { useIsFocused } from '@react-navigation/native';
+
+const screenWidth = Dimensions.get('window').width;
 
 const MenuScreen = ({ closeMenu }) => {
   const navigation = useNavigation();
   const route = useRoute();
-  const { student, userRole } = route.params; 
+  const { student, userRole } = useContext(UserContext);
   const isFocused = useIsFocused();
 
-  console.log('userRole from route:', userRole); 
-  console.log('student from route:', student);
-  
-  // Define the menu items for Admin
+  const [menuVisible, setMenuVisible] = useState(true);
+  const slideAnim = useState(new Animated.Value(-screenWidth))[0]; // Start off-screen
+  const fadeAnim = useState(new Animated.Value(0))[0]; // Fade background
+
+  useEffect(() => {
+    // Animate in when mounted
+    Animated.parallel([
+      Animated.timing(slideAnim, {
+        toValue: 0,
+        duration: 300,
+        useNativeDriver: true,
+      }),
+      Animated.timing(fadeAnim, {
+        toValue: 1,
+        duration: 300,
+        useNativeDriver: true,
+      }),
+    ]).start();
+  }, []);
+
+  const closeMenuHandler = () => {
+    // Animate out
+    Animated.parallel([
+      Animated.timing(slideAnim, {
+        toValue: -screenWidth,
+        duration: 300,
+        useNativeDriver: true,
+      }),
+      Animated.timing(fadeAnim, {
+        toValue: 0,
+        duration: 300,
+        useNativeDriver: true,
+      }),
+    ]).start(() => {
+      setMenuVisible(false);
+      if (closeMenu) closeMenu();
+      navigation.goBack(); // After animation
+    });
+  };
+
+  const handleNavigate = (screen) => {
+    if (route.name === screen) {
+      closeMenuHandler();
+      return;
+    }
+
+    closeMenuHandler();
+    setTimeout(() => {
+      if (screen === 'HomeScreen') {
+        navigation.replace('HomeScreen');
+      } else {
+        navigation.navigate(screen);
+      }
+    }, 400); // After closing animation
+  };
+
+  const userName = userRole === 'admin' 
+    ? 'Admin' 
+    : student 
+    ? `${student.firstName} ${student.lastName}` 
+    : 'Student';
+
   const adminMenuItems = [
     { name: 'Home', icon: <MaterialIcons name="home" size={24} />, screen: 'DOHomeScreen' },
     { name: 'Violations', icon: <MaterialIcons name="gavel" size={24} />, screen: 'DOViolations' },
@@ -24,7 +85,6 @@ const MenuScreen = ({ closeMenu }) => {
     { name: 'Student Handbook', icon: <MaterialIcons name="menu-book" size={24} />, screen: 'DOHandbookScreen' },
   ];
 
-  // Define the menu items for Student
   const studentMenuItems = [
     { name: 'Home', icon: <MaterialIcons name="home" size={24} />, screen: 'HomeScreen' },
     { name: 'Profile', icon: <MaterialIcons name="person" size={24} />, screen: 'ProfileScreen' },
@@ -34,89 +94,75 @@ const MenuScreen = ({ closeMenu }) => {
     { name: 'Handbook', icon: <MaterialIcons name="menu-book" size={24} />, screen: 'HandbookScreen' },
   ];
 
-  // Choose menu items based on role
   const menuItems = userRole === 'admin' ? adminMenuItems : studentMenuItems;
 
-  const [menuVisible, setMenuVisible] = useState(true);  
+  if (!menuVisible) return null; // Don't render if menu is hidden
 
-  const closeMenuHandler = () => {
-    setMenuVisible(false);
-    if (closeMenu) closeMenu();
-    navigation.goBack();
-    console.log('student:', student);
-  };
-
-  const handleNavigate = (screen) => {
-    if (route.name === screen) {
-
-      closeMenuHandler();
-      return;
-    }
-
-    navigation.navigate(screen, { userRole, student }); // pass userRole to next screen if needed
-    console.log('Navigating to:', screen);
-    closeMenuHandler();
-  };
-
-  const userName = userRole === 'admin' 
-  ? 'Admin' 
-  : student 
-  ? `${student.firstName} ${student.lastName}` 
-  : 'Student';
-    
   return (
-    <View style={[styles.container, { display: menuVisible ? 'flex' : 'none' }]}>
-      <View style={styles.header}>
-        <Image source={require('../../assets/logo.png')} style={styles.logo} />
-        <TouchableOpacity onPress={closeMenuHandler}>
-          <Text style={styles.closeIcon}>✕</Text>
-        </TouchableOpacity>
-      </View>
-    
-      <View style={styles.userInfo}>
-        <Image source={require('../../assets/user.png')} style={styles.avatar} />
-        <Text style={styles.userName}>{userName}</Text>
-      </View>
+    <View style={StyleSheet.absoluteFill}>
+      {/* Fade background */}
+      <TouchableWithoutFeedback onPress={closeMenuHandler}>
+        <Animated.View style={[styles.fadeBackground, { opacity: fadeAnim }]} />
+      </TouchableWithoutFeedback>
 
-      <ScrollView style={styles.menuList}>
-        {menuItems.map((item, index) => {
-          const isActive = route.name === item.screen;
+      {/* Sliding menu */}
+      <Animated.View style={[styles.container, { transform: [{ translateX: slideAnim }] }]}>
+        <View style={styles.header}>
+          <Image source={require('../../assets/logo.png')} style={styles.logo} />
+          <TouchableOpacity onPress={closeMenuHandler}>
+            <Text style={styles.closeIcon}>✕</Text>
+          </TouchableOpacity>
+        </View>
 
-          return (
-            <TouchableOpacity
-              key={index}
-              style={[styles.menuItem, isActive && styles.activeItem]}
-              onPress={() => navigation.navigate(item.screen, { userRole })}
-            >
-              <View style={styles.iconContainer}>
-                {React.cloneElement(item.icon, {
-                  color: isActive ? '#fff' : '#000',
-                })}
-              </View>
-              <Text style={[styles.menuText, isActive && styles.activeText]}>
-                {item.name}
-              </Text>
-            </TouchableOpacity>
-          );
-        })}
-      </ScrollView>
+        <View style={styles.userInfo}>
+          <Image source={require('../../assets/user.png')} style={styles.avatar} />
+          <Text style={styles.userName}>{userName}</Text>
+        </View>
+
+        <ScrollView style={styles.menuList}>
+          {menuItems.map((item, index) => {
+            const isActive = route.name === item.screen;
+
+            return (
+              <TouchableOpacity
+                key={index}
+                style={[styles.menuItem, isActive && styles.activeItem]}
+                onPress={() => handleNavigate(item.screen)}
+              >
+                <View style={styles.iconContainer}>
+                  {React.cloneElement(item.icon, {
+                    color: isActive ? '#fff' : '#000',
+                  })}
+                </View>
+                <Text style={[styles.menuText, isActive && styles.activeText]}>
+                  {item.name}
+                </Text>
+              </TouchableOpacity>
+            );
+          })}
+        </ScrollView>
+      </Animated.View>
     </View>
   );
 };
 
 export default MenuScreen;
 
+
 const styles = StyleSheet.create({
+  fadeBackground: {
+    ...StyleSheet.absoluteFillObject,
+    backgroundColor: 'rgba(0,0,0,0.4)',
+    zIndex: 1,
+  },
   container: {
-    flex: 1,
-    backgroundColor: '#fff',
     position: 'absolute',
     top: 0,
-    left: 0,
-    right: 0,
     bottom: 0,
-    zIndex: 999,
-    elevation: 10,
+    width: '100%',
+    backgroundColor: '#fff',
+    zIndex: 2,
+    elevation: 5,
     paddingTop: 40,
   },
   header: {

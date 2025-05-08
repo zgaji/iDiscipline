@@ -8,12 +8,16 @@ dotenv.config();
 sgMail.setApiKey(process.env.SENDGRID_API_KEY);
 
 const app = express();
-const port = 3000;
+const port = process.env.PORT || 3000;
 
-// Enable CORS
+// Middleware
 app.use(cors());
-
 app.use(bodyParser.json());
+
+// Health check endpoint
+app.get('/', (req, res) => {
+  res.send('✅ Email Service is Running!');
+});
 
 app.post('/send-password', async (req, res) => {
   const { toEmail, password } = req.body;
