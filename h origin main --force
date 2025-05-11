@@ -1,0 +1,281 @@
+[33mcommit 8e5a86f3dff389ef9b2de9ed8844deeed091593f[m[33m ([m[1;36mHEAD[m[33m -> [m[1;32mmain[m[33m)[m
+Author: zgaji <zarinelle.c@gmail.com>
+Date:   Thu May 8 13:08:26 2025 +0800
+
+    changes
+
+[33mcommit 87154a4432e4117ed7d8cf8c815c840f7d933a0e[m
+Author: zgaji <zarinelle.c@gmail.com>
+Date:   Sat Apr 26 08:03:02 2025 +0800
+
+    Login Auth +StudentList
+    
+    Login Auth
+    -Token Admin
+    -Email Verification
+    -Email Password
+    -DO Student List
+    -Archive
+    -Edit
+    -Add
+    -Filter
+    -Count
+    -Search
+    -BackEnd
+    -Admin
+
+[33mcommit 083f60e37d84c8ce2ad4457ddab0d408fc2e953b[m
+Author: zgaji <zarinelle.c@gmail.com>
+Date:   Sun Apr 20 14:00:29 2025 +0800
+
+    student incident report add
+
+[33mcommit 69cf9e87238d06cc1fca0292e44b0602ace9da9f[m
+Author: zgaji <zarinelle.c@gmail.com>
+Date:   Fri Apr 18 11:34:51 2025 +0800
+
+    role
+
+[33mcommit 54c6529e1bc890fda4f912d52c6edf4398fc2588[m
+Author: zgaji <zarinelle.c@gmail.com>
+Date:   Fri Apr 18 09:57:30 2025 +0800
+
+    mini upd
+
+[33mcommit a13cc9b1170d38456ed78a135d9df3a371038c00[m
+Author: zgaji <zarinelle.c@gmail.com>
+Date:   Thu Apr 17 17:59:41 2025 +0800
+
+    mini upd
+
+[33mcommit 388263cc637c84b1b17b5d9a3d8fa57a90e3f160[m
+Author: zgaji <zarinelle.c@gmail.com>
+Date:   Sat Apr 12 16:44:26 2025 +0800
+
+    for pc
+
+[33mcommit 8cb4b04f4172c3c96a5b01bbc4b63634989a3f86[m
+Author: zgaji <zarinelle.c@gmail.com>
+Date:   Thu Apr 3 05:49:16 2025 +0800
+
+    adjusted student end layout
+
+[33mcommit 48df0834e32da095eed78702b4dc178b04dc4b41[m
+Author: zgaji <zarinelle.c@gmail.com>
+Date:   Sat Mar 29 17:35:24 2025 +0800
+
+    pdf
+
+[33mcommit d1491b5c5a07bd22c89c35210e8ef816c5de43d3[m
+Author: zgaji <zarinelle.c@gmail.com>
+Date:   Fri Feb 28 23:47:26 2025 +0800
+
+    last
+
+[33mcommit 41ca93dd61eff8bf973b1a20cbc1e8803d6ebe1f[m
+Author: zgaji <zarinelle.c@gmail.com>
+Date:   Fri Feb 28 17:13:30 2025 +0800
+
+    update
+
+[33mcommit 606da5ccfdd188ecea3009324720d300f67bf251[m
+Author: zgaji <zarinelle.c@gmail.com>
+Date:   Fri Feb 28 15:53:46 2025 +0800
+
+    .
+
+[33mcommit 3d2ee7d316b199d1372bdcb9b19f89dd9ce8b1bf[m
+Merge: c15418c 58b96d2
+Author: zgaji <zarinelle.c@gmail.com>
+Date:   Fri Feb 28 13:22:54 2025 +0800
+
+    Merge branch 'main' of https://github.com/zgaji/iDiscipline
+
+[33mcommit c15418c7533402e9b9d0c585ceb58eec9731e643[m
+Author: zgaji <zarinelle.c@gmail.com>
+Date:   Fri Feb 28 13:22:44 2025 +0800
+
+    bit changes
+
+[33mcommit 58b96d22ab3a51e0126c8917e33e88d024698f53[m
+Author: hauxus404 <matthew12629@gmail.com>
+Date:   Fri Feb 28 13:21:33 2025 +0800
+
+    update
+
+[33mcommit 1078095354a35df93c4d6fb90b359a9a3caefa7a[m
+Author: zgaji <zarinelle.c@gmail.com>
+Date:   Fri Feb 28 12:00:58 2025 +0800
+
+    student upd
+
+[33mcommit b5544633dbba48683934376afd98e28184aeea37[m
+Author: hauxus404 <matthew12629@gmail.com>
+Date:   Fri Feb 28 01:29:57 2025 +0800
+
+    update
+
+[33mcommit 5e58b22b4ac49ce2bbb23bef40c06f89e2fae1b7[m
+Author: hauxus404 <matthew12629@gmail.com>
+Date:   Fri Feb 28 00:56:50 2025 +0800
+
+    update
+
+[33mcommit 532bbd133794571e67ae37dfa2c3b3406f8c7f35[m
+Author: hauxus404 <matthew12629@gmail.com>
+Date:   Fri Feb 28 00:42:01 2025 +0800
+
+    update
+
+[33mcommit df2b5a1087c1f70da4cf3432659a59b66f7a2935[m
+Author: hauxus404 <matthew12629@gmail.com>
+Date:   Thu Feb 27 18:09:27 2025 +0800
+
+    update
+
+[33mcommit 30432be497fc299502539a8758ec5ab4bdd586ca[m
+Author: hauxus404 <matthew12629@gmail.com>
+Date:   Thu Feb 27 17:43:36 2025 +0800
+
+    update
+
+[33mcommit 977591fd62869febbef4a9a7506842252b94a92b[m
+Author: zgaji <zarinelle.c@gmail.com>
+Date:   Thu Feb 27 02:38:37 2025 +0800
+
+    do authentication
+
+[33mcommit 43185578f97a5b5655c44c4d143b8a73015e94d1[m
+Author: hauxus404 <matthew12629@gmail.com>
+Date:   Wed Feb 26 18:26:12 2025 +0800
+
+    update
+
+[33mcommit 0f6865d565b65003f73c3c4798b156e5775f1d71[m
+Author: hauxus404 <matthew12629@gmail.com>
+Date:   Wed Feb 26 16:56:11 2025 +0800
+
+    Update MenuBar.js
+
+[33mcommit 842fe8298a080730790c4250c5fc99ebbc36470b[m
+Author: hauxus404 <matthew12629@gmail.com>
+Date:   Wed Feb 26 16:45:14 2025 +0800
+
+    Update LoginScreen.js
+
+[33mcommit afe4f7c621c5532dcba8374a0ebaacd425664a8b[m
+Author: hauxus404 <matthew12629@gmail.com>
+Date:   Wed Feb 26 16:01:17 2025 +0800
+
+    update
+
+[33mcommit ee694f7bd5b119929c17d4048e00891fef681bfd[m
+Author: hauxus404 <matthew12629@gmail.com>
+Date:   Wed Feb 26 15:41:45 2025 +0800
+
+    update
+
+[33mcommit 61bc2fdeff835ec17c3b9712f4f1c2abc9f5dfe7[m
+Author: hauxus404 <matthew12629@gmail.com>
+Date:   Wed Feb 26 14:50:56 2025 +0800
+
+    push
+
+[33mcommit bb30afbb8ba5543c999e6c3b98035f3a59a9a87f[m
+Author: hauxus404 <matthew12629@gmail.com>
+Date:   Wed Feb 26 14:32:48 2025 +0800
+
+    update
+
+[33mcommit 182e7e1815970c673ae757224521c42ef71be333[m
+Author: hauxus404 <matthew12629@gmail.com>
+Date:   Wed Feb 26 14:23:24 2025 +0800
+
+    update
+
+[33mcommit 15e9776e460c76e4eb99aaf89e9c405945f4543d[m
+Merge: 37633ce 45b5eb1
+Author: hauxus404 <matthew12629@gmail.com>
+Date:   Wed Feb 26 14:08:18 2025 +0800
+
+    Merge branch 'main' of https://github.com/zgaji/iDiscipline
+
+[33mcommit 37633ce0fcedc0d3cc21afeefef9eb25b02bf35d[m
+Author: hauxus404 <matthew12629@gmail.com>
+Date:   Wed Feb 26 14:08:05 2025 +0800
+
+    update
+
+[33mcommit 45b5eb1a092b698d5c2b5e24ee0f9d4eda05506e[m
+Author: zgaji <zarinelle.c@gmail.com>
+Date:   Wed Feb 26 14:07:16 2025 +0800
+
+    authentication sample
+
+[33mcommit 2e1c29acbcbbf14202df90af4b394f0f8dfea39f[m
+Merge: 7744e99 9bb0c2b
+Author: zgaji <zarinelle.c@gmail.com>
+Date:   Wed Feb 26 09:36:24 2025 +0800
+
+    Merge branch 'main' of https://github.com/zgaji/iDiscipline
+
+[33mcommit 9bb0c2bc2fdecf78741357f1488d86d885b75e83[m
+Author: hauxus404 <matthew12629@gmail.com>
+Date:   Wed Feb 26 01:58:41 2025 +0800
+
+    update
+
+[33mcommit 7744e99fe8203d0570e81ebef53d7fda40858a26[m
+Author: zgaji <zarinelle.c@gmail.com>
+Date:   Wed Feb 26 01:51:07 2025 +0800
+
+    added menubar changes
+
+[33mcommit 5274287ebc2636be3ed1ca41db3becec029f5d14[m
+Author: hauxus404 <matthew12629@gmail.com>
+Date:   Wed Feb 26 01:28:03 2025 +0800
+
+    new
+
+[33mcommit cd0e71816d50cbcd5c90d21c2e5e045e8511802d[m
+Author: hauxus404 <matthew12629@gmail.com>
+Date:   Tue Feb 25 17:16:51 2025 +0800
+
+    new update
+
+[33mcommit 5af5bdaf25045bef7dcd1fdf6743bb153be89a73[m
+Author: hauxus404 <matthew12629@gmail.com>
+Date:   Tue Feb 25 15:42:08 2025 +0800
+
+    added login
+
+[33mcommit 7b9f2c83ac5137c8dd7c0a9d90267d5ded017f8c[m
+Merge: f91c532 c30b6b7
+Author: zgaji <zarinelle.c@gmail.com>
+Date:   Tue Feb 25 15:20:17 2025 +0800
+
+    Merge branch 'main' of https://github.com/zgaji/iDiscipline
+
+[33mcommit f91c53278d7375500517c7b33335ff80b429e3fa[m
+Author: zgaji <zarinelle.c@gmail.com>
+Date:   Tue Feb 25 15:20:00 2025 +0800
+
+    Create Styles.js
+
+[33mcommit c30b6b77ba5f1a4853548c6a41a64432847cf1e9[m
+Author: hauxus404 <matthew12629@gmail.com>
+Date:   Tue Feb 25 15:19:14 2025 +0800
+
+    Update App.js
+
+[33mcommit 2d78cdb64504d19fd97e7a6cacae7c12f9c1b0e5[m
+Author: zgaji <zarinelle.c@gmail.com>
+Date:   Tue Feb 25 14:59:28 2025 +0800
+
+    Update App.js
+
+[33mcommit f7d0a96f6accf6a391d945a9915f877a118cc0b6[m
+Author: zgaji <zarinelle.c@gmail.com>
+Date:   Tue Feb 25 14:57:09 2025 +0800
+
+    initial
