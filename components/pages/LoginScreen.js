@@ -4,12 +4,17 @@ import InputField from '../parts/InputField';
 import Button from '../parts/Button';
 import Checkbox from '../parts/CheckBox';
 import { useNavigation } from '@react-navigation/native';
+<<<<<<< HEAD
 import { signInWithEmailAndPassword, getIdTokenResult } from 'firebase/auth'; // ✅ import getIdTokenResult
 import { getDoc, doc } from 'firebase/firestore'; 
 import { auth, firestore } from '../backend/firebaseConfig'; // adjust if needed
 import { useContext } from 'react';
 import { UserContext } from '../contexts/UserContext';
 import { sendPasswordResetEmail } from 'firebase/auth';
+=======
+import { auth } from '../../firebaseConfig'; 
+import { signInWithEmailAndPassword } from 'firebase/auth';
+>>>>>>> parent of 87154a4 (Login Auth +StudentList)
 
 const LoginScreen = () => {
   const navigation = useNavigation();
@@ -18,7 +23,11 @@ const LoginScreen = () => {
   const [attempts, setAttempts] = useState(0);
   const [isLocked, setIsLocked] = useState(false);
   const [remainingTime, setRemainingTime] = useState(0);
+<<<<<<< HEAD
   const { setUserRole, setStudent, setIsAuthenticated } = useContext(UserContext);
+=======
+  const [loading, setLoading] = useState(true);
+>>>>>>> parent of 87154a4 (Login Auth +StudentList)
   
   useEffect(() => {
     let timer;
@@ -69,15 +78,11 @@ const LoginScreen = () => {
       const user = userCredential.user;
   
       if (user) {
-        // 1️⃣ Verify email first
-        if (!user.emailVerified) {
-          Alert.alert(
-            "Email Not Verified",
-            "Please verify your email address before logging in. A verification email has been sent to your inbox."
-          );
-          return;
-        }
+        const role = user.email === 'admin@email.com' ? 'admin' : 'student'; // Update as necessary
+        Alert.alert("Login Successful", `Welcome, ${role}!`);
+        setAttempts(0);
   
+<<<<<<< HEAD
         // 2️⃣ Fetch custom claims (role)
         const idTokenResult = await getIdTokenResult(user);
         const role = idTokenResult.claims.role;
@@ -114,6 +119,10 @@ const LoginScreen = () => {
             Alert.alert("Error", "Student record not found.");
           }
         }
+=======
+        // Navigate to the redirect screen after login
+        navigation.replace('RedirectScreen', { isAuthenticated: true, userRole: role });
+>>>>>>> parent of 87154a4 (Login Auth +StudentList)
       }
     } catch (error) {
       const newAttempts = attempts + 1;
@@ -127,13 +136,18 @@ const LoginScreen = () => {
       }
     }
   };
+<<<<<<< HEAD
   
   
+=======
+>>>>>>> parent of 87154a4 (Login Auth +StudentList)
 
   return (
     <View style={styles.container}>
+      {/* Blue Background */}
       <View style={styles.blueBackground}></View>
 
+      {/* White Login Form with Rounded Top */}
       <View style={styles.whiteContainer}>
         <Text style={styles.title}>Login</Text>
 
@@ -157,7 +171,7 @@ const LoginScreen = () => {
           </TouchableOpacity>
         </View>
 
-        <Button title="Sign In" onPress={handleLogin} disabled={isLocked} style={styles.btn}/>
+        <Button title="Sign In" onPress={handleLogin} disabled={isLocked} />
 
         {isLocked && (
           <Text style={styles.lockoutText}>
@@ -172,12 +186,17 @@ const LoginScreen = () => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: "#E3EBF3", 
+    backgroundColor: "#007AFF", 
   },
   blueBackground: {
     height: "40%", 
     justifyContent: "center",
     alignItems: "center",
+  },
+  headerText: {
+    color: "#FFF",
+    fontSize: 28,
+    fontWeight: "bold",
   },
   whiteContainer: {
     flex: 1,
@@ -188,11 +207,11 @@ const styles = StyleSheet.create({
     marginTop: -30, 
   },
   title: {
-    fontSize: 28,
+    fontSize: 24,
     fontWeight: "bold",
     marginBottom: 20,
     textAlign: "left",
-    color: '#0F296F',
+    color: '#0057ff',
   },
   optionsRow: {
     flexDirection: "row",
@@ -208,11 +227,6 @@ const styles = StyleSheet.create({
     textAlign: "center",
     marginTop: 10,
   },
-  btn: {
-    backgroundColor: '#0F296F',
-    marginTop: 20,
-  },
-
 });
 
 export default LoginScreen;

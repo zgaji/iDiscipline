@@ -1,5 +1,12 @@
+<<<<<<< HEAD
 import React, { useState, useEffect } from "react";
 import { View, Text, TextInput, ScrollView, TouchableOpacity, Modal, StyleSheet, Platform, ToastAndroid, Alert, Image } from "react-native";
+=======
+import React, { useState } from "react";
+import {View, Text, TextInput, ScrollView, TouchableOpacity, Modal, StyleSheet,Platform,ToastAndroid,Image} from "react-native";
+import DOMenuBar from "../parts/DOMenuBar";
+import IncidentReportMenu from "../parts/IncidentReportMenu";
+>>>>>>> parent of 87154a4 (Login Auth +StudentList)
 import { FontAwesome } from "@expo/vector-icons";
 import { Picker } from "@react-native-picker/picker";
 import Header from "../parts/Header";

@@ -1,44 +1,34 @@
-import React, { useState, useEffect } from "react";
-import {
-  View,
-  Text,
-  TextInput,
-  ScrollView,
-  TouchableOpacity,
-  StyleSheet,
-  Platform,
-  ToastAndroid,
-  Image,
-} from "react-native";
+import React, { useState } from "react";
+import { View, Text, TextInput, ScrollView, TouchableOpacity, StyleSheet, Modal,Platform,ToastAndroid,Image } from "react-native";
 import { FontAwesome } from "@expo/vector-icons";
-import { Picker } from "@react-native-picker/picker";
 import Header from "../parts/Header";
+<<<<<<< HEAD
 import DOStudentCard from "../parts/DOStudentCard";
 import AddStudentModal from "../parts/AddStudentModal";
 import { firestore } from "../backend/firebaseConfig";
 import { collection, getDocs, query, where } from "firebase/firestore";
 import { checkVerificationAndSendPassword } from "../scripts/verificationCheck";
+=======
+import MenuBar from "../parts/DOMenuBar";
+import StudentCard from "../parts/DOStudentCard";
+
+
+// To modify: input field for the form, submit button, and any other necessary components
+
+>>>>>>> parent of 87154a4 (Login Auth +StudentList)
 
 
 const DOStudentList = ({ navigation }) => {
   const [modalVisible, setModalVisible] = useState(false);
-  const [students, setStudents] = useState([]);
-  const [filteredStudents, setFilteredStudents] = useState([]);
-  const [loading, setLoading] = useState(true);
-  const [searchQuery, setSearchQuery] = useState("");
-  const [selectedYear, setSelectedYear] = useState("");
-  const [selectedSection, setSelectedSection] = useState("");
-  const [activeTab, setActiveTab] = useState("all");
 
-  const sectionOptions = {
-    "7th Grade": ["St. Pedro", "St. Aloysious", "St. Dominic"],
-    "8th Grade": ["St. Stephen", "St. Maximillian", "St. Lorenzo"],
-    "9th Grade": ["St. Philip", "St. Andrew", "St. Bartholomew"],
-    "10th Grade": ["St. Matthew", "St. John", "St. Paul"],
-    "11th Grade": ["St. John Bosco", "St. Vincent"],
-    "12th Grade": ["St. Benedict", "St. Sebastian"],
-  };
+  const students = [
+    { name: "Full Name", year: "Year" },
+    { name: "Full Name", year: "Year" },
+    { name: "Full Name", year: "Year" },
+    { name: "Full Name", year: "Year" },
+  ];
 
+<<<<<<< HEAD
   useEffect(() => {
     fetchStudents();
   }, []);
@@ -94,59 +84,56 @@ const DOStudentList = ({ navigation }) => {
       ToastAndroid.show("Chatbot has been clicked", ToastAndroid.SHORT);
     }
   };
+=======
+    const showToast = () => {
+      if (Platform.OS === "android") {
+        ToastAndroid.show("Chatbot has been clicked", ToastAndroid.SHORT);
+      } 
+    };
+>>>>>>> parent of 87154a4 (Login Auth +StudentList)
 
   return (
     <View style={{ flex: 1, backgroundColor: "#F4F9FC", padding: 20, marginTop: 30 }}>
-      <Header title="Student List" />
+      <View style={{ marginBottom: 15 }}> 
+        <Header title="StudentList" />
+      </View>
 
-      {/* Student Count */}
-      <View style={styles.studentHeader}>
-        <Text style={styles.studentText}>Students</Text>
-        <View style={styles.studentCount}>
-          <Text style={styles.countText}>{filteredStudents.length}</Text>
+      <ScrollView contentContainerStyle={styles.content}>
+        {/* Students Count */}
+        <View style={styles.studentHeader}>
+          <Text style={styles.studentText}>Students</Text>
+          <View style={styles.studentCount}>
+            <Text style={styles.countText}>20</Text>
+          </View>
+          <TouchableOpacity style={styles.yearButton}>
+            <Text style={styles.yearText}>Year</Text>
+            <FontAwesome name="caret-down" size={14} color="#000" />
+          </TouchableOpacity>
         </View>
-      </View>
 
-      {/* Search */}
-      <View style={styles.searchContainer}>
-        <TextInput
-          placeholder="Search.."
-          placeholderTextColor="#999"
-          style={styles.searchInput}
-          value={searchQuery}
-          onChangeText={handleSearch}
-        />
-        <FontAwesome name="search" size={16} color="#666" />
-      </View>
+        {/* Search Bar */}
+        <View style={styles.searchContainer}>
+          <TextInput placeholder="Search" style={styles.searchInput} />
+          <FontAwesome name="times-circle" size={18} color="#999" />
+        </View>
 
-      {/* Add + Filters */}
-      <View style={styles.actionRow}>
+        {/* Add Student Button */}
         <TouchableOpacity style={styles.addButton} onPress={() => setModalVisible(true)}>
           <Text style={styles.addButtonText}>Add Student</Text>
         </TouchableOpacity>
 
-        <View style={styles.pickerWrapper}>
-          <Picker
-            selectedValue={selectedYear}
-            onValueChange={(itemValue) => {
-              if (itemValue !== "") {
-                setSelectedYear(itemValue);
-                setSelectedSection("");
-                filterStudents(searchQuery, itemValue, "");
-              }
-            }}
-            style={styles.picker}
-          >
-            <Picker.Item label="Select Year" value="" color="#888" />
-            <Picker.Item label="7th Grade" value="7th Grade" />
-            <Picker.Item label="8th Grade" value="8th Grade" />
-            <Picker.Item label="9th Grade" value="9th Grade" />
-            <Picker.Item label="10th Grade" value="10th Grade" />
-            <Picker.Item label="11th Grade" value="11th Grade" />
-            <Picker.Item label="12th Grade" value="12th Grade" />
-          </Picker>
-        </View>
+        {/* Student List */}
+        {students.map((student, index) => (
+          <StudentCard
+            key={index}
+            name={student.name}
+            year={student.year}
+            onPress={() => navigation.navigate("DOStudentProfile")}
+          />
+        ))}
+      </ScrollView>
 
+<<<<<<< HEAD
         <View style={styles.pickerWrapper}>
           <Picker
             selectedValue={selectedSection}
@@ -218,10 +205,13 @@ const DOStudentList = ({ navigation }) => {
       )}
 
       {/* Chatbot FAB */}
+=======
+>>>>>>> parent of 87154a4 (Login Auth +StudentList)
       <TouchableOpacity style={styles.fab} onPress={showToast}>
         <Image source={require("../../assets/chatbot.png")} style={styles.fabIcon} />
       </TouchableOpacity>
 
+<<<<<<< HEAD
       {/* Modal */}
       <AddStudentModal
         modalVisible={modalVisible}
@@ -232,13 +222,50 @@ const DOStudentList = ({ navigation }) => {
           ToastAndroid.show("Student added successfully!", ToastAndroid.SHORT);
         }}
       />
+=======
+      {/* Add Student Modal */}
+      <Modal animationType="fade" transparent={true} visible={modalVisible} onRequestClose={() => setModalVisible(false)}>
+        <View style={styles.modalOverlay}>
+          <View style={styles.modalContainer}>
+            {/* Close Button */}
+            <TouchableOpacity style={styles.closeButton} onPress={() => setModalVisible(false)}>
+              <Text style={styles.closeText}>×</Text>
+            </TouchableOpacity>
+
+            {/* Modal Content */}
+            <Text style={styles.modalTitle}>Create New Student Account</Text>
+            <View style={styles.infoContainer}>
+              <Text style={styles.infoText}>First Name:</Text>
+              <Text style={styles.infoText}>Middle Name:</Text>
+              <Text style={styles.infoText}>Last Name:</Text>
+              <Text style={styles.infoText}>Gender:</Text>
+              <Text style={styles.infoText}>Birth Date:</Text>
+              <Text style={styles.infoText}>Address:</Text>
+              <Text style={styles.infoText}>Year & Section:</Text>
+              <Text style={styles.infoText}>Adviser:</Text>
+
+              <Text style={[styles.infoText, styles.emergencyContact]}>Emergency Contact</Text>
+              <Text style={styles.infoText}>Parent/Guardian:</Text>
+              <Text style={styles.infoText}>Email:</Text>
+              <Text style={styles.infoText}>Contact Number:</Text>
+            </View>
+          </View>
+        </View>
+      </Modal>
+>>>>>>> parent of 87154a4 (Login Auth +StudentList)
     </View>
   );
 };
 
 const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    backgroundColor: "#F4F7FC",
+  },
+  content: {
+    padding: 20,
+  },
   studentHeader: {
-    marginTop: 20,
     flexDirection: "row",
     alignItems: "center",
     marginBottom: 10,
@@ -248,71 +275,49 @@ const styles = StyleSheet.create({
     fontWeight: "bold",
   },
   studentCount: {
-    borderWidth: 2,
-    borderColor: "#B0B0B0",
-    borderRadius: 15,
-    paddingHorizontal: 20,
-    paddingVertical: 2,
-    marginLeft: 15,
+    backgroundColor: "#E3E3E3",
+    borderRadius: 12,
+    paddingHorizontal: 10,
+    marginLeft: 10,
   },
   countText: {
-    fontSize: 16,
-    color: "#00008B",
-    fontWeight: "600",
+    fontWeight: "bold",
+  },
+  yearButton: {
+    flexDirection: "row",
+    alignItems: "center",
+    marginLeft: 10,
+    backgroundColor: "#E3E3E3",
+    paddingHorizontal: 10,
+    borderRadius: 10,
+  },
+  yearText: {
+    marginRight: 5,
   },
   searchContainer: {
     flexDirection: "row",
     alignItems: "center",
-    backgroundColor: "#F8F9FC",
-    borderColor: "#D1D1D1",
-    borderWidth: 1,
-    borderRadius: 25,
-    paddingHorizontal: 15,
-    marginBottom: 15,
-    height: 45,
-    shadowColor: "#000",
-    shadowOffset: { width: 0, height: 1 },
+    backgroundColor: "#fff",
+    paddingHorizontal: 10,
+    borderRadius: 8,
+    marginBottom: 10,
     shadowOpacity: 0.1,
-    shadowRadius: 1,
-    elevation: 1,
+    elevation: 3,
   },
   searchInput: {
     flex: 1,
-    fontSize: 16,
-    color: "#333",
-  },
-  actionRow: {
-    flexDirection: "row",
-    alignItems: "center",
-    marginBottom: 15,
-    gap: 5,
+    padding: 10,
   },
   addButton: {
     backgroundColor: "#27AE60",
     paddingVertical: 10,
-    paddingHorizontal: 30,
-    borderRadius: 999,
+    borderRadius: 8,
     alignItems: "center",
-    justifyContent: "center",
+    marginBottom: 10,
   },
   addButtonText: {
     color: "#fff",
     fontWeight: "bold",
-    fontSize: 14,
-  },
-  pickerWrapper: {
-    borderWidth: 1,
-    borderColor: "#C4C4C4",
-    borderRadius: 8,
-    backgroundColor: "#fff",
-    overflow: "hidden",
-    width: 100,
-    height: 36,
-    justifyContent: "center",
-  },
-  picker: {
-    fontSize: 12,
-    height: 36,
   },
   fab: {
     position: "absolute",
@@ -329,39 +334,67 @@ const styles = StyleSheet.create({
   fabIcon: {
     width: 30,
     height: 30,
-    tintColor: "#fff",
+    tintColor: "#fff", // Keeps icon color consistent
   },
-  tabRow: {
-    flexDirection: "row",
+
+  // Modal Styles
+  modalOverlay: {
+    flex: 1,
+    backgroundColor: "rgba(0, 0, 0, 0.5)", // ✅ Blurred background effect
     justifyContent: "center",
-    marginBottom: 15,
-    gap: 10,
+    alignItems: "center",
   },
-  
-  tabButton: {
+  modalContainer: {
+    width: "80%",
     backgroundColor: "#fff",
-    borderRadius: 12,
-    paddingVertical: 10,
-    paddingHorizontal: 68,
-    borderWidth: 1,
-    borderColor: "#ccc",
-    elevation: 2,
+    borderRadius: 10,
+    padding: 20,
   },
+<<<<<<< HEAD
   
   tabButtonActive: {
     backgroundColor: "#0D2B79", 
     borderColor: "#0D2B79",
+=======
+  closeButton: {
+    position: "absolute",
+    top: 10,
+    right: 10,
+>>>>>>> parent of 87154a4 (Login Auth +StudentList)
   },
-  
-  tabText: {
-    color: "#555",
-    fontWeight: "600",
+  closeText: {
+    fontSize: 22,
+    fontWeight: "bold",
+  },
+  modalTitle: {
+    fontSize: 18,
+    fontWeight: "bold",
+    color: "#0057FF",
+    textAlign: "center",
+  },
+  infoContainer: {
+    marginTop: 10,
+  },
+  infoText: {
     fontSize: 14,
+    marginBottom: 3,
   },
-  
-  tabTextActive: {
+  emergencyContact: {
+    fontWeight: "bold",
+    color: "#0057FF",
+    marginTop: 10,
+  },
+  createButton: {
+    backgroundColor: "#F4B400",
+    paddingVertical: 10,
+    borderRadius: 10,
+    alignItems: "center",
+    marginTop: 15, // ✅ Ensures proper spacing at the bottom
+  },
+  createButtonText: {
     color: "#fff",
-  },  
+    fontWeight: "bold",
+  },
 });
 
 export default DOStudentList;

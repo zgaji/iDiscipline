@@ -1,7 +1,14 @@
+<<<<<<< HEAD
 import React, { useState, useEffect, useContext } from "react";
 import { View, Text, ScrollView, TouchableOpacity, StyleSheet, Modal, Image, Platform, ToastAndroid } from "react-native";
 import { firestore } from "../backend/firebaseConfig";
 import { collection, getDocs, addDoc, query, where } from "firebase/firestore"; 
+=======
+import React, { useState, useEffect } from "react";
+import { View, Text, ScrollView, TouchableOpacity, StyleSheet, Modal, TextInput, Image, Platform, ToastAndroid } from "react-native";
+import { firestore } from "../../firebaseConfig"; // Adjust the import based on your project structure
+import { collection, addDoc, getDocs } from "firebase/firestore";
+>>>>>>> parent of 87154a4 (Login Auth +StudentList)
 import Header from "../parts/Header";
 import IncidentReportCard from "../parts/IncidentReportCard";
 import IncidentReportModal from "../parts/IncidentReportModal";
@@ -12,6 +19,7 @@ const IncidentReportsScreen = () => {
   const [selectedReport, setSelectedReport] = useState(null);
   const [modalVisible, setModalVisible] = useState(false);
   const [reports, setReports] = useState([]);
+  const [isDateTimePickerVisible, setDateTimePickerVisible] = useState(false);
 
   useEffect(() => {
     if (student) {
@@ -51,6 +59,7 @@ const IncidentReportsScreen = () => {
 
   const handleSubmitReport = async (data) => {
     try {
+<<<<<<< HEAD
       let incidentReportNo = generateIncidentReportNo();
       let exists = await checkIncidentReportNoExists(incidentReportNo);
   
@@ -60,16 +69,27 @@ const IncidentReportsScreen = () => {
       }
   
       const reportData = {
+=======
+      // Add new report to Firestore with "Under Review" status
+      const docRef = await addDoc(collection(firestore, "incidentReports"), {
+>>>>>>> parent of 87154a4 (Login Auth +StudentList)
         ...data,
         reportedByStudentNo: student?.studentNo || "Unknown",
         reportedByName: `${student?.firstName || ""} ${student?.lastName || ""}`,
         incidentReportNo,
         status: "Under Review",
+<<<<<<< HEAD
       };
   
       await addDoc(collection(firestore, "incidentReports"), reportData);
       fetchReports();
       setModalVisible(false);
+=======
+        incidentReportNo: `Report #${new Date().getTime()}`, // Unique Report No
+      });
+      fetchReports(); // Fetch the updated reports list
+      setModalVisible(false); // Close the modal
+>>>>>>> parent of 87154a4 (Login Auth +StudentList)
     } catch (error) {
       console.error("Error submitting report:", error);
     }
@@ -113,6 +133,7 @@ const IncidentReportsScreen = () => {
 
             {selectedReport && (
               <>
+<<<<<<< HEAD
                 <Text style={styles.modalTitle}>Incident {selectedReport.incidentReportNo}</Text>
                 {["dateTime", "location", "violationCategory", "violationType", "victim", "offender", "witness", "description", "reportedBy", "dateReported"].map((field, index) => (
                   <View key={index}>
@@ -120,6 +141,21 @@ const IncidentReportsScreen = () => {
                     <Text style={styles.modalText}>{selectedReport[field]}</Text>
                   </View>
                 ))}
+=======
+                <Text style={styles.modalTitle}>{selectedReport.incidentReportNo}</Text>
+                <Text style={styles.modalLabel}>Date & Time of the Incident:</Text>
+                <Text style={styles.modalText}>{selectedReport.dateTime}</Text>
+                <Text style={styles.modalLabel}>Location:</Text>
+                <Text style={styles.modalText}>{selectedReport.location}</Text>
+                <Text style={styles.modalLabel}>Parties Involved:</Text>
+                <Text style={styles.modalText}>{selectedReport.parties}</Text>
+                <Text style={styles.modalLabel}>Description of the Incident:</Text>
+                <Text style={styles.modalText}>{selectedReport.description}</Text>
+                <Text style={styles.modalLabel}>Reported by:</Text>
+                <Text style={styles.modalText}>{selectedReport.reportedBy}</Text>
+                <Text style={styles.modalLabel}>Date Reported:</Text>
+                <Text style={styles.modalText}>{selectedReport.dateReported}</Text>
+>>>>>>> parent of 87154a4 (Login Auth +StudentList)
               </>
             )}
           </View>

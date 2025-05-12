@@ -1,5 +1,18 @@
+<<<<<<< HEAD
 import React, { useState, useEffect, useContext } from "react";
 import { Modal, View, Text, TouchableOpacity, TextInput, ScrollView, StyleSheet, Alert } from "react-native";
+=======
+import React, { useState, useEffect } from "react";
+import {
+  Modal,
+  View,
+  Text,
+  TouchableOpacity,
+  TextInput,
+  ScrollView,
+  StyleSheet,
+} from "react-native";
+>>>>>>> parent of 87154a4 (Login Auth +StudentList)
 import RNPickerSelect from "react-native-picker-select";
 import DateTimePickerModal from "react-native-modal-datetime-picker";
 import { UserContext } from "../contexts/UserContext";
@@ -47,6 +60,7 @@ const IncidentReportModal = ({ visible, onClose, onSubmit }) => {
   const [isDateTimePickerVisible, setDateTimePickerVisible] = useState(false);
 
   useEffect(() => {
+<<<<<<< HEAD
     const fetchStudents = async () => {
       try {
         const snapshot = await getDocs(collection(firestore, "publicStudents"));
@@ -57,6 +71,9 @@ const IncidentReportModal = ({ visible, onClose, onSubmit }) => {
       }
     };
 
+=======
+    // Automatically set the "Date Reported" field to the current date when modal is visible
+>>>>>>> parent of 87154a4 (Login Auth +StudentList)
     if (visible) {
       fetchStudents();
       const currentDate = new Date().toLocaleDateString();
@@ -84,6 +101,7 @@ const IncidentReportModal = ({ visible, onClose, onSubmit }) => {
     setDateTimePickerVisible(false);
   };
 
+<<<<<<< HEAD
   const validateForm = () => {
     const requiredFields = ["dateTime", "location", "violationCategory", "violationType", "offender", "description"];
     for (let field of requiredFields) {
@@ -100,6 +118,11 @@ const IncidentReportModal = ({ visible, onClose, onSubmit }) => {
       onSubmit(formData);
       onClose();
     }
+=======
+  const handleSubmit = () => {
+    onSubmit(formData);
+    onClose();
+>>>>>>> parent of 87154a4 (Login Auth +StudentList)
   };
 
   return (
@@ -129,23 +152,48 @@ const IncidentReportModal = ({ visible, onClose, onSubmit }) => {
 
             <Text style={styles.label}>Violation Category:</Text>
             <RNPickerSelect
+<<<<<<< HEAD
               onValueChange={(value) => handleInputChange("violationCategory", value)}
               value={formData.violationCategory || ""}
               style={pickerStyles}
               items={[
                 { label: "Minor", value: "Minor" },
                 { label: "Major", value: "Major" },
+=======
+              onValueChange={(value) =>
+                handleInputChange("violationCategory", value)
+              }
+              value={formData.violationCategory}
+              style={pickerStyles}
+              items={[
+                { label: "Minor", value: "minor" },
+                { label: "Major", value: "major" },
+                { label: "Critical", value: "critical" },
+>>>>>>> parent of 87154a4 (Login Auth +StudentList)
               ]}
             />
 
             <Text style={styles.label}>Violation Type:</Text>
             <RNPickerSelect
+<<<<<<< HEAD
               onValueChange={(value) => handleInputChange("violationType", value)}
               value={formData.violationType || ""}
               style={pickerStyles}
               placeholder={{ label: "Select Violation Type", value: "" }}
               disabled={!formData.violationCategory}
               items={filteredViolationTypes}
+=======
+              onValueChange={(value) =>
+                handleInputChange("violationType", value)
+              }
+              value={formData.violationType}
+              style={pickerStyles}
+              items={[
+                { label: "Verbal", value: "verbal" },
+                { label: "Physical", value: "physical" },
+                { label: "Cyber", value: "cyber" },
+              ]}
+>>>>>>> parent of 87154a4 (Login Auth +StudentList)
             />
 
             <Text style={styles.label}>Victim:</Text>
@@ -254,6 +302,39 @@ const styles = StyleSheet.create({
   submitButtonText: { color: "#fff", fontWeight: "bold" },
   suggestionsContainer: {
     backgroundColor: "#fff",
+<<<<<<< HEAD
+=======
+    borderRadius: 10,
+    padding: 20,
+  },
+  closeButton: {
+    position: "absolute",
+    top: 10,
+    right: 10,
+    zIndex: 10,
+  },
+  closeButtonText: {
+    fontSize: 18,
+    fontWeight: "bold",
+    color: "#555",
+  },
+  modalTitle: {
+    fontSize: 20,
+    fontWeight: "bold",
+    color: "#1E1E1E",
+    marginBottom: 10,
+  },
+  scrollContent: {
+    paddingBottom: 20,
+  },
+  label: {
+    fontSize: 14,
+    fontWeight: "bold",
+    marginTop: 10,
+    marginBottom: 5,
+  },
+  input: {
+>>>>>>> parent of 87154a4 (Login Auth +StudentList)
     borderWidth: 1,
     borderColor: "#ccc",
     borderRadius: 5,

@@ -1,6 +1,7 @@
 import React, { useContext } from "react";
 import { View, ScrollView, StyleSheet, TouchableOpacity, Image, Platform, ToastAndroid, Text } from "react-native";
 import Header from "../parts/Header";
+import MenuBar from "../parts/MenuBar";
 import StudentCard from "../parts/StudentCard";
 import InfoCard from "../parts/InfoCard";
 import { SafeAreaView } from 'react-native-safe-area-context';
@@ -21,16 +22,21 @@ const ProfileScreen = () => {
         <Header title="Student Profile" />
       </View>
 
+<<<<<<< HEAD
       {student ? (
         <StudentCard student={student} />
       ) : (
         <Text style={styles.loadingText}>Loading student information...</Text> 
       )}
 
+=======
+      <StudentCard />
+>>>>>>> parent of 87154a4 (Login Auth +StudentList)
       <ScrollView contentContainerStyle={{ alignItems: "center" }}>
       <InfoCard
           title="Student Details"
           details={{
+<<<<<<< HEAD
             "First Name": student?.firstName || "-",
             "Middle Name": student?.middleName || "-",
             "Last Name": student?.lastName || "-",
@@ -39,6 +45,14 @@ const ProfileScreen = () => {
             "Year & Section": student?.year && student?.section ? `${student.year} - ${student.section}` : "-",
             Adviser: student?.adviser || "-",
             "Student Email": student?.studentEmail || "-",
+=======
+            "First Name": "",
+            "Middle Name": "",
+            "Last Name": "",
+            Gender: "",
+            "Birth Date": "",
+            Address: "",
+>>>>>>> parent of 87154a4 (Login Auth +StudentList)
           }}
         />
         <InfoCard

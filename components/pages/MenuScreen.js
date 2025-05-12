@@ -10,6 +10,7 @@ const screenWidth = Dimensions.get('window').width;
 const MenuScreen = ({ closeMenu }) => {
   const navigation = useNavigation();
   const route = useRoute();
+<<<<<<< HEAD
   const { student, userRole } = useContext(UserContext);
   const isFocused = useIsFocused();
 
@@ -75,6 +76,15 @@ const MenuScreen = ({ closeMenu }) => {
     ? `${student.firstName} ${student.lastName}` 
     : 'Student';
 
+=======
+  const { userRole } = route.params || {};  // ✅ Get userRole from route params
+  const isFocused = useIsFocused();
+
+  console.log('userRole from route:', userRole); 
+
+  
+  // Define the menu items for Admin
+>>>>>>> parent of 87154a4 (Login Auth +StudentList)
   const adminMenuItems = [
     { name: 'Home', icon: <MaterialIcons name="home" size={24} />, screen: 'DOHomeScreen' },
     { name: 'Violations', icon: <MaterialIcons name="gavel" size={24} />, screen: 'DOViolations' },
@@ -98,6 +108,7 @@ const MenuScreen = ({ closeMenu }) => {
 
   if (!menuVisible) return null; // Don't render if menu is hidden
 
+<<<<<<< HEAD
   return (
     <View style={StyleSheet.absoluteFill}>
       {/* Fade background */}
@@ -142,6 +153,62 @@ const MenuScreen = ({ closeMenu }) => {
           })}
         </ScrollView>
       </Animated.View>
+=======
+  const closeMenuHandler = () => {
+    setMenuVisible(false);
+    if (closeMenu) closeMenu();
+    navigation.goBack();
+  };
+
+  const handleNavigate = (screen) => {
+    if (route.name === screen) {
+
+      closeMenuHandler();
+      return;
+    }
+
+    navigation.navigate(screen, { userRole }); // pass userRole to next screen if needed
+    console.log('Navigating to:', screen);
+    closeMenuHandler();
+  };
+
+  return (
+    <View style={[styles.container, { display: menuVisible ? 'flex' : 'none' }]}>
+      <View style={styles.header}>
+        <Image source={require('../../assets/logo.png')} style={styles.logo} />
+        <TouchableOpacity onPress={closeMenuHandler}>
+          <Text style={styles.closeIcon}>✕</Text>
+        </TouchableOpacity>
+      </View>
+    
+      <View style={styles.userInfo}>
+        <Image source={require('../../assets/user.png')} style={styles.avatar} />
+        <Text style={styles.userName}>{userRole === 'admin' ? 'Admin' : 'Student'}</Text>
+      </View>
+
+      <ScrollView style={styles.menuList}>
+      {menuItems.map((item, index) => {
+        const isActive = route.name === item.screen;
+
+        return (
+          <TouchableOpacity
+            key={index}
+            style={[styles.menuItem, isActive && styles.activeItem]}
+            onPress={() => navigation.navigate(item.screen, { userRole })}
+          >
+            <View style={styles.iconContainer}>
+              {React.cloneElement(item.icon, {
+                color: isActive ? '#fff' : '#000',
+              })}
+            </View>
+            <Text style={[styles.menuText, isActive && styles.activeText]}>
+              {item.name}
+            </Text>
+          </TouchableOpacity>
+        );
+      })}
+      </ScrollView>
+>>>>>>> parent of 87154a4 (Login Auth +StudentList)
     </View>
   );
 };
@@ -166,7 +233,7 @@ const styles = StyleSheet.create({
     paddingTop: 40,
   },
   header: {
-    backgroundColor: '#0F296F',
+    backgroundColor: '#0057FF',
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'space-between',
@@ -194,7 +261,7 @@ const styles = StyleSheet.create({
   },
   userName: {
     marginTop: 10,
-    fontSize: 20,
+    fontSize: 16,
     fontWeight: 'bold',
   },
   menuList: {

@@ -13,10 +13,16 @@ import {
   Modal
 } from "react-native";
 import { FontAwesome } from "@expo/vector-icons";
+<<<<<<< HEAD
 import { Picker } from "@react-native-picker/picker";
 import Header from "../parts/Header";  // Adjust the import if necessary
 import AddAppointmentModal from "../parts/AddAppointmentModal";
 
+=======
+import DOMenuBar from "../parts/DOMenuBar";
+import AppointmentsMenu from "../parts/AppointmentsMenu";
+import Header from "../parts/Header";
+>>>>>>> parent of 87154a4 (Login Auth +StudentList)
 
 const DOAppointments = () => {
   const [searchQuery, setSearchQuery] = useState("");

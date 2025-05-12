@@ -3,6 +3,7 @@ import { View, ScrollView, StyleSheet, TouchableOpacity, Text, Image, Platform, 
 import { collection, query, where, getDocs } from "firebase/firestore";
 import { firestore } from "../backend/firebaseConfig"; 
 import Header from "../parts/Header";
+import MenuBar from "../parts/DOMenuBar";
 import DOStatCard from "../parts/DOStatCard"; 
 import AppointmentCard from "../parts/AppointmentCard";
 
@@ -58,9 +59,15 @@ const DOHomeScreen = () => {
   };
 
   const stats = [
+<<<<<<< HEAD
     { title: "Violation", count: loading ? "-" : violationCount, bgColor: "#D04B49", icon: require("../../assets/violation.png") },
     { title: "Incident Reports", count: loading ? "-" : underReviewCount, bgColor: "#169971", icon: require("../../assets/inc.png") },
     { title: "Appointment", count: 0, bgColor: "#10349E", icon: require("../../assets/appointment.png") },
+=======
+    { title: "Violation", count: 0, bgColor: "#FF5E5B", icon: require("../../assets/violation.png") },
+    { title: "Incident Reports", count: 0, bgColor: "#2BC999", icon: require("../../assets/inc.png") },
+    { title: "Appointment", count: 0, bgColor: "#2C62FF", icon: require("../../assets/appointment.png") },
+>>>>>>> parent of 87154a4 (Login Auth +StudentList)
   ];
 
   return (
@@ -115,7 +122,17 @@ const styles = StyleSheet.create({
     shadowRadius: 8,
     elevation: 5,
   },
+<<<<<<< HEAD
   sectionTitle: { fontSize: 30, fontWeight: "bold", marginLeft: 10, marginTop: 10, marginBottom: 10, color: "#0D078E" },
+=======
+  sectionTitle: {
+    fontSize: 30,
+    fontWeight: "bold",
+    marginTop: 10,
+    marginBottom: 10,
+    color: "#007AFF", // Blue title
+  },
+>>>>>>> parent of 87154a4 (Login Auth +StudentList)
   fab: {
     position: "absolute",
     bottom: 20,

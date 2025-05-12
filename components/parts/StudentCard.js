@@ -1,20 +1,22 @@
 import React from "react";
-import { View, Text, Image, StyleSheet, TouchableOpacity } from "react-native";
+import { View, Text, Image, StyleSheet,TouchableOpacity } from "react-native";
 
 const StudentCard = ({ student, onPress }) => {
   return (
     <TouchableOpacity style={styles.profileCard} onPress={onPress}>
       <View style={styles.card}>
         <View style={styles.header} />
+
         <View style={styles.body}>
           <View style={styles.imagePlaceholder}>
             <Image source={require("../../assets/user.png")} style={styles.avatar} />
           </View>
+
           <View style={styles.textContainer}>
-            <Text style={styles.name}>{student.firstName} {student.lastName}</Text>
-            <Text style={styles.studentNo}>Student No: {student.studentNo}</Text>
-            <Text style={styles.details}>Year & Section: {student.year} - {student.section}</Text>
-            <Text style={styles.details}>School Year: 2024-2025</Text>
+            <Text style={styles.name}>Student Name</Text>
+            <Text style={styles.studentNo}>Student No.</Text>
+            <Text style={styles.details}>Year & Section:</Text>
+            <Text style={styles.details}>School Year:</Text>
           </View>
         </View>
       </View>
@@ -29,13 +31,13 @@ const styles = StyleSheet.create({
     borderRadius: 10,
     overflow: "hidden",
     elevation: 3,
-    width: 350,
+    width: 350, 
     marginBottom: 20,
     height: 175,
   },
   header: {
-    backgroundColor: "#0F296F",
-    height: 30,
+    backgroundColor: "#0057FF",
+    height: 30, 
     borderTopLeftRadius: 10,
     borderTopRightRadius: 10,
   },
@@ -64,7 +66,7 @@ const styles = StyleSheet.create({
     fontWeight: "bold",
   },
   studentNo: {
-    fontSize: 16,
+    fontSize: 16  ,
     fontWeight: "bold",
     marginBottom: 5,
     borderBottomWidth: 1,

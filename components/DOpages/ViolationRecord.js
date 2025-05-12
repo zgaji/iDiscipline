@@ -2,14 +2,18 @@ import React, { useState } from "react";
 import { View, Text, Image, TouchableOpacity, StyleSheet, ScrollView, Platform, ToastAndroid } from "react-native";
 import { Picker } from "@react-native-picker/picker";
 import Header from "../parts/Header";
+import MenuBar from "../parts/DOMenuBar";
 import StudentCard from "../parts/StudentCard";
 import ViolationCaseCard from "../parts/ViolationCaseCard";
 import { useRoute } from "@react-navigation/native";
 import CaseDetailModal from "../parts/CaseDetailModal";
 
 const ViolationRecord = ({ navigation }) => {
+<<<<<<< HEAD
   const route = useRoute();
   const { student } = route.params || {};
+=======
+>>>>>>> parent of 87154a4 (Login Auth +StudentList)
   const [selectedFilter, setSelectedFilter] = useState("All");
   const [sortOrder, setSortOrder] = useState("Highest");
   const [selectedCase, setSelectedCase] = useState(null);
@@ -77,11 +81,18 @@ const ViolationRecord = ({ navigation }) => {
         <StudentCard student={student} />
       </View>
 
+<<<<<<< HEAD
       {/* Filter Row */}
       <View style={styles.filterRow}>
       <View style={styles.buttonGroup}>
         <ScrollView horizontal showsHorizontalScrollIndicator={false} contentContainerStyle={styles.centeredButtons}>
           {["All", "Major Offense", "Minor Offense", "Archive"].map((filter) => (
+=======
+        <StudentCard></StudentCard>
+        <View style={styles.filterContainer}>
+        <ScrollView horizontal showsHorizontalScrollIndicator={false}>
+          {["All", "Major Offense", "Minor Offense"].map((filter) => (
+>>>>>>> parent of 87154a4 (Login Auth +StudentList)
             <TouchableOpacity
               key={filter}
               style={[styles.filterButton, selectedFilter === filter && styles.activeFilter]}

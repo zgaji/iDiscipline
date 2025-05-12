@@ -1,6 +1,11 @@
 import React, { useState, useEffect } from "react";
 import { View, Text, TextInput, TouchableOpacity, ScrollView, Modal, StyleSheet, Platform, ToastAndroid } from "react-native";
 import { FontAwesome } from "@expo/vector-icons";
+<<<<<<< HEAD
+=======
+import DOMenuBar from "../parts/DOMenuBar";
+import DOViolationsDetails from "./DOViolationsDetails";
+>>>>>>> parent of 87154a4 (Login Auth +StudentList)
 import Header from "../parts/Header";
 import AddViolationModal from "../parts/AddViolationModal";
 import { collection, getDocs } from "firebase/firestore";

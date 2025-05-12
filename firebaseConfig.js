@@ -1,9 +1,18 @@
 // firebaseConfig.js
+<<<<<<< HEAD:components/backend/firebaseConfig.js
 import { initializeApp, getApps } from 'firebase/app';
 import { getAuth, initializeAuth, getReactNativePersistence } from 'firebase/auth';
 import { getFirestore } from 'firebase/firestore';
 import { getStorage } from 'firebase/storage';
 import ReactNativeAsyncStorage from '@react-native-async-storage/async-storage';
+=======
+
+import { initializeApp } from 'firebase/app';
+import { getAuth, initializeAuth, getReactNativePersistence } from 'firebase/auth'; 
+import { getFirestore } from 'firebase/firestore'; 
+import { getStorage } from 'firebase/storage'; 
+import ReactNativeAsyncStorage from '@react-native-async-storage/async-storage';  // Import AsyncStorage
+>>>>>>> parent of 87154a4 (Login Auth +StudentList):firebaseConfig.js
 
 // Main config
 const firebaseConfig = {

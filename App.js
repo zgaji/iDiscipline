@@ -1,10 +1,16 @@
 import React, { useContext } from 'react';
 import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
+<<<<<<< HEAD
+=======
+import { auth } from './firebaseConfig';
+import { onAuthStateChanged } from 'firebase/auth';
+>>>>>>> parent of 87154a4 (Login Auth +StudentList)
 import { Text } from 'react-native';
 import { UserProvider, UserContext } from './components/contexts/UserContext'; // ✅ import context
 
 
+// Screens
 import LoginScreen from './components/pages/LoginScreen';
 import HomeScreen from './components/pages/HomeScreen';
 import DOHomeScreen from './components/DOpages/DOHomeScreen';
@@ -21,6 +27,7 @@ import IncidentReportsScreen from './components/pages/IncidentReportsScreen';
 import HandbookScreen from './components/pages/HandbookScreen';
 import ProfileScreen from './components/pages/ProfileScreen';
 import RedirectScreen from './components/pages/RedirectScreen'; 
+<<<<<<< HEAD
 import ViolationDetailsScreen from './components/pages/ViolationDetailsScreen'; 
 import ViolationSlipScreen from './components/pages/ViolationSlipScreen'; 
 import ChatPortalScreen from './components/pages/ChatPortalScreen';
@@ -63,6 +70,60 @@ const AppNavigation = () => {
         <Stack.Screen name="ViolationRecord" component={ViolationRecord} />
         </Stack.Navigator>
     </NavigationContainer>
+=======
+
+const Stack = createStackNavigator();
+
+export default function App() {
+  const [isAuthenticated, setIsAuthenticated] = useState(false);
+  const [userRole, setUserRole] = useState('');
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    const unsubscribe = onAuthStateChanged(auth, user => {
+      if (user) {
+        setUserRole(user.email === 'admin@email.com' ? 'admin' : 'student');
+        setIsAuthenticated(true);
+      } else {
+        setIsAuthenticated(false);
+        setUserRole('');
+      }
+      setLoading(false);
+    });
+
+    return () => unsubscribe();
+  }, []);
+
+  if (loading) return <Text>Loading...</Text>;
+
+  return (
+    <NavigationContainer>
+      <Stack.Navigator screenOptions={{ headerShown: false }}>
+      <Stack.Screen
+        name="RedirectScreen"
+        component={RedirectScreen}
+        initialParams={{ isAuthenticated, userRole }} // Pass initial params to the screen
+      />
+      <Stack.Screen name="LoginScreen" component={LoginScreen} />
+      <Stack.Screen name="HomeScreen" component={HomeScreen} />
+      <Stack.Screen name="DOHomeScreen" component={DOHomeScreen} />
+      <Stack.Screen name="MenuScreen" component={MenuScreen} initialParams={{ userRole }} />
+      <Stack.Screen name="DOViolations" component={DOViolations} />
+      <Stack.Screen name="DOStudentList" component={DOStudentList} />
+      <Stack.Screen name="DOStudentProfile" component={StudentProfileScreen} />
+      <Stack.Screen name="DOIncidentReports" component={IncidentReports} />
+      <Stack.Screen name="DOAppointments" component={DOAppointments} />
+      <Stack.Screen name="ReportsScreen" component={ReportsScreen} />
+      <Stack.Screen name="DOHandbookScreen" component={DOHandbookScreen} />
+      <Stack.Screen name="ViolationsScreen" component={ViolationsScreen} />
+      <Stack.Screen name="IncidentReportsScreen" component={IncidentReportsScreen} />
+      <Stack.Screen name="HandbookScreen" component={HandbookScreen} />
+      <Stack.Screen name="ProfileScreen" component={ProfileScreen} />
+      
+    </Stack.Navigator>
+</NavigationContainer>
+
+>>>>>>> parent of 87154a4 (Login Auth +StudentList)
   );
 };
 export default function App() {

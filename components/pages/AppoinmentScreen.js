@@ -4,7 +4,7 @@ import Header from "../parts/Header";  // Make sure Header exists and is properl
 import MenuBar from "../parts/MenuBar";  // Ensure MenuBar component is available
 import CalendarView from "../parts/CalendarView";  // Check CalendarView component for correct import
 
-const AppointmentScreen = () => {
+const AppointmentsScreen = () => {
 
   const handleChatbotClick = () => {
     if (Platform.OS === "android") {
@@ -50,4 +50,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default AppointmentScreen;
+export default AppointmentsScreen;

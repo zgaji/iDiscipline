@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import { View, Text, StyleSheet,Platform,ToastAndroid,Image, TouchableOpacity, ScrollView, } from "react-native";
+import DOMenuBar from "../parts/DOMenuBar";
 import Header from "../parts/Header";
 
 
@@ -15,6 +16,9 @@ const ReportsScreen = () => {
     <View style={{ flex: 1, backgroundColor: "#F4F9FC", padding: 20, marginTop: 30 }}>
       <View style={{ marginBottom: 15 }}> 
         <Header title="Report" />
+      </View>
+      <View style={{ marginBottom: 15 }}> 
+        <DOMenuBar activeTab="Report"/>
       </View>
       {/* Page Title */}
       <Text style={styles.title}>Reports</Text>

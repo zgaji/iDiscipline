@@ -2,6 +2,7 @@ import React, { useState, useContext } from "react";
 import { View, ScrollView, StyleSheet, TouchableOpacity, Text, Image, ToastAndroid, Platform } from "react-native";
 import { Picker } from "@react-native-picker/picker";
 import Header from "../parts/Header";
+import MenuBar from "../parts/MenuBar";
 import ViolationCard from "../parts/ViolationCard";
 import { UserContext } from "../contexts/UserContext"; // ✅ import
 
