@@ -1,7 +1,8 @@
+// DOHomeScreen with Supabase Integration (Fully Optimized)
+
 import React, { useState, useEffect } from "react";
 import { View, ScrollView, StyleSheet, TouchableOpacity, Text, Image, Platform, ToastAndroid } from "react-native";
-import { collection, query, where, getDocs } from "firebase/firestore";
-import { firestore } from "../backend/firebaseConfig"; 
+import supabase from '../backend/supabaseClient';
 import Header from "../parts/Header";
 import DOStatCard from "../parts/DOStatCard"; 
 import AppointmentCard from "../parts/AppointmentCard";
@@ -20,36 +21,30 @@ const DOHomeScreen = () => {
   useEffect(() => {
     fetchIncidentReports();
     fetchViolations();
-  
+
     const interval = setInterval(() => {
       fetchIncidentReports();
       fetchViolations();
     }, 10000);
-  
+
     return () => clearInterval(interval); 
   }, []);
-  
+
   const fetchViolations = async () => {
     try {
-      const snapshot = await getDocs(collection(firestore, "violations"));
-      setViolationCount(snapshot.size); // snapshot.size = total documents
+      const { data, error } = await supabase.from('violations').select('*');
+      if (error) throw error;
+      setViolationCount(data.length);
     } catch (error) {
       console.error("Error fetching violations:", error);
     }
   };
-  
 
   const fetchIncidentReports = async () => {
     try {
-      const q = query(
-        collection(firestore, "incidentReports"),
-        where("status", "==", "Under Review")
-      );
-
-      const snapshot = await getDocs(q);
-      const reports = snapshot.docs.map((doc) => ({ id: doc.id, ...doc.data() }));
-
-      setUnderReviewCount(reports.length);
+      const { data, error } = await supabase.from('incident_reports').select('*').eq('status', 'Under Review');
+      if (error) throw error;
+      setUnderReviewCount(data.length);
     } catch (error) {
       console.error("Error fetching incident reports:", error);
     } finally {
@@ -73,12 +68,7 @@ const DOHomeScreen = () => {
         <View style={styles.cardContainer}>
           {stats.map((item, index) => (
             <View style={styles.cardRow} key={index}>
-              <DOStatCard
-                title={item.title}
-                icon={item.icon}
-                count={item.count}
-                bgColor={item.bgColor}
-              />
+              <DOStatCard title={item.title} icon={item.icon} count={item.count} bgColor={item.bgColor} />
             </View>
           ))}
         </View>

@@ -7,6 +7,7 @@
     "icon": "./assets/icon.png",
     "userInterfaceStyle": "light",
     "newArchEnabled": true,
+    "sdkVersion": "53.0.0", 
     "splash": {
       "image": "./assets/splash-icon.png",
       "resizeMode": "contain",
@@ -14,27 +15,47 @@
     },
     "ios": {
       "supportsTablet": true,
+      "bundleIdentifier": "com.yourcompany.idiscipline", 
+      "buildNumber": "1.0.0",
       "infoPlist": {
         "NSDocumentsDirectoryUsageDescription": "This app needs access to the device storage to save and open PDFs."
       }
     },
     "android": {
+      "package": "com.yourcompany.idiscipline",
       "permissions": [
         "READ_EXTERNAL_STORAGE",
         "WRITE_EXTERNAL_STORAGE",
-        "INTERNET"
+        "INTERNET",
+        "ACCESS_NETWORK_STATE", 
+        "WAKE_LOCK" 
       ],
       "adaptiveIcon": {
         "foregroundImage": "./assets/adaptive-icon.png",
         "backgroundColor": "#ffffff"
-      }
+      },
+      "softwareKeyboardLayoutMode": "pan" 
     },
     "web": {
       "favicon": "./assets/favicon.png"
     },
+    "plugins": [
+      "expo-updates", 
+      "expo-asset" 
+    ],
     "updates": {
+      "enabled": true,
+      "checkAutomatically": "ON_LOAD", 
       "fallbackToCacheTimeout": 0
     },
-    "assetBundlePatterns": ["**/*"]
+    "assetBundlePatterns": ["**/*"],
+    "runtimeVersion": {
+      "policy": "sdkVersion" 
+    },
+    "extra": {
+      "eas": {
+        "projectId": "ee424f8c-dcc3-4b6d-8017-bbd18aecd622" 
+      }
+    }
   }
 }

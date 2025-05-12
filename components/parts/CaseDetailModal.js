@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { Modal, View, Text, StyleSheet, TouchableOpacity, ScrollView, Alert, Platform, TextInput } from "react-native";
-import RNHTMLtoPDF from 'react-native-html-to-pdf'; // Import PDF library
+import * as Print from 'expo-print';
 import EditViolationModal from "./EditViolationModal"; // Import the Edit Violation Modal
 
 const CaseDetailModal = ({ visible, onClose, caseData, onEdit }) => {
@@ -27,41 +27,34 @@ const CaseDetailModal = ({ visible, onClose, caseData, onEdit }) => {
   };
 
   // Function to generate and download the PDF
-  const handleDownloadPDF = async () => {
-    try {
-      const htmlContent = `
-        <h1>Case #${caseData.id}</h1>
-        <p><strong>Student Name:</strong> ${caseData.offender || "N/A"}</p>
-        <p><strong>Status:</strong> ${caseData.status || "Pending"}</p>
-        <p><strong>Violation Category:</strong> ${caseData.violationCategory || "N/A"}</p>
-        <p><strong>Violation Type:</strong> ${caseData.violationType || "N/A"}</p>
-        <p><strong>Date & Time Reported:</strong> ${caseData.DateReported + caseData.time || "N/A"}</p>
-        <p><strong>Description:</strong> ${caseData.description || "N/A"}</p>
-        <hr/>
-        <h2>Updates</h2>
-        ${caseData.updates && caseData.updates.length > 0
-          ? caseData.updates.map((update, index) => (
-            `<p>${index + 1}. ${update.title} - ${formatDate(update.date)}</p>`
-          )).join('')
-          : '<p>No updates available.</p>'
-        }
-      `;
+const handleDownloadPDF = async () => {
+  try {
+    const htmlContent = `
+      <h1>Case #${caseData.id}</h1>
+      <p><strong>Student Name:</strong> ${caseData.offender || "N/A"}</p>
+      <p><strong>Status:</strong> ${caseData.status || "Pending"}</p>
+      <p><strong>Violation Category:</strong> ${caseData.violationCategory || "N/A"}</p>
+      <p><strong>Violation Type:</strong> ${caseData.violationType || "N/A"}</p>
+      <p><strong>Date & Time Reported:</strong> ${caseData.DateReported + caseData.time || "N/A"}</p>
+      <p><strong>Description:</strong> ${caseData.description || "N/A"}</p>
+      <hr/>
+      <h2>Updates</h2>
+      ${caseData.updates && caseData.updates.length > 0
+        ? caseData.updates.map((update, index) => (
+          `<p>${index + 1}. ${update.title} - ${formatDate(update.date)}</p>`
+        )).join('')
+        : '<p>No updates available.</p>'
+      }
+    `;
 
-      const options = {
-        html: htmlContent,
-        fileName: 'case_details',
-        directory: 'Documents',
-      };
+    const { uri } = await Print.printToFileAsync({ html: htmlContent });
+    Alert.alert("PDF Created", `PDF has been created at ${uri}`);
+  } catch (error) {
+    console.error("Error generating PDF:", error);
+    Alert.alert('Error', 'Failed to generate the PDF.');
+  }
+};
 
-      const file = await RNHTMLtoPDF.convert(options);
-
-      console.log('PDF saved to:', file.filePath);
-      Alert.alert('PDF Created', `The PDF has been created and saved at ${file.filePath}`);
-    } catch (error) {
-      console.error("Error generating PDF:", error);
-      Alert.alert('Error', 'Failed to generate the PDF.');
-    }
-  };
 
   return (
     <Modal transparent={true} visible={visible} animationType="slide" onRequestClose={onClose}>

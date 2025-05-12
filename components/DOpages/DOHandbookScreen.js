@@ -1,3 +1,5 @@
+// DOHandbookScreen with Optimized PDF Handling (Retained Design and Layout)
+
 import React, { useEffect, useState } from "react";
 import { View, Image, StyleSheet, TouchableOpacity, Platform, ToastAndroid, Button, Alert } from "react-native";
 import Header from "../parts/Header";
@@ -10,24 +12,26 @@ const DOHandbookScreen = () => {
   const [fileUri, setFileUri] = useState(null);
 
   useEffect(() => {
-    const checkAndDownloadPDF = async () => {
-      try {
-        const localFileUri = `${FileSystem.documentDirectory}shb25.pdf`;
-        const fileInfo = await FileSystem.getInfoAsync(localFileUri);
-
-        if (!fileInfo.exists) {
-          console.log("Downloading PDF...");
-          const { uri } = await FileSystem.downloadAsync(pdfUrl, localFileUri);
-          console.log("Download complete:", uri);
-        }
-        setFileUri(localFileUri);
-      } catch (error) {
-        console.error("Error downloading PDF:", error);
-      }
-    };
-
     checkAndDownloadPDF();
   }, []);
+
+  const checkAndDownloadPDF = async () => {
+    try {
+      const localFileUri = `${FileSystem.documentDirectory}shb25.pdf`;
+      const fileInfo = await FileSystem.getInfoAsync(localFileUri);
+
+      if (!fileInfo.exists) {
+        console.log("Downloading PDF...");
+        const { uri } = await FileSystem.downloadAsync(pdfUrl, localFileUri);
+        console.log("Download complete:", uri);
+      }
+
+      setFileUri(localFileUri);
+    } catch (error) {
+      console.error("Error downloading PDF:", error);
+      Alert.alert("Error", "Unable to download PDF. Please try again later.");
+    }
+  };
 
   const handleChatbotClick = () => {
     if (Platform.OS === "android") {
@@ -53,11 +57,12 @@ const DOHandbookScreen = () => {
     <View style={{ flex: 1, backgroundColor: "#F4F9FC", padding: 20, marginTop: 30 }}>
       <Header title="Student Handbook" />
 
-      {/* Online PDF Viewer using Google Docs */}
+      {/* Online PDF Viewer using WebView */}
       <View style={{ flex: 1, height: 500 }}>
         <WebView 
-          source={{ uri: `https://docs.google.com/gview?embedded=true&url=${pdfUrl}` }} 
+          source={{ uri: pdfUrl }} 
           style={{ flex: 1 }} 
+          originWhitelist={['*']}
         />
       </View>
 

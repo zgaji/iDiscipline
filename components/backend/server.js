@@ -1,8 +1,11 @@
+// server.js (Express + WebSocket Server)
 import express from 'express';
 import sgMail from '@sendgrid/mail';
 import bodyParser from 'body-parser';
 import dotenv from 'dotenv';
 import cors from 'cors';
+import { WebSocketServer } from 'ws';
+import http from 'http';
 
 dotenv.config();
 sgMail.setApiKey(process.env.SENDGRID_API_KEY);
@@ -16,9 +19,10 @@ app.use(bodyParser.json());
 
 // Health check endpoint
 app.get('/', (req, res) => {
-  res.send('✅ Email Service is Running!');
+  res.send('✅ Email & WebSocket Service is Running!');
 });
 
+// Email Service Endpoint
 app.post('/send-password', async (req, res) => {
   const { toEmail, password } = req.body;
 
@@ -39,6 +43,31 @@ app.post('/send-password', async (req, res) => {
   }
 });
 
-app.listen(port, () => {
-  console.log(`Backend server running at http://localhost:${port}`);
+// ✅ WebSocket Server Integration
+const server = http.createServer(app);
+const wss = new WebSocketServer({ server });
+
+wss.on('connection', (ws) => {
+  console.log('✅ New WebSocket connection established.');
+
+  ws.on('message', (message) => {
+    console.log('📩 Message received:', message);
+    
+    // Broadcast message to all connected clients
+    wss.clients.forEach((client) => {
+      if (client !== ws && client.readyState === ws.OPEN) {
+        client.send(message);
+      }
+    });
+  });
+
+  ws.on('close', () => {
+    console.log('🔌 WebSocket connection closed.');
+  });
+});
+
+// Start the combined Express + WebSocket server
+server.listen(port, () => {
+  console.log(`✅ Backend server running at http://localhost:${port}`);
+  console.log(`✅ WebSocket server running at ws://localhost:${port}`);
 });

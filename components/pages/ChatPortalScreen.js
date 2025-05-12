@@ -1,76 +1,50 @@
-import React, { useState } from "react";
-import {
-  View,
-  Text,
-  ScrollView,
-  TouchableOpacity,
-  StyleSheet,
-  TextInput,
-} from "react-native";
-import { FontAwesome } from "@expo/vector-icons";
-import Header from "../parts/Header";
-import CaseDetails from "../parts/CaseDetails";
-import { useRoute, useNavigation } from "@react-navigation/native";
+// Enhanced ChatPortalScreen.js - Real-time Chat Interface
+import React, { useContext, useState, useEffect, useRef } from 'react';
+import { View, Text, TextInput, TouchableOpacity, ScrollView, StyleSheet } from 'react-native';
+import { UserContext } from '../contexts/UserContext';
 
 const ChatPortalScreen = () => {
-  const [modalVisible, setModalVisible] = useState(false);
-  const [message, setMessage] = useState("");
-  const navigation = useNavigation();
-  const [selectedCase, setSelectedCase] = useState({
-    id: 1,
-    studentName: "John Doe",
-    dateSent: "Dec 25 2025",
-    status: "Pending",
-    category: "Major",
-    violation: "Disruptive Behavior",
-    timeReported: "10:30 AM",
-    notes: "Student was reported for loud behavior in the library."
-  });
+  const { messages, sendMessage, userRole, student } = useContext(UserContext);
+  const [newMessage, setNewMessage] = useState('');
+  const scrollViewRef = useRef();
+
+  const handleSendMessage = () => {
+    if (newMessage.trim()) {
+      sendMessage(newMessage);
+      setNewMessage('');
+    }
+  };
+
+  useEffect(() => {
+    // Automatically scroll to the bottom when a new message arrives
+    scrollViewRef.current?.scrollToEnd({ animated: true });
+  }, [messages]);
 
   return (
     <View style={styles.container}>
-      <Header title="Chat" />
-      <TouchableOpacity 
-        style={styles.dropdownIcon} 
-        onPress={() => navigation.navigate("ViolationDetailsScreen", { type: selectedCase.category, count: 3 })}
-      >
-        <FontAwesome name="angle-down" size={24} color="#999" />
-      </TouchableOpacity>
-      
-      {/* Case Details Section */}
-      <TouchableOpacity style={styles.caseDetails} onPress={() => setModalVisible(true)}>
-        <Text style={styles.caseDetailsText}>Case Details:</Text>
-        <FontAwesome name="angle-right" size={18} color="#000" />
-      </TouchableOpacity>
-      
-      {/* Chat Messages */}
-      <ScrollView contentContainerStyle={styles.chatContainer}>
-        <View style={styles.messageBubble}>
-          <View style={styles.avatar} />
-          <View style={styles.messageContent}>
-            <Text style={styles.senderName}>Disciplinary Officer</Text>
-            <Text style={styles.messageText}>This is a reminder regarding your violation.</Text>
-            <Text style={styles.messageDate}>Thursday - Dec. 25, 2025</Text>
+      <ScrollView ref={scrollViewRef} style={styles.chatContainer}>
+        {messages.map((msg, index) => (
+          <View
+            key={index}
+            style={msg.sender === (userRole === 'admin' ? 'Disciplinary Officer' : student?.studentEmail) ? styles.sentMessage : styles.receivedMessage}
+          >
+            <Text style={styles.messageSender}>{msg.sender}</Text>
+            <Text style={styles.messageText}>{msg.content}</Text>
           </View>
-        </View>
+        ))}
       </ScrollView>
 
-      {/* Message Input Section */}
       <View style={styles.inputContainer}>
-        <TextInput
+        <TextInput 
           style={styles.input}
-          placeholder="Chat Here..."
-          value={message}
-          onChangeText={setMessage}
-          editable={!modalVisible} // Disable input when modal is open
+          placeholder='Type your message...'
+          value={newMessage}
+          onChangeText={setNewMessage}
         />
-        <TouchableOpacity style={[styles.sendButton, modalVisible && styles.disabledButton]} disabled={modalVisible}>
-          <Text style={styles.sendText}>Send</Text>
+        <TouchableOpacity style={styles.sendButton} onPress={handleSendMessage}>
+          <Text style={styles.sendButtonText}>Send</Text>
         </TouchableOpacity>
       </View>
-
-      {/* Case Details Modal */}
-      <CaseDetails visible={modalVisible} caseData={selectedCase} onClose={() => setModalVisible(false)} />
     </View>
   );
 };
@@ -78,88 +52,63 @@ const ChatPortalScreen = () => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: "#F4F7FC",
-  },
-  caseDetails: {
-    flexDirection: "row",
-    alignItems: "center",
-    justifyContent: "space-between",
-    backgroundColor: "#fff",
-    padding: 15,
-    margin: 15,
-    borderRadius: 10,
-    elevation: 3,
-  },
-  caseDetailsText: {
-    fontWeight: "bold",
+    backgroundColor: '#F5F5F5',
+    padding: 10
   },
   chatContainer: {
-    paddingHorizontal: 20,
-    paddingBottom: 50,
+    flex: 1,
+    marginBottom: 10
   },
-  messageBubble: {
-    flexDirection: "row",
-    alignItems: "center",
-    marginVertical: 10,
-  },
-  avatar: {
-    width: 30,
-    height: 30,
-    borderRadius: 15,
-    backgroundColor: "#ccc",
-    marginRight: 10,
-  },
-  messageContent: {
-    backgroundColor: "#007AFF",
+  sentMessage: {
+    alignSelf: 'flex-end',
+    backgroundColor: '#DCF8C6',
     padding: 10,
     borderRadius: 10,
+    marginVertical: 5,
+    maxWidth: '75%'
   },
-  senderName: {
-    fontWeight: "bold",
-    color: "#fff",
-    marginBottom: 5,
+  receivedMessage: {
+    alignSelf: 'flex-start',
+    backgroundColor: '#ECECEC',
+    padding: 10,
+    borderRadius: 10,
+    marginVertical: 5,
+    maxWidth: '75%'
+  },
+  messageSender: {
+    fontWeight: 'bold',
+    marginBottom: 2
   },
   messageText: {
-    color: "#fff",
-  },
-  messageDate: {
-    fontSize: 12,
-    color: "#ddd",
+    fontSize: 16
   },
   inputContainer: {
-    flexDirection: "row",
-    alignItems: "center",
-    padding: 10,
-    borderTopWidth: 1,
-    borderColor: "#ddd",
-    backgroundColor: "#fff",
+    flexDirection: 'row',
+    alignItems: 'center',
+    backgroundColor: '#FFFFFF',
+    padding: 8,
+    borderRadius: 8,
+    elevation: 3
   },
   input: {
     flex: 1,
-    padding: 10,
+    height: 40,
+    borderColor: '#ddd',
     borderWidth: 1,
-    borderColor: "#ddd",
-    borderRadius: 10,
-    backgroundColor: "#f9f9f9",
+    borderRadius: 5,
+    paddingHorizontal: 10
   },
   sendButton: {
-    backgroundColor: "#007AFF",
-    paddingVertical: 10,
-    paddingHorizontal: 20,
-    borderRadius: 10,
     marginLeft: 10,
+    backgroundColor: '#007AFF',
+    paddingVertical: 8,
+    paddingHorizontal: 15,
+    borderRadius: 5
   },
-  sendText: {
-    color: "#fff",
-    fontWeight: "bold",
-  },
-  disabledButton: {
-    backgroundColor: "#ccc",
-  },
-  dropdownIcon: {
-    alignSelf: "center",
-    marginVertical: 10,
-  },
+  sendButtonText: {
+    color: '#FFFFFF',
+    fontWeight: 'bold'
+  }
 });
 
 export default ChatPortalScreen;

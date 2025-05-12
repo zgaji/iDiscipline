@@ -4,7 +4,6 @@ import { createStackNavigator } from '@react-navigation/stack';
 import { Text } from 'react-native';
 import { UserProvider, UserContext } from './components/contexts/UserContext'; // ✅ import context
 
-
 import LoginScreen from './components/pages/LoginScreen';
 import HomeScreen from './components/pages/HomeScreen';
 import DOHomeScreen from './components/DOpages/DOHomeScreen';

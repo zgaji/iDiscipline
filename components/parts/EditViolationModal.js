@@ -12,10 +12,9 @@ import {
   Platform,
 } from "react-native";
 import RNPickerSelect from "react-native-picker-select";
-import { doc, updateDoc } from "firebase/firestore";
-import { firestore } from "../backend/firebaseConfig";
 import AutoSuggestInput from "../parts/AutoSuggestInput";
-import { collection, getDocs, query, where } from "firebase/firestore";
+import supabase from "../backend/supabaseClient"; // ✅ Use Supabase instead
+
 
 const EditViolationModal = ({ visible, onClose, violationData, onSubmit }) => {
   const [formData, setFormData] = useState({
@@ -39,31 +38,35 @@ const EditViolationModal = ({ visible, onClose, violationData, onSubmit }) => {
   });
   
   const handleArchive = async () => {
-    setIsSubmitting(true);
-    try {
-      const violationRef = doc(firestore, "violations", formData.id);
-  
-      const newUpdate = {
-        title: "Archived by Disciplinary Officer",
-        date: new Date().toISOString(),
-      };
-      const updatedUpdates = [...(formData.updates || []), newUpdate];
-  
-      await updateDoc(violationRef, {
+  setIsSubmitting(true);
+  try {
+    const newUpdate = {
+      title: "Archived by Disciplinary Officer",
+      date: new Date().toISOString(),
+    };
+    const updatedUpdates = [...(formData.updates || []), newUpdate];
+
+    const { data, error } = await supabase
+      .from("violations") // Replace with your actual table name
+      .update({
         status: "Archived",
         updates: updatedUpdates,
-      });
-  
-      showSuccessToast();
-      onSubmit();
-      onClose();
-    } catch (error) {
-      console.error("Error archiving violation:", error);
-      Alert.alert("Error", "Failed to archive violation.");
-    } finally {
-      setIsSubmitting(false);
-    }
-  };
+      })
+      .eq("caseNo", formData.caseNo); // Make sure to use the correct identifier
+
+    if (error) throw error;
+
+    showSuccessToast();
+    onSubmit();
+    onClose();
+  } catch (error) {
+    console.error("Error archiving violation:", error);
+    Alert.alert("Error", "Failed to archive violation.");
+  } finally {
+    setIsSubmitting(false);
+  }
+};
+
 
   const violationTypes = [
     { type: "Minor Offense", title: "Tardiness" },
@@ -83,23 +86,28 @@ const EditViolationModal = ({ visible, onClose, violationData, onSubmit }) => {
 
   // Fetch student data from Firestore
   useEffect(() => {
-    const fetchStudents = async () => {
-      try {
-        const q = query(collection(firestore, "users"), where("role", "==", "student"));
-        const snapshot = await getDocs(q);
-        const list = snapshot.docs.map((doc) => ({
-          id: doc.id,
-          studentNo: doc.data().studentNo,
-          fullName: `${doc.data().firstName} ${doc.data().lastName}`,
-          ...doc.data(),
-        }));
-        setStudents(list);
-      } catch (error) {
-        console.error("Error fetching students:", error);
-      }
-    };
-    fetchStudents();
-  }, []);
+  const fetchStudents = async () => {
+    try {
+      const { data, error } = await supabase
+        .from("students") // Replace with your actual table name
+        .select("*");
+
+      if (error) throw error;
+
+      const list = data.map((student) => ({
+        id: student.studentid,
+        studentNo: student.studentno,
+        fullName: `${student.firstname} ${student.lastname}`,
+        ...student,
+      }));
+      setStudents(list);
+    } catch (error) {
+      console.error("Error fetching students:", error);
+    }
+  };
+  fetchStudents();
+}, []);
+
 
   // Update form data when modal becomes visible and violation data changes
   useEffect(() => {
@@ -125,19 +133,20 @@ const EditViolationModal = ({ visible, onClose, violationData, onSubmit }) => {
   };
 
   // Validate the form before submitting
-  const validateForm = () => {
-    const requiredFields = [
-      "location", "violationCategory", "violationType", "offender", "description",
-      "month", "day", "year", "time"
-    ];
-    for (let field of requiredFields) {
-      if (!formData[field]) {
-        Alert.alert("Validation Error", `Please fill in ${field.replace(/([A-Z])/g, " $1").toLowerCase()}.`);
-        return false;
-      }
+const validateForm = () => {
+  const requiredFields = [
+    "location", "violationCategory", "violationType", "offender", "description",
+    "month", "day", "year", "time"
+  ];
+  for (let field of requiredFields) {
+    if (!formData[field]) {
+      Alert.alert("Validation Error", `Please fill in ${field.replace(/([A-Z])/g, " $1").toLowerCase()}.`);
+      return false;
     }
-    return true;
-  };
+  }
+  return true;
+};
+
 
   // Show success toast
   const showSuccessToast = () => {
@@ -149,26 +158,41 @@ const EditViolationModal = ({ visible, onClose, violationData, onSubmit }) => {
   };
 
   // Submit the form data to Firestore
-  const handleSubmit = async () => {
-    if (!validateForm()) return;
+const handleSubmit = async () => {
+  if (!validateForm()) return;
 
-    setIsSubmitting(true);
-    try {
-      const violationRef = doc(firestore, "violations", formData.id);
-      const { id, ...violationWithoutId } = formData;
+  setIsSubmitting(true);
+  try {
+    const { data, error } = await supabase
+      .from("violations") // Replace with your actual table name
+      .update({
+        status: formData.status,
+        location: formData.location,
+        violationCategory: formData.violationCategory,
+        violationType: formData.violationType,
+        victim: formData.victim,
+        offender: formData.offender,
+        witness: formData.witness,
+        description: formData.description,
+        DateReported: formData.DateReported,
+        reportedBy: formData.reportedBy,
+        updates: formData.updates,
+      })
+      .eq("caseNo", formData.caseNo); // Make sure to use the correct identifier
 
-      await updateDoc(violationRef, violationWithoutId);
+    if (error) throw error;
 
-      showSuccessToast();
-      onSubmit();
-      onClose();
-    } catch (error) {
-      console.error("Error updating violation:", error);
-      Alert.alert("Error", "Failed to update violation.");
-    } finally {
-      setIsSubmitting(false);
-    }
-  };
+    showSuccessToast();
+    onSubmit();
+    onClose();
+  } catch (error) {
+    console.error("Error updating violation:", error);
+    Alert.alert("Error", "Failed to update violation.");
+  } finally {
+    setIsSubmitting(false);
+  }
+};
+
 
   const filteredViolationTypes = violationTypes
     .filter((item) => item.type === formData.violationCategory)

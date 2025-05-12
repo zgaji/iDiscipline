@@ -1,8 +1,9 @@
+// Header Component with Supabase Integration (Retained Design and Layout - Fully Optimized)
+
 import React from 'react';
 import { View, Text, TouchableOpacity, StyleSheet, Image, Alert } from 'react-native';
 import { useNavigation, useRoute } from '@react-navigation/native';
-import { auth } from '../backend/firebaseConfig'; // Import Firebase auth
-import { signOut } from 'firebase/auth';  // Import Firebase signOut
+import supabase from '../backend/supabaseClient';
 
 const screenTitles = {
   HomeScreen: "Home",
@@ -37,9 +38,11 @@ const Header = ({ openMenu }) => {
 
   const handleLogout = async () => {
     try {
-      await signOut(auth); // This will trigger onAuthStateChanged to set isAuthenticated to false
+      const { error } = await supabase.auth.signOut();
+      if (error) throw error;
+
       // After logging out, navigate to the login screen
-      navigation.replace('LoginScreen'); // Or any other screen you want to navigate to after logout
+      navigation.replace('LoginScreen');
     } catch (error) {
       console.error("Error signing out: ", error);
       Alert.alert("Error", "There was a problem logging out. Please try again.");

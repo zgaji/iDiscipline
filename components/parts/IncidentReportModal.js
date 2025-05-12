@@ -3,8 +3,8 @@ import { Modal, View, Text, TouchableOpacity, TextInput, ScrollView, StyleSheet,
 import RNPickerSelect from "react-native-picker-select";
 import DateTimePickerModal from "react-native-modal-datetime-picker";
 import { UserContext } from "../contexts/UserContext";
-import { collection, getDocs, query, where } from "firebase/firestore";
-import { firestore } from "../backend/firebaseConfig"; // ✅ import this
+import supabase from "../backend/supabaseClient"; // ✅ Use Supabase instead
+
 
 const IncidentReportModal = ({ visible, onClose, onSubmit }) => {
   const { student } = useContext(UserContext);
@@ -47,33 +47,44 @@ const IncidentReportModal = ({ visible, onClose, onSubmit }) => {
   const [isDateTimePickerVisible, setDateTimePickerVisible] = useState(false);
 
   useEffect(() => {
-    const fetchStudents = async () => {
-      try {
-        const snapshot = await getDocs(collection(firestore, "publicStudents"));
-        const students = snapshot.docs.map(doc => ({ ...doc.data(), id: doc.id }));
-        setAllStudents(students);
-      } catch (error) {
-        console.error("Error fetching students: ", error);
-      }
-    };
+  const fetchStudents = async () => {
+    try {
+      const { data, error } = await supabase
+        .from("students") // Replace with your actual table name
+        .select("*");
 
-    if (visible) {
-      fetchStudents();
-      const currentDate = new Date().toLocaleDateString();
-      setFormData({
-        dateTime: "",
-        location: "",
-        violationCategory: "",
-        violationType: "",
-        victim: "",
-        offender: "",
-        witness: "",
-        description: "",
-        reportedBy: student ? `${student.studentNo} - ${student.firstName} ${student.lastName}` : "",
-        dateReported: currentDate,
-      });
+      if (error) throw error;
+
+      const students = data.map((student) => ({
+        id: student.studentid, // Match the field name from your Supabase table
+        firstName: student.firstname,
+        lastName: student.lastname,
+      }));
+
+      setAllStudents(students);
+    } catch (error) {
+      console.error("Error fetching students: ", error);
     }
-  }, [visible, student]);
+  };
+
+  if (visible) {
+    fetchStudents();
+    const currentDate = new Date().toLocaleDateString();
+    setFormData({
+      dateTime: "",
+      location: "",
+      violationCategory: "",
+      violationType: "",
+      victim: "",
+      offender: "",
+      witness: "",
+      description: "",
+      reportedBy: student ? `${student.studentNo} - ${student.firstName} ${student.lastName}` : "",
+      dateReported: currentDate,
+    });
+  }
+}, [visible, student]);
+
 
   const handleInputChange = (name, value) => {
     setFormData((prevState) => ({ ...prevState, [name]: value }));
@@ -95,12 +106,22 @@ const IncidentReportModal = ({ visible, onClose, onSubmit }) => {
     return true;
   };
 
-  const handleSubmit = () => {
-    if (validateForm()) {
+  const handleSubmit = async () => {
+  if (validateForm()) {
+    try {
+      const { error } = await supabase.from("incident_reports").insert([formData]);
+      if (error) throw error;
+
+      Alert.alert("Success", "Incident report submitted successfully.");
       onSubmit(formData);
       onClose();
+    } catch (error) {
+      Alert.alert("Error", "Failed to submit incident report.");
+      console.error("Submission error: ", error);
     }
-  };
+  }
+};
+
 
   return (
     <Modal visible={visible} animationType="slide" transparent>

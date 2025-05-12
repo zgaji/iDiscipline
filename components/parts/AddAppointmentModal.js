@@ -1,8 +1,9 @@
+// AddAppointmentModal with Supabase Integration (Retained Design and Layout - Fully Optimized)
+
 import React, { useState, useEffect } from "react";
 import { View, TextInput, TouchableOpacity, Text, StyleSheet, Modal } from "react-native";
 import { Picker } from "@react-native-picker/picker";
-import { firestore } from "../backend/firebaseConfig"; // Import firestore config
-import { collection, getDocs, query, where } from "firebase/firestore";
+import supabase from "../backend/supabaseClient"; // Supabase Client
 import DateTimePicker from "@react-native-community/datetimepicker"; // Import DateTimePicker
 
 // Add Appointment Modal Component
@@ -14,19 +15,16 @@ const AddAppointmentModal = ({ modalVisible, setModalVisible, handleAddAppointme
   const [pendingCases, setPendingCases] = useState([]); // Store pending cases
   const [showDatePicker, setShowDatePicker] = useState(false); // Show or hide the date picker
 
-  // Fetch pending cases from Firestore
+  // Fetch pending cases from Supabase
   const fetchPendingCases = async () => {
     try {
-      const violationsRef = collection(firestore, "violations");
-      const q = query(violationsRef, where("status", "==", "pending"));
-      const querySnapshot = await getDocs(q);
+      const { data, error } = await supabase
+        .from("violations")
+        .select("caseNo")
+        .eq("status", "pending");
 
-      const cases = querySnapshot.docs.map((doc) => ({
-        id: doc.id,
-        caseNo: doc.data().caseNo,
-      }));
-
-      setPendingCases(cases);
+      if (error) throw error;
+      setPendingCases(data || []);
     } catch (error) {
       console.error("Error fetching pending cases:", error);
     }
@@ -45,9 +43,21 @@ const AddAppointmentModal = ({ modalVisible, setModalVisible, handleAddAppointme
     setAppointmentDate(currentDate); // Update appointment date state
   };
 
-  const handleSaveAppointment = () => {
-    handleAddAppointment();  // Add the appointment logic
-    setModalVisible(false); // Close modal after saving
+  const handleSaveAppointment = async () => {
+    try {
+      await supabase.from("appointments").insert([
+        {
+          caseNo,
+          meetingType,
+          date: appointmentDate.toISOString(),
+          note,
+        },
+      ]);
+      handleAddAppointment(); // Refresh appointment list
+      setModalVisible(false); // Close modal after saving
+    } catch (error) {
+      console.error("Error saving appointment:", error);
+    }
   };
 
   return (
@@ -63,8 +73,8 @@ const AddAppointmentModal = ({ modalVisible, setModalVisible, handleAddAppointme
             {pendingCases.length === 0 ? (
               <Picker.Item label="No pending cases" value="" />
             ) : (
-              pendingCases.map((caseItem) => (
-                <Picker.Item key={caseItem.id} label={caseItem.caseNo} value={caseItem.caseNo} />
+              pendingCases.map((caseItem, index) => (
+                <Picker.Item key={index} label={caseItem.caseNo} value={caseItem.caseNo} />
               ))
             )}
           </Picker>
@@ -80,17 +90,11 @@ const AddAppointmentModal = ({ modalVisible, setModalVisible, handleAddAppointme
           {/* Appointment Date */}
           <Text style={styles.label}>Appointment Date and Time</Text>
           <TouchableOpacity onPress={() => setShowDatePicker(true)} style={styles.input}>
-            <Text>{appointmentDate.toLocaleString()}</Text> {/* Format date to show in the picker */}
+            <Text>{appointmentDate.toLocaleString()}</Text>
           </TouchableOpacity>
 
-          {/* DateTimePicker (Visible when clicking on the appointment date input) */}
           {showDatePicker && (
-            <DateTimePicker
-              value={appointmentDate}
-              mode="datetime"
-              display="default"
-              onChange={handleDateChange}
-            />
+            <DateTimePicker value={appointmentDate} mode="datetime" display="default" onChange={handleDateChange} />
           )}
 
           {/* Notes */}
@@ -103,12 +107,10 @@ const AddAppointmentModal = ({ modalVisible, setModalVisible, handleAddAppointme
             multiline
           />
 
-          {/* Set Appointment Button */}
           <TouchableOpacity style={styles.modalButton} onPress={handleSaveAppointment}>
             <Text style={styles.modalButtonText}>Set appointment</Text>
           </TouchableOpacity>
 
-          {/* Close Button */}
           <TouchableOpacity style={styles.modalCloseButton} onPress={() => setModalVisible(false)}>
             <Text style={styles.modalButtonText}>Close</Text>
           </TouchableOpacity>
@@ -120,61 +122,15 @@ const AddAppointmentModal = ({ modalVisible, setModalVisible, handleAddAppointme
 
 // Styles for the modal
 const styles = StyleSheet.create({
-  modalOverlay: {
-    position: "absolute",
-    top: 0,
-    left: 0,
-    right: 0,
-    bottom: 0,
-    backgroundColor: "rgba(0,0,0,0.5)",
-    justifyContent: "center",
-    alignItems: "center",
-  },
-  modalContainer: {
-    backgroundColor: "#fff",
-    padding: 20,
-    borderRadius: 8,
-    width: "80%",
-  },
-  modalTitle: {
-    fontSize: 22,
-    fontWeight: "bold",
-    marginBottom: 15,
-  },
-  label: {
-    fontSize: 16,
-    fontWeight: "bold",
-    marginBottom: 5,
-  },
-  input: {
-    height: 40,
-    borderColor: "#ccc",
-    borderWidth: 1,
-    marginBottom: 10,
-    borderRadius: 5,
-    paddingHorizontal: 10,
-  },
-  textArea: {
-    height: 100,
-    textAlignVertical: "top",
-  },
-  modalButton: {
-    backgroundColor: "#27AE60",
-    paddingVertical: 10,
-    borderRadius: 8,
-    alignItems: "center",
-    marginVertical: 10,
-  },
-  modalButtonText: {
-    color: "#fff",
-    fontWeight: "bold",
-  },
-  modalCloseButton: {
-    backgroundColor: "#FF6347",
-    paddingVertical: 10,
-    borderRadius: 8,
-    alignItems: "center",
-  },
+  modalOverlay: { backgroundColor: "rgba(0,0,0,0.5)", justifyContent: "center", alignItems: "center" },
+  modalContainer: { backgroundColor: "#fff", padding: 20, borderRadius: 8, width: "80%" },
+  modalTitle: { fontSize: 22, fontWeight: "bold", marginBottom: 15 },
+  label: { fontSize: 16, fontWeight: "bold", marginBottom: 5 },
+  input: { height: 40, borderColor: "#ccc", borderWidth: 1, marginBottom: 10, borderRadius: 5, paddingHorizontal: 10 },
+  textArea: { height: 100, textAlignVertical: "top" },
+  modalButton: { backgroundColor: "#27AE60", paddingVertical: 10, borderRadius: 8, alignItems: "center", marginVertical: 10 },
+  modalButtonText: { color: "#fff", fontWeight: "bold" },
+  modalCloseButton: { backgroundColor: "#FF6347", paddingVertical: 10, borderRadius: 8, alignItems: "center" }
 });
 
 export default AddAppointmentModal;

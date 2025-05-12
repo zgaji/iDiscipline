@@ -1,8 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { View, Text, TextInput, TouchableOpacity, Modal, StyleSheet, ScrollView, Alert } from "react-native";
 import RNPickerSelect from "react-native-picker-select";
-import { doc, updateDoc } from "firebase/firestore";
-import { firestore } from "../backend/firebaseConfig";
+import supabase from "../backend/supabaseClient"; // Supabase Client
 
 const yearSectionMap = {
   "7th Grade": ["St. Pedro", "St. Aloysious", "St. Dominic"],
@@ -26,24 +25,15 @@ const EditStudentModal = ({ visible, onClose, student, onSave }) => {
 
   const handleSubmit = async () => {
     try {
-      const studentRef = doc(firestore, "users", student.studentEmail);
-  
-      const updateData = {
-        firstName: form.firstName,
-        middleName: form.middleName,
-        lastName: form.lastName,
-        gender: form.gender,
-        address: form.address,
-        year: form.year,
-        section: form.section,
-        adviser: form.adviser,
-        parentGuardian: form.parentGuardian,
-        emergencyEmail: form.emergencyEmail,
-        contactNumber: form.contactNumber,
-      };
-  
-      await updateDoc(studentRef, updateData);
-  
+      const { data, error } = await supabase
+        .from("students")
+        .update({
+          ...form
+        })
+        .eq("studentEmail", form.studentEmail);
+
+      if (error) throw error;
+
       Alert.alert("Success", "Student updated successfully");
       onSave();
       onClose();
@@ -52,85 +42,30 @@ const EditStudentModal = ({ visible, onClose, student, onSave }) => {
       console.error("Update Error:", error.message);
     }
   };
-  
+
   return (
     <Modal visible={visible} animationType="slide" transparent>
       <View style={styles.modalOverlay}>
         <View style={styles.modalContainer}>
           <Text style={styles.title}>Edit Student</Text>
           <ScrollView>
-            <TextInput
-              style={styles.input}
-              value={form.firstName}
-              onChangeText={(v) => updateField("firstName", v)}
-              placeholder="First Name"
-            />
-            <TextInput
-              style={styles.input}
-              value={form.middleName}
-              onChangeText={(v) => updateField("middleName", v)}
-              placeholder="Middle Name"
-            />
-            <TextInput
-              style={styles.input}
-              value={form.lastName}
-              onChangeText={(v) => updateField("lastName", v)}
-              placeholder="Last Name"
-            />
-            <RNPickerSelect
-              onValueChange={(v) => updateField("gender", v)}
-              value={form.gender}
-              style={pickerStyles}
-              items={[
-                { label: "Male", value: "Male" },
-                { label: "Female", value: "Female" },
-              ]}
-            />
-            <TextInput
-              style={styles.input}
-              value={form.address}
-              onChangeText={(v) => updateField("address", v)}
-              placeholder="Address"
-            />
-            <RNPickerSelect
-              onValueChange={(v) => {
-                updateField("year", v);
-                updateField("section", "");
-              }}
-              value={form.year}
-              style={pickerStyles}
-              items={Object.keys(yearSectionMap).map((y) => ({ label: y, value: y }))}
-            />
-            <RNPickerSelect
-              onValueChange={(v) => updateField("section", v)}
-              value={form.section}
-              style={pickerStyles}
-              items={(yearSectionMap[form.year] || []).map((s) => ({ label: s, value: s }))}
-            />
-            <TextInput
-              style={styles.input}
-              value={form.adviser}
-              onChangeText={(v) => updateField("adviser", v)}
-              placeholder="Adviser"
-            />
-            <TextInput
-              style={styles.input}
-              value={form.parentGuardian}
-              onChangeText={(v) => updateField("parentGuardian", v)}
-              placeholder="Parent/Guardian"
-            />
-            <TextInput
-              style={styles.input}
-              value={form.emergencyEmail}
-              onChangeText={(v) => updateField("emergencyEmail", v)}
-              placeholder="Emergency Email"
-            />
-            <TextInput
-              style={styles.input}
-              value={form.contactNumber}
-              onChangeText={(v) => updateField("contactNumber", v)}
-              placeholder="Contact Number"
-            />
+            <TextInput style={styles.input} value={form.firstName} onChangeText={(v) => updateField("firstName", v)} placeholder="First Name" />
+            <TextInput style={styles.input} value={form.middleName} onChangeText={(v) => updateField("middleName", v)} placeholder="Middle Name" />
+            <TextInput style={styles.input} value={form.lastName} onChangeText={(v) => updateField("lastName", v)} placeholder="Last Name" />
+
+            <RNPickerSelect onValueChange={(v) => updateField("gender", v)} value={form.gender} style={pickerStyles} items={[{ label: "Male", value: "Male" }, { label: "Female", value: "Female" }]} />
+
+            <TextInput style={styles.input} value={form.address} onChangeText={(v) => updateField("address", v)} placeholder="Address" />
+
+            <RNPickerSelect onValueChange={(v) => { updateField("year", v); updateField("section", ""); }} value={form.year} style={pickerStyles} items={Object.keys(yearSectionMap).map((y) => ({ label: y, value: y }))} />
+
+            <RNPickerSelect onValueChange={(v) => updateField("section", v)} value={form.section} style={pickerStyles} items={(yearSectionMap[form.year] || []).map((s) => ({ label: s, value: s }))} />
+
+            <TextInput style={styles.input} value={form.adviser} onChangeText={(v) => updateField("adviser", v)} placeholder="Adviser" />
+            <TextInput style={styles.input} value={form.parentGuardian} onChangeText={(v) => updateField("parentGuardian", v)} placeholder="Parent/Guardian" />
+            <TextInput style={styles.input} value={form.emergencyEmail} onChangeText={(v) => updateField("emergencyEmail", v)} placeholder="Emergency Email" />
+            <TextInput style={styles.input} value={form.contactNumber} onChangeText={(v) => updateField("contactNumber", v)} placeholder="Contact Number" />
+
             <TouchableOpacity style={styles.saveButton} onPress={handleSubmit}>
               <Text style={styles.saveText}>Save</Text>
             </TouchableOpacity>

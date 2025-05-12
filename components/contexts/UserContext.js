@@ -1,35 +1,33 @@
-
+// UserContext.js (Using Native WebSocket in Expo)
 import React, { createContext, useState, useEffect } from "react";
-import { auth, firestore } from "../backend/firebaseConfig";
-import { onAuthStateChanged } from "firebase/auth";
-import { doc, getDoc } from "firebase/firestore";
+import supabase from "../backend/supabaseClient";
 
 export const UserContext = createContext();
+let socket; // Declare WebSocket globally
 
 export const UserProvider = ({ children }) => {
   const [userRole, setUserRole] = useState('');
   const [student, setStudent] = useState(null);
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   const [loading, setLoading] = useState(true);
+  const [messages, setMessages] = useState([]); // ✅ Messages for chat
 
   useEffect(() => {
-    const unsubscribe = onAuthStateChanged(auth, async (user) => {
-      if (user) {
-        const email = user.email;
-        if (email === 'darthzcellen@gmail.com') {
-          setUserRole('admin');
-          setIsAuthenticated(true);
-        } else {
-          const userDocRef = doc(firestore, "users", email);
-          const userDoc = await getDoc(userDocRef);
+    const checkAuthStatus = async () => {
+      const { data: { session } } = await supabase.auth.getSession();
+      
+      if (session) {
+        const email = session.user.email;
+        const { data: profile } = await supabase.from('students').select('*').eq('studentEmail', email).single();
 
-          if (userDoc.exists()) {
-            setUserRole('student');
-            setStudent(userDoc.data());
+        if (profile) {
+          if (profile.roles === 'admin') {
+            setUserRole('admin');
             setIsAuthenticated(true);
-          } else {
-            console.log("⚠️ No student data found for", email);
-            setIsAuthenticated(false);
+          } else if (profile.roles === 'student') {
+            setUserRole('student');
+            setStudent(profile);
+            setIsAuthenticated(true);
           }
         }
       } else {
@@ -38,13 +36,64 @@ export const UserProvider = ({ children }) => {
         setStudent(null);
       }
       setLoading(false);
-    });
+    };
 
-    return () => unsubscribe();
+    checkAuthStatus();
   }, []);
 
+  // // ✅ Initialize Native WebSocket Connection
+  // useEffect(() => {
+  //   if (isAuthenticated) {
+  //     socket = new WebSocket('ws://localhost:3000'); // Use your WebSocket URL (Secure)
+      
+  //     socket.onopen = () => {
+  //       console.log("✅ WebSocket connection established");
+  //     };
+
+  //     socket.onmessage = (event) => {
+  //       const message = JSON.parse(event.data);
+  //       console.log("📩 New Message:", message);
+  //       setMessages((prev) => [...prev, message]);
+  //     };
+
+  //     socket.onerror = (error) => {
+  //       console.error("❌ WebSocket Error:", error.message);
+  //     };
+
+  //     socket.onclose = () => {
+  //       console.log("🔌 WebSocket connection closed");
+  //     };
+
+  //     return () => {
+  //       socket.close(); // Clean up on component unmount
+  //     };
+  //   }
+  // }, [isAuthenticated]);
+
+  // ✅ Send Message Function (Globally Available)
+  const sendMessage = (content) => {
+    if (socket && socket.readyState === WebSocket.OPEN) {
+      const messageData = {
+        sender: userRole === 'admin' ? 'Disciplinary Officer' : student?.studentEmail,
+        content,
+        timestamp: new Date().toISOString()
+      };
+      socket.send(JSON.stringify(messageData));
+    }
+  };
+
   return (
-    <UserContext.Provider value={{ userRole, setUserRole, student, setStudent, isAuthenticated, setIsAuthenticated, loading }}>
+    <UserContext.Provider value={{
+      userRole,
+      setUserRole,
+      student,
+      setStudent,
+      isAuthenticated,
+      setIsAuthenticated,
+      loading,
+      messages,
+      sendMessage // ✅ Expose sendMessage function
+    }}>
       {children}
     </UserContext.Provider>
   );
